@@ -23,7 +23,7 @@ The goal is to build a machine that will take such a vector x as input and that 
 This is a nontrivial problem due to the wide variability of handwriting.
 It could be tackled(解决) using handcrafted rules or heuristics(启发法) for distinguishing the digits based on the shapes of the strokes, but in practice such an approach leads to a proliferation(增值) of rules and of exceptions(异常) to the rules and so on, and invariably(不约而同地) gives poor results.
 
-Far better results can be obtained by adopting a machine learning approach in which a large set of N digits$ {x_1,\cdots,x_N}$ called a /training set/ is used to tune(调节) the parameters of an adaptive model.
+Far better results can be obtained by adopting a machine learning approach in which a large set of N digits \({x_1,\cdots,x_N}\) called a /training set/ is used to tune(调节) the parameters of an adaptive model.
 The categories of the digits in the /training set(训练集)/ are known in advance, typically by inspecting them individually and hand-labeling them.
 We can express the category of a digit using /target vector(目标向量)/ $t$, which represents the identity of the corresponding digit.
 Suitable techniques for representing categories in terms of vectors will be discussed later.
