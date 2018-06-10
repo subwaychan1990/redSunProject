@@ -198,7 +198,7 @@ feature = PolynomialFeatures(3)
 #+RESULTS:
 
 对于每个行向量$a$, 有 ~transform~ 方法使得其输出为\(\{a_1^{i_1}a_2^{i_2}\cdots a_k^{i_M}\big|0\leqslant\sum_{j=1}^Mi_j\leqslant M\}\).
-如果$a$是一维向量, 强行将其转化为列向量.
+如果 $a$ 是一维向量, 强行将其转化为列向量.
 
 #+BEGIN_SRC python :exports both :results output :session src:1-1
   print(feature.transform(np.array([[2, 7], [5, 3]])))
@@ -254,6 +254,7 @@ from linear_regressor import LinearRegressor
 #+ATTR_LaTeX: scale=0.75
 #+LABEL: fig:1.4
 [[file:img/fig:1.4.png]]
+
 
 
 * Appendix A
