@@ -2,4 +2,5 @@ prml/PRML-master/
 prml/_minted-prmlnotes/
 prml/.DS_Store
 .pytest_cache
+prml/ltximg/
 .DS_Store

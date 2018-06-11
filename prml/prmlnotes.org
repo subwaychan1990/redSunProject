@@ -14,6 +14,9 @@
   import matplotlib.pyplot as plt
   import sys
   sys.path.append("my-packages")
+  from polynomial import PolynomialFeatures
+  from linear_regressor import LinearRegressor
+  from ridge_regressor import RidgeRegressor
 #+END_SRC
 
 The problem of searching for patterns in data is a fundamental one and has a long and successful history.
@@ -141,6 +144,8 @@ Probability theory, discussed in Section 1.2(?), provides a framework for expres
 #+END_SRC
 
 #+RESULTS:
+: /Users/subway/.virtualenvs/py3env/lib/python3.6/site-packages/matplotlib/font_manager.py:1328: UserWarning: findfont: Font family ['cmmi10'] not found. Falling back to DejaVu Sans
+:   (prop.get_family(), self.defaultFamily[fontext]))
 
 
 #+CAPTION: Plot of a training data set of $N = 10$ points, shown as blue circles, each comprising an observation of the input variable x along with the corresponding target variable t. The green curve shows the function $sin(2πx)$ used to generate the data. Our goal is to predict the value of $t$ for some new value of $x$, without knowledge of the green curve.
@@ -174,21 +179,21 @@ We shall discuss the motivation for this choice of error function later in this 
 For the moment we simply note that it is a nonnegative quantity that would be zero if, and only if, the function $y(x, \mathbf{w})$ were to pass exactly through each training data point.
 The geometrical interpretation(解释) of the sum-of-squares error function is illustrated in Figure [[fig:1.3]].
 
-#+CAPTION: The error function \eqref{error function} corresponds to (one half of) the sum of the squares of the displacements (shown by the vertical green bars) of each data point from the function $y(x, \mathbf{w})$.
+#+CAPTION: The error function \eqref{error function} corresponds to (Mone half of) the sum of the squares of the displacements (shown by the vertical green bars) of each data point from the function $y(x, \mathbf{w})$.
 #+ATTR_LaTeX: scale=0.75
 #+LABEL: fig:1.3
 [[file:img/fig:1.3.png]]
 
 We can solve the curve fitting problem by choosing the value of $w$ for which $E(w)$ is as small as possible.
-Because the error function is a quadratic function of the coefficients $w$, its derivatives with respect to the coefficients will be linear in the elements of $w$, and so the minimization of the error function has a unique solution, denoted by $w^*$, which can be found in closed form.
-The resulting polynomial is given by the function $y(x, w^*)$.
+Because the error function is a quadratic function of the coefficients $w$, its derivatives with respect to the coefficients will be linear in the elements of $w$, and so the minimization of the error function has a unique solution, denoted by $\mathbf{w^*}$, which can be found in closed form.
+The resulting polynomial is given by the function $y(x, \mathbf{w^*})$.
 
 There remains the problem of choosing the order $M$ of the polynomial, and as we shall see this will turn out to be an example of an important concept called /model comparison(模型对比)/ or /model selection(选择)/.
 In Figure [[fig:1.4]], we show four examples of the results of fitting polynomials having orders $M = 0, 1, 3, 9$ to the data set shown in Figure [[fig:1.2]].
 
 
 定义多项式特征 ~class PolynomialFeatures~ .
-其初始输入为维度,如$n=3$:
+其初始输入为维度,如$n=3$:M
 
 #+BEGIN_SRC python :exports both :exports both :results output :session src:1-1
 from polynomial import PolynomialFeatures
@@ -242,7 +247,8 @@ from linear_regressor import LinearRegressor
       plt.ylim(-1.5, 1.5)
       plt.annotate("M={}".format(degree), xy=(-0.15, 1))
   plt.subplots_adjust(right=0.75)
-  plt.legend(bbox_to_anchor=(1.05, 0.64), loc=2, borderaxespad=0.)
+  plt.legend(bbox_to_anchor=(1.05, 0.64), loc=2,
+             borderaxespad=0.)
   plt.savefig("img/fig:1.4.png")
   plt.close("all")
 #+END_SRC
@@ -254,6 +260,329 @@ from linear_regressor import LinearRegressor
 #+ATTR_LaTeX: scale=0.75
 #+LABEL: fig:1.4
 [[file:img/fig:1.4.png]]
+
+
+We notice that the constant $(M = 0)$ and first order $(M = 1)$ polynomials give rather poor fits to the data and consequently rather poor representations of the function $sin(2πx)$.
+The third order $(M = 3)$ polynomial seems to give the best fit to the function $sin(2πx)$ of the examples shown in Figure [[fig:1.4]].
+When we go to a much higher order polynomial $(M = 9)$, we obtain an excellent fit to the training data.
+In fact, the polynomial passes exactly through each data point and $E(\mathbf{w^*}) = 0$.
+However, the fitted curve oscillates wildly and gives a very poor representation of the function $sin(2πx)$.
+This latter behavior is known as /over-fitting(过拟合)/.
+
+As we have noted earlier, the goal is to achieve good generalization by making accurate predictions for new data.
+We can obtain some quantitative insight into the dependence of the generalization performance on $M$ by considering a separate test set comprising 100 data points generated using exactly the same procedure used to generate the training set points but with new choices for the random noise values included in the target values.
+For each choice of $M$ , we can then evaluate the residual value of $E(\mathbf{w^*})$ given by \eqref{error function} for the training data, and we can also evaluate $E(\mathbf{w^*})$ for the test data set.
+It is sometimes more convenient to use the root-mean-square (RMS) error defined by
+
+\begin{equation}\label{RMS}
+E_{RMS} = \sqrt{2E(\mathbf{w^*})/N}
+\end{equation}
+
+in which the division by N allows us to compare different sizes of data sets on an equal footing(基础), and the square root ensures that ERMS is measured on the same scale (and in the same units) as the target variable $t$.
+Graphs of the training and test set RMS errors are shown, for various values of M, in Figure [[fig:1.5]].
+The test set error is a measure of how well we are doing in predicting the values of $t$ for new data observations of $x$.
+We note from Figure [[fig:1.5]] that small values of $M$ give relatively large values of the test set error, and this can be attributed(归结于) to the fact that the corresponding *polynomials are rather inflexible and are incapable of capturing the oscillations(震荡) in the function* $sin(2πx)$.
+Values of $M$ in the range $3 \leqslant M \leqslant 8$ give small values for the test set error, and these also give reasonable representations of the generating function $sin(2πx)$, as can be seen, for the case of $M = 3$, from Figure [[fig:1.4]].
+
+#+BEGIN_SRC python :exports both :results output :session src:1-1
+  def rmse(a, b):
+      return np.sqrt(np.mean(np.square(a - b)))
+
+
+  training_errors = []
+  test_errors = []
+
+  for i in range(10):
+      feature = PolynomialFeatures(i)
+      X_train = feature.transform(x_train)
+      X_test = feature.transform(x_test)
+
+      model = LinearRegressor()
+      model.fit(X_train, y_train)
+      y = model.predict(X_test)
+      training_errors.append(rmse(model.predict(X_train),
+                                  y_train))
+      test_errors.append(
+          rmse(
+              model.predict(X_test),
+              y_test + np.random.normal(scale=0.25,
+                                        size=len(y_test))))
+
+  plt.plot(
+      training_errors, 'o-', mfc="none", mec="b", ms=10,
+      c="b", label="Training")
+  plt.plot(test_errors, 'o-', mfc="none", mec="r", ms=10,
+           c="r", label="Test")
+  plt.legend()
+  plt.xlabel("degree")
+  plt.ylabel("RMSE")
+  plt.savefig("img/fig:1.5.png")
+  plt.close("all")
+#+END_SRC
+
+#+RESULTS:
+
+#+CAPTION: tbl:1.1
+#+BEGIN_SRC python :exports both :results raw :session src:1-1
+  import numpy as np
+  import pandas as pd
+  df = pd.DataFrame([])
+  for _ in [0, 1, 3, 9]:
+      feature = PolynomialFeatures(_)
+      X_train = feature.transform(x_train)
+
+      mapping["$M=%d$" % _] = pd.Series(np.linalg.pinv(X_train)
+                                        @ y_train)
+  df = pd.DataFrame(mapping)
+  df.index = ["$w_%d^*$" % _ for _ in range(10)]
+  from tabulate import tabulate
+  tbl = lambda x: tabulate(x,headers="keys",tablefmt="orgtbl")
+  tbl(df.round(2).fillna(""))
+#+END_SRC
+
+#+RESULTS:
+#+CAPTION: Table of the coefficients $\mathbf{w^*}$ for polynomials of various order. Observe how the typical magnitude of the coefficients increases dramatically as the order of the polynomial increases.
+#+LABEL: tbl:1.1
+|         | $M=0$   | $M=1$   | $M=3$   |     $M=9$ |
+|---------+---------+---------+---------+-----------|
+| $w_0^*$ | -0.04   | 0.78    | 0.01    |      0.12 |
+| $w_1^*$ |         | -1.64   | 9.29    |    -32.23 |
+| $w_2^*$ |         |         | -26.79  |    552.58 |
+| $w_3^*$ |         |         | 17.04   |  -2728.57 |
+| $w_4^*$ |         |         |         |   4762.78 |
+| $w_5^*$ |         |         |         |   2031.29 |
+| $w_6^*$ |         |         |         | -19359.5  |
+| $w_7^*$ |         |         |         |  28382.5  |
+| $w_8^*$ |         |         |         | -17856.2  |
+| $w_9^*$ |         |         |         |   4246.73 |
+
+
+#+CAPTION: Graphs of the root-mean-square error, defined by \eqref{RMS}, evaluated on the training set and on an independent test set for various values of $M$.
+#+ATTR_LaTeX: scale=0.75
+#+LABEL: fig:1.5
+[[file:img/fig:1.5.png]]
+
+For $M = 9$, the training set error goes to zero, as we might expect because this polynomial contains 10 degrees of freedom corresponding to the 10 coefficients $w_0,\cdots,w_9$, and so can be tuned exactly to the 10 data points in the training set.
+However, the test set error has become very large and, as we saw in Figure [[fig:1.4]], the corresponding function $y(x, \mathbf{w^⋆}) exhibits wild oscillations.
+
+This may seem paradoxical because a polynomial of given order contains all lower order polynomials as special cases.
+The $M = 9$ polynomial is therefore capable of generating results at least as good as the $M = 3$ polynomial.
+($M = 9$ 的多项式因此能够产生至少与 $M = 3$ 一样好的结果。)
+Furthermore, we might suppose that the best predictor of new data would be the function sin(2πx) from which the data was generated (and we shall see later that this is indeed the case).
+We know that a power series expansion of the function $sin(2πx)$ contains terms of all orders, so we might expect that results should improve monotonically as we increase $M$.
+
+We can gain some insight into the problem by examining the values of the coefficients $\mathbf{w^*}$ obtained from polynomials of various order, as shown in Table [[tbl:1.1]].
+We see that, as $M$ increases, the magnitude of the coefficients typically gets larger.
+In particular for the $M = 9$ polynomial, the coefficients have become finely tuned to the data by developing large positive and negative values so that the corresponding polynomial function matches each of the data points exactly, but between data points (particularly near the ends of the range) the function exhibits the large oscillations observed in Figure [[fig:1.4]].
+Intuitively(直觉地), what is happening is that the more flexible polynomials with larger values of $M$ are becoming increasingly tuned to the random noise on the target values.
+It is also interesting to examine the behavior of a given model as the size of the data set is varied, as shown in Figure [[fig:1.6]].
+We see that, for a given model complexity, the over-fitting problem become less severe(严厉的) as the size of the data set increases.
+Another way to say this is that the larger the data set, the more complex (in other words more flexible) the model that we can afford to fit to the data.
+One rough(粗略的) heuristic that is sometimes advocated is that the number of data points should be no less than some multiple (say 5 or 10) of the number of adaptive parameters in the model.
+However, as we shall see in Chapter 3, the number of parameters is not necessarily the most appropriate measure of model complexity.
+
+
+#+CAPTION: fig:1.6
+#+BEGIN_SRC python :results output :session src:1-1
+  np.random.seed(1234)
+  def create_toy_data(func, sample_size, std):
+    x = np.linspace(0, 1, sample_size)
+    t = func(x) + np.random.normal(scale=std, size=x.shape)
+    return x, t
+
+  def func(x):
+    return np.sin(2 * np.pi * x)
+
+
+  for i,number in enumerate([15,100]):
+      plt.subplot(1, 2, i + 1)
+      feature = PolynomialFeatures(9)
+      x_train, y_train = create_toy_data(func, number, 0.25)
+      X_train = feature.transform(x_train)
+      x_test = np.linspace(0, 1, 100)
+      y_test = func(x_test)
+      X_test = feature.transform(x_test)
+
+      model = LinearRegressor()
+      model.fit(X_train, y_train)
+      y = model.predict(X_test)
+
+      plt.scatter(x_train, y_train, facecolor="none", edgecolor="b", s=50, label="training data")
+      plt.plot(x_test, y_test, c="g", label="$\sin(2\pi x)$")
+      plt.plot(x_test, y, c="r", label="fitting")
+      plt.ylim(-1.5, 1.5)
+      plt.annotate("M={}".format(9), xy=(-0.15, 1))
+  plt.savefig("img/fig:1.6.png")
+  plt.close("all")
+#+END_SRC
+
+#+RESULTS:
+
+#+CAPTION: Plots of the solutions obtained by minimizing the sum-of-squares error function using the $M = 9$ polynomial for $N = 15$ data points (left plot) and $N = 100$ data points (right plot). We see that increasing the size of the data set reduces the over-fitting problem.
+#+LABEL: fig:1.6
+[[file:img/fig:1.6.png]]
+
+
+Also, there is something rather unsatisfying about having to limit the number of parameters in a model according to the size of the available training set.
+It would seem more reasonable to choose the complexity of the model according to the complexity of the problem being solved.
+We shall see that the least squares approach to finding the model parameters represents a specific case of /maximum likelihood(最大似然)/ (discussed in Section 1.2.5(?)), and that the over-fitting problem can be understood as a general property of maximum likelihood.
+By adopting a /Bayesian/ approach, the over-fitting problem can be avoided.
+We shall see that there is no difficulty from a Bayesian perspective in employing models for which the number of parameters greatly exceeds the number of data points.
+Indeed, in a Bayesian model the /effective(有效)/ number of parameters adapts automatically to the size of the data set.
+
+For the moment, however, it is instructive to continue with the current approach and to consider how in practice we can apply it to data sets of limited size where wemay wish to use relatively complex and flexible models.
+One technique that is often used to control the over-fitting phenomenon in such cases is that of /regularization(正则化)/, which involves(包含) adding a penalty term to the error function \eqref{error function} in order to discourage the coefficients from reaching large values.
+The simplest such penalty term takes the form of a sum of squares of all of the coefficients, leading to a modified error function of the form
+
+\begin{equation}\label{regularized error function}
+\tilde{E}(\mathbf{w}) = \frac{1}{2}\sum_{n=1}^N \{y(x_n,\mathbf{w}-t_n)\}^2 + \frac{\lambda}{2}\parallel\mathbf{w}\parallel^2
+\end{equation}
+
+the coefficient \lambda governs the relative importance of the regularization term compared with the sum-of-squares error term.
+Note that often the coefficient $w_0$ is omitted(省略) from the regularizer because its inclusion causes the results to depend on the choice of origin for the target variable (Hastie et al., 2001), or it may be included but with its own regularization coefficient (we shall discuss this topic in more detail in Section 5.5.1(?)).
+Again, the error function in \eqref{regularized error function} can be minimized exactly in closed form.
+Techniques such as this are known in the statistics literature as /shrinkage(收缩)/ methods because they reduce the value of the coefficients.
+The particular case of a quadratic regularizer is called /ridge regression(山脊回归)/ (Hoerl and Kennard, 1970).
+In the context of neural networks, this approach is known as /weight decay(权值衰减)/.
+
+#+BEGIN_SRC python :exports both :results output
+import numpy
+print(numpy.exp())
+#+END_SRC
+
+#+RESULTS:
+: 2.718281828459045
+
+
+#+CAPTION: fig:1.7
+#+BEGIN_SRC python :exports both :results output :session src:1-1
+  for i, lamb in enumerate([-18, 0]):
+      plt.subplot(1, 2, i + 1)
+      feature = PolynomialFeatures(9)
+      X_train = feature.transform(x_train)
+      X_test = feature.transform(x_test)
+
+      model = RidgeRegressor(alpha=np.exp(lamb))
+      model.fit(X_train, y_train)
+      y = model.predict(X_test)
+      plt.scatter(
+          x_train,
+          y_train,
+          facecolor="none",
+          edgecolor="b",
+          s=50,
+          label="training data")
+      plt.plot(x_test, y_test, c="g", label="$\sin(2\pi x)$")
+      plt.plot(x_test, y, c="r", label="fitting")
+      plt.ylim(-1.5, 1.5)
+      plt.title("$\ln\lambda = %d$" % lamb)
+      plt.annotate("M=9", xy=(-0.15, 1))
+  plt.savefig("img/fig:1.7.png")
+  plt.close("all")
+#+END_SRC
+
+#+RESULTS:
+
+#+CAPTION: Plots of $M = 9$ polynomials fitted to the data set shown in Figure 1.2 using the regularized error function \eqref{regularized error function} for two values of the regularization parameter \lambda corresponding to $\ln\lambda = −18$ and $\ln\lambda = 0$. The case of no regularizer, i.e., $\lambda  = 0$, corresponding to $\ln\lambda = -\infty$, is shown at the bottom right of Figure 1.4.
+#+ATTR_LaTeX: scale=0.75
+#+LABEL: fig:1.7
+[[file:img/fig:1.7.png]]
+
+
+Figure [[fig:1.7]] shows the results of fitting the polynomial of order $M = 9$ to the same data set as before but now using the regularized error function given by \eqref{regularized error function}.
+We see that, for a value of $\ln\lambda = −18$, the over-fitting has been suppressed(镇压) and we now obtain a much closer representation of the underlying function $sin(2πx)$.
+If, however, we use too large a value for λ then we again obtain a poor fit, as shown in Figure [[fig:1.7]] for $\ln\lambda = 0$.
+The corresponding coefficients from the fitted polynomials are given in Table [[tbl:1.2]], showing that regularization has the desired effect of reducing the magnitude of the coefficients.
+
+
+#+BEGIN_SRC python :exports both :results output :session src:1-1
+  import pandas as pd
+  mapping = {}
+  infty = float("inf")
+  for index,_ in enumerate([-infty, -18, 0]):
+      feature = PolynomialFeatures(9)
+      X_train = feature.transform(x_train)
+      eye = np.eye(np.size(X_train, 1))
+      alpha = np.exp(_)
+      mapping["$ln\lambda=%f$" % _] = np.linalg.solve(alpha * eye + X_train.T @ X_train, X_train.T @ y_train)
+  df = pd.DataFrame(mapping)
+  df.index = ["$w_%d^*$" % _ for _ in range(10)]
+  from tabulate import tabulate
+  tbl = lambda x: tabulate(x,headers="keys",tablefmt="orgtbl")
+  print(tbl(df.round(2).fillna("")))
+#+END_SRC
+
+#+RESULTS:
+
+
+#+CAPTION: Table of the coefficients $\mathbf{w^*}$ for $M = 9$ polynomials with various values for the regularization parameter \lambda. Note that $\ln\lambda = -\infty$ corresponds to a model with no regularization, i.e., to the graph at the bottom right in Figure 1.4. We see that, as the value of \lambda increases, the typical magnitude of the coefficients gets smaller.
+#+LABEL: tbl:1.2
+|         | $ln\lambda=-18$ | $ln\lambda=\infty$ | $ln\lambda=0$ |
+|---------+-----------------+--------------------+---------------|
+| $w_0^*$ |            0.08 |               0.12 |          0.36 |
+| $w_1^*$ |            -8.2 |             -32.23 |         -0.33 |
+| $w_2^*$ |          185.19 |             552.47 |          -0.4 |
+| $w_3^*$ |          -860.9 |           -2727.64 |          -0.3 |
+| $w_4^*$ |         1438.25 |            4758.44 |         -0.19 |
+| $w_5^*$ |         -422.12 |             2043.1 |          -0.1 |
+| $w_6^*$ |        -1042.18 |           -19378.8 |         -0.02 |
+| $w_7^*$ |          231.68 |            28401.1 |          0.03 |
+| $w_8^*$ |         1113.58 |             -17866 |          0.07 |
+| $w_9^*$ |         -635.94 |            4248.91 |          0.11 |
+
+The impact of the regularization term on the generalization error can be seen by plotting the value of the RMS error \eqref{RMS} for both training and test sets against $\ln\lambda$, as shown in Figure [[fig:1.8]].
+We see that in effect \lambda now controls the effective complexity of the model and hence determines the degree of over-fitting.
+
+#+BEGIN_SRC python :exports both :results output :session src:1-1
+print(y_train)
+#+END_SRC
+
+#+RESULTS:
+: [ 0.11785879  0.34504369  1.3429845   0.78786243  0.16187296 -0.12022941
+:  -0.6511283  -1.14393863 -0.63886352 -0.56067124]
+
+
+#+BEGIN_SRC python :exports both :results output :session src:1-1
+  def rmse(a, b):
+      return np.sqrt(np.mean(np.square(a - b)))
+
+
+  training_errors = []
+  test_errors = []
+
+  for lamb in (np.linspace(-40, -20, 100)):
+      feature = PolynomialFeatures(9)
+      X_train = feature.transform(x_train)
+      X_test = feature.transform(x_test)
+
+      model = RidgeRegressor(alpha=np.exp(lamb))
+      model.fit(X_train, y_train)
+      y = model.predict(X_train)
+
+      training_errors.append(rmse(model.predict(X_train), y_train))
+      test_errors.append(rmse(model.predict(X_test), y_test))
+  plt.plot(np.linspace(-40,-20,100),training_errors,'b-')
+  plt.plot(np.linspace(-40,-20,100),test_errors,'r-')
+  plt.savefig("img/fig:1.8.png")
+  plt.close("")
+#+END_SRC
+
+#+RESULTS:
+
+#+CAPTION: caption
+#+ATTR_LaTeX: scale=0.75
+#+LABEL: fig:1.8
+[[file:img/fig:1.8.png]]
+
+
+The issue of model complexity is an important one and will be discussed at length in Section 1.3(?).
+Here we simply note that, if we were trying to solve a practical application using this approach of minimizing an error function, we would have to find a way to determine a suitable value for the model complexity.
+The results above suggest a simple way of achieving this, namely by taking the available data and partitioning it into a training set, used to determine the coefficients w, and a separate /validation set(验证集)/, also called a /hold-out set(拿出集)/, used to optimize the model complexity (either $M$ or \lambda).
+In many cases, however, this will prove to be too wasteful of valuable training data, and we have to seek more sophisticated approaches.
+
+So far our discussion of polynomial curve fitting has appealed largely to intuition.
+We now seek a more principled approach to solving problems in pattern recognition by turning to a discussion of probability theory.
+As well as providing the foundation for nearly all of the subsequent developments in this book, it will also give us some important insights into the concepts we have introduced in the context of polynomial curve fitting and will allow us to extend these to more complex situations.
 
 
 
