@@ -558,7 +558,7 @@ len(test_errors)
 
 #+RESULTS:
 
-#+CAPTION: caption
+#+CAPTION: Graph of the root-mean-square error \eqref{RMS} versus $\ln\lambda$ for the $M = 9$ polynomial.
 #+ATTR_LaTeX: scale=0.75
 #+LABEL: fig:1.8
 [[file:img/fig:1.8.png]]
