@@ -1,5 +1,6 @@
 #+TITLE:  Notes of PRML and Scikit-learn
 #+OPTIONS: ::t
+
 #+latex:\newpage
 
 * Introduction
@@ -2373,6 +2374,179 @@ This is because these test samples are outside of the range of the training samp
 
 
 *** Automatic Relevance Determination - ARD
+
+
+** 变分法初步
+
+
+微分学的一个最早的应用就是求极值, 先是一元实值函数的极值, 然后是多元实值函数的极值.
+建立了无穷维赋范线性空间上的微分学, 当然会利用它去探讨无穷维赋范线性空间上的实值函数的极值问题.
+
+\begin{theorem}\label{variations-basic}
+假设 $E$ 是个赋范线性空间, $U$ 是 $E$ 的一个开集, 映射 $f :U \rightarrow R$ 在 $U$ 上有直到 $(k - 1)$ 阶的导数, 而在点 $\mathbf{x} \in U$ 处有 $k$ 阶导数 $f^{(k)}(\mathbf{x}) \in \mathbf{L} (E, \cdots, E; R)$, 其中 $k \geqslant 2$. 又设 $f'(\mathbf{x}) = 0,\cdots , f^{(k - 1 )}(\mathbf{x}) = 0$, 而 $f^{(k)}(\mathbf{x}) \neq 0$ , 确切些,
+
+\begin{equation}
+\forall\mathbf{h}\in E\forall j\in\{1, \cdots, k-1\}\left( f^{(j)}\mathbf{h}^{j} = 0 \right)
+\end{equation}
+
+而
+
+\begin{equation}
+\exist \mathbf{h}\in E \left( f^{(k)}(\mathbf{x})\mathbf{h}^{k} \neq 0 \right)
+\end{equation}
+
+则
+
+(1) $\mathbf{x}$ 是函数 $f$ 的极值点的必要条件是: $k$ 是偶数, 且 $f^{(k)}(x)\mathbf{h}^{k}$ 不取相异的符号.
+
+(2) $x$ 是函数 $f$ 的极值点的充分条件是: $f^{(k)}(\mathbf{x})\mathbf{h}^{k}$ 在单位球面 $|h| = 1$ 上与零保持一个正的距离.
+若在单位球面上有不等式:
+
+\begin{equation}
+|\mathnf{h}| = 1 \Longrightarrow f^{(k)}(\mathbf{x})\mathbf{h}^{k} \geqslant \delta > 0
+\end{equation}
+
+其中 $\delta$ 是个不依赖于 $\mathbf{h}$ 的正数, 则 $\mathbf{x}$ 是函数 $f$ 的局部极小值点;
+若在单位球面上有不等式
+
+\begin{equation}
+|\mathnf{h}| = 1 \Longrightarrow f^{(k)}(\mathbf{x})\mathbf{h}^{k} \leqslant \delta < 0
+\end{equation}
+
+其中 $\delta$ 是个不依赖于 $\mathbf{h}$ 的负数, 则 $\mathbf{x}$ 是函数 $f$ 的局部极大值点.
+\end{theorem}
+
+\begin{proof}
+略.
+\end{proof}
+
+\begin{note}
+在定理 \ref{variations-basic}  的条件下， $\mathbf{x}$ 是函数 $f$ 的极值点的必要条件是: $f'(\mathbf{x}) =\mathbf{0}$.
+\end{note}
+
+\begin{note}
+定理 \ref{variations-basic} 可以推广到 $U$ 是 $E$ 的一个仿射子空间的开集的情形.
+下面我们将遇到这个情形.
+\end{note}
+
+\begin{example}
+先介绍 Banach 空间 $C^1(K, \mathbf{R})$ 的概念, 其中 $K$ 是 $\mathbf{R}^{n}$ 中满足条件 $K = \bar{K}^{o}$ 的紧子集.
+$C^1(K, \mathbf{R})$ 表示定义在 $K^{o}$ 上一次连续可微, 且导数可连续延拓至 $K$ 上的实值函数全体.
+$C^1(K, \mathbf{R})$ 上的范数定义如下:
+
+\begin{equation}
+|f|_{C^1(k)} = \max \left\{ |f|_{C(K)}, |\partial_j f|_{C(K)}, j=1,\cdots,n \right\}.
+\end{equation}
+
+不难证明, 如上定义的范数与以下定义的范数等价:
+
+\begin{equation}
+|f|'_{C^1(K)} = |f|_{C(K)} + \sum_{j=1}^n |\partial_jf|_{C(K)}.
+\end{equation}
+
+我们可以证明, $C^1(K, \mathbf{R})$ 相对于如上定义的范数构成一个 Banach 空间.
+
+设 $L\in C^1 (\mathbf{R}^3, \mathbf{R})$ 和 $f \in C^1 ([α,b], R)$.
+映射 $F : C^1 ([a, b], \mathbf{R}) \rightarrow \mathbf{R}$ 如下:
+
+\begin{equation}
+F(f) = \int_a^b L\left(x,f(x),f'(x)\right)dx.
+\end{equation}
+
+为了研究 $F$, 引进以下两个映射:
+
+\begin{equation}
+F_1: C^1 ([α, b], \mathbf{R}) \rightarrow C([a,b], \mathbf{R}), \quad
+F_1(x) = L(x,f(x),f'(x))
+\end{equation}
+
+和
+
+\begin{equation}
+F_2: C^1 ([α, b], \mathbf{R}) \rightarrow \mathbf{R}, \quad
+F_2(g) = \int_a^b g(x)dx.
+\end{equation}
+
+
+显然, $F = F_2 \circ F_1$, 而且是连续线性映射.
+
+我们先证明: $F_1$ 可微, 且
+
+\begin{equation}
+F_1'(f)h(x) = \partial_2 L(x,f(x),f'(x))h(x) + \partial_3 L(x,f(x),f'(x))h'(x)
+\end{equation}
+
+其中 $\partial_2$ 和 $\partial_3$ 分别表示对 $L$ 的第二和第三个自变量的求偏导数运算.
+证明略.
+
+我们有
+
+\begin{equation}\label{equ:8.9.13}
+F_1'(f)h = \int_a^b [\partial_2 L(x,f(x),f'(x))h(x) + \partial_3 L(x,f(x),f'(x))h'(x)]dx.
+\end{equation}
+
+常常遇到这样的极值问题，我们要求 $f$ 限制在 $C^1$ 的这样的仿射子空间上:
+
+\begin{equation}
+\{ f\in C^1([a,b],\mathbf{R}): f(a)=A, f(b=B) \}
+\end{equation}
+
+其中 $A$ 和 $B$ 是两个给定的常数.
+当我们考虑限制在以上仿射子空间上的极值问题时, (\ref{equ:8.9.13}) 中的 $h$ 应满足条件:
+
+\begin{equation}\label{equ:8.9.14}
+f(a) = f(a) + h(a), \quad f(b) = f(b) + h(b).
+\end{equation}
+
+换言之, $h$ 应满足条件
+
+\begin{equation}\label{equ:8.9.15}
+h(a) = h(b) = 0
+\end{equation}
+
+这时，假若 $L\inC^2 (\mathbf{R}^3, \mathbf{R})$, 通过一次分部积分, (\ref{equ:8.9.13}) 便可改写成
+
+\begin{equation}
+F'(f)h = \int_a^b \left[ \partial_2 L\left( x,f(x),f'(x) \right)
+- \frac{d}{dx}\partial_3 L\left( x,f(x),f'(x) \right) \right] h(x)dx
+\end{equation}
+
+由定理 \ref{variations-basic} ，在(\ref{equ:8.9.14}) 的条件下的 $F$ 的极值问题的解应满足条件: 对于任何满足条件(\ref{equ:8.9.15}) 的 $C^1$ 中的函数 h, 有
+
+\begin{equation}
+F'(f)h = \int_a^b \left[ \partial_2 L\left( x,f(x),f'(x) \right)
+- \frac{d}{dx}\partial_3 L\left( x,f(x),f'(x) \right) \right] h(x)dx = 0
+\end{equation}
+
+由此，根据下面的 Du Bois Reymond 引理, $f$ 应满足以下的方程, 它称为 $\textbf{Euler-Lagrange}$ 方程:
+
+\begin{equation}
+\partial_2 L\left( x,f(x),f'(x) \right)
+- \frac{d}{dx}\partial_3 L\left( x,f(x),f'(x) \right) = 0
+\end{equation}
+\end{example}
+
+
+\begin{lemma}
+(\textbf{Du Bois Reymond} 引理) 设 $\phi \in C\left( [a,b], \mathbf{R} \right), 它满足条件:
+
+\begin{equation}
+\forall h \in C^{\infty} \left( h(a) = h(b) = 0 \Longrightarrow \int_a^b \phi(x)h(x)dx = 0 \right),
+\end{equation}
+
+则 $\forall x \in [a,b]( \phi (x) = 0).
+\end{lemma}
+
+\begin{proof}
+略.
+\end{proof}
+
+
+
+
+
+
+
 
 
 ** Exercises
