@@ -1,5 +1,5 @@
 import numpy as np
-from prml.linear.regressor import Regressor
+from regressor import Regressor
 
 
 class BayesianRegressor(Regressor):
