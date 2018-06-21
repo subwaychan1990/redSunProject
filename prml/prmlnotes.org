@@ -2558,6 +2558,14 @@ F'(f)h = \int_a^b \left[ \partial_2 L\left( x,f(x),f'(x) \right)
 * Probability Distributions
 
 
+#+CAPTION: ch02-init
+#+BEGIN_SRC python :results silent :session src:2-1
+import numpy as np
+import matplotlib.pyplot as plt
+np.random.seed(1234)
+#+END_SRC
+
+
 In Chapter [[Introduction]], we emphasized the central role played by probability theory in the solution of pattern recognition problems.
 We turn now to an exploration of some particular examples of probability distributions and their properties.
 As well as being of great interest in their own right, these distributions can form building blocks for more complex models and will be used extensively throughout the book.
@@ -2620,7 +2628,258 @@ It is easily verified that this distribution is normalized and that it has mean 
 var[x] &= \mu(1-\mu) \label{variance-of-Bernoulli-distribution}
 \end{align}
 
-*** The beta distribution
+Now suppose we have a data set $\mathcal{D} = \{x_1,\cdots,x_N\}$ of observed values of x.
+We can construct the likelihood function, which is a function of \mu, on the assumption that the observations are drawn independently from $p(x|\mu)$, so that
+
+\begin{equation}
+p(\mathcal{D}|\mu) = \prod_{n=1}^Np(x_i|\mu) = \prod_{n=1}^N \mu^{x_n}(1-\mu)^{1-x_n}
+\end{equation}
+
+In a frequentist setting, we can estimate a value for \mu by maximizing the likelihood function, or equivalently by maximizing the logarithm of the likelihood.
+In the case of the Bernoulli distribution, the log likelihood function is given by
+
+\begin{equation}\label{equ:2.5}
+\ln p(\mathcal{D}|\mu) = \sum_{i=1}^N \ln p(x_n|\mu)
+= \sum_{i=1}^N\{ x_n\ln\mu + (1-x_n)\ln(1-\mu) \}
+\end{equation}
+
+At this point, it is worth noting that the log likelihood function depends on the $N$ observations $x_n$ only through their sum $\sum_n x_n$.
+This sum provides an example of a /sufficient statistic(充分统计量)/ for the data under this distribution, and we shall study the important role of sufficient statistics in some detail.
+If we set the derivative of $\ln p(\mathcal{D}|\mu)$ with respect to \mu equal to zero, we obtain the maximum likelihood estimator
+
+\begin{equation}\label{equ:2.7}
+\mu_{ML} = \frac{1}{N}\sum_{n=1}^N x_n
+\end{equation}
+
+which is also known as the /sample mean(样本均值)/.
+If we denote the number of observations of $x = 1$ (heads) within this data set by $m$, then we can write (\ref{equ:2.7}) in the form
+
+\begin{equation}\label{equ:2.8}
+\mu_{ML} = \frac{m}{N}
+\end{equation}
+
+so that the probability of landing heads is given, in this maximum likelihood framework, by the fraction of observations of heads in the data set.
+
+Now suppose we flip a coin, say, 3 times and happen to observe 3 heads. Then $N = m = 3$ and $\mu_{ML} = 1$.
+In this case, the maximum likelihood result would predict that all future observations should give heads.
+Common sense tells us that this is unreasonable, and in fact this is an extreme example of the over-fitting associated with maximum likelihood.
+We shall see shortly how to arrive at more sensible conclusions through the introduction of a prior distribution over $\mu$.
+
+We can also work out the distribution of the number $m$ of observations of $x = 1$, given that the data set has size $N$.
+This is called the /binomial distribution(二项分布)/, and from (\ref{equ:2.5}) we see that it is proportional to $\mu^{m}(1 − \mu)^{N−m}.
+In order to obtain the normalization coefficient we note that out of $N$ coin flips, we have to add up all of the possible ways of obtaining $m$ heads, so that the binomial distribution can be written
+
+\begin{equation}\label{binomial-distribution}
+\text{Bin}(m|N,\mu) = \binom{N}{m}\mu^{m}(1-\mu)^{N-m}
+\end{equation}
+
+where
+
+\begin{equation}
+\binom{N}{m} = \frac{N!}{(N-m)!m!}
+\end{equation}
+
+is the number of ways of choosing $m$ objects out of a total of $N$ identical objects.
+Figure [[fig:2.1]] shows a plot of the binomial distribution for $N = 10$ and $\mu = 0.25$.
+
+
+#+CAPTION: fig:2.1
+#+BEGIN_SRC python :results silent :session src:2-1
+from scipy.stats import binom
+fig, ax = plt.subplots(1, 1)
+n, p = 10, 0.25
+x = np.arange(11)
+y = binom.pmf(x, n, p)
+ax.bar(x,y,color="b")
+ax.set_xlabel("$m$")
+plt.savefig("img/fig:2.1.png")
+#+END_SRC
+
+#+CAPTION: Histogram plot of the binomial distribution (ref:binomial-distribution) as a function of m for $N =10$ and $\mu = 0.25$.
+#+ATTR_LaTeX: scale=0.75
+#+LABEL: fig:2.1
+[[file:img/fig:2.1.png]]
+
+
+The mean and variance of the binomial distribution can be found by using the result of Exercise 1.10(?), which shows that for independent events the mean of the sum is the sum of the means, and the variance of the sum is the sum of the variances.
+Because $m = x_1 + \cdots + x_N$, and for each observation the mean and variance are given by (ref:mean-of-Bernoulli-distribution) and (ref:variance-of-Bernoulli-distribution), respectively, we have
+
+\begin{align}
+\mathbb{E}[m] \equiv \sum_{m=0}^N m\text{Bin}(m|N,\mu) &= N\mu \label{mean-of-binomial-distribution} \\
+var[m] \equiv \sum_{m=0}^N (m-\mathbb{E}[m])^2\text{Bin}(m|N,\mu) &= N\mu(1-\mu) \label{variance-of-binomial-distribution}
+\end{align}
+
+These results can also be proved directly using calculus.
+
+
+*** TODO The beta distribution
+
+
+We have seen in (\ref{qeu:2.8}) that the maximum likelihood setting for the parameter \mu in the Bernoulli distribution, and hence in the binomial distribution, is given by the fraction of the observations in the data set having x = 1.
+As we have already noted, this can give severely over-fitted results for small data sets.
+In order to develop a Bayesian treatment for this problem, we need to introduce a prior distribution $p(\mu)$ over the parameter \mu.
+Here we consider a form of prior distribution that has a simple interpretation as well as some useful analytical properties.
+To motivate this prior, we note that the likelihood function takes the form of the product of factors of the form $\mu^{x}(1 − \mu)^{1−x}$.
+If we choose a prior to be proportional to powers of \mu and $(1 − \mu)$, then the posterior distribution, which is proportional to the product of the prior and the likelihood function, will have the same functional form as the prior.
+This property is called /conjugacy(共轭性)/ and we will see several examples of it later in this chapter.
+We therefore choose a prior, called the /beta/ distribution, given by
+
+\begin{equation}\label{beta-distribution}
+\text{Beta}(\mu|a,b) = \frac{\Gamma(a+b)}{\Gamma{a}\Gamma(b)} \mu^{a-1}(1-\mu)^{b-1}
+\end{equation}
+
+where Γ(x) is the gamma function defined by
+
+\begin{equation}\label{gamma-function}
+\Gamma(x) \equiv \int_0^{\infty} u^{x-1}e^{-u}du
+\end{equation}
+
+and the coefficient in (ref:beta-distribution) ensures that the beta distribution is normalized, so that
+
+\begin{equation}
+\int_0^1 \text{Beta}(\mu|a,b) = 1
+\end{equation}
+
+The mean and variance of the beta distribution are given by
+
+\begin{align}
+\mathbb{E}[x] &= \frac{a}{a+b} \label{mean-of-beta-distribution} \\
+var[\mu] &= \frac{ab}{(a+b)^2(a+b+1)} \label{variance-of-beta-distribution}
+\end{align}
+
+The parameters $a$ and $b$ are often called /hyperparameters(超参数)/ because they control the distribution of the parameter \mu.
+Figure [[fig:2.2]] shows plots of the beta distribution for various values of the hyperparameters.
+
+
+#+CAPTION: fig:2.2
+#+BEGIN_SRC python :results output :session src:2-1
+from scipy.stats import beta
+fig, ax = plt.subplots(2, 2)
+def create_beta_plot(a,b,ax,*args):
+  x = np.linspace(0,1, 100)
+  ax[args].plot(x, beta.pdf(x, a, b),'r-', lw=1, alpha=0.6)
+  ax[args].annotate("$a={0}$\n$b={1}$".format(a,b),xy=(0.25,2.2))
+  ax[args].set_ylim(0,3)
+  ax[args].set_xlabel("$\mu$")
+
+create_beta_plot(0.1,0.1,ax,0,0)
+create_beta_plot(1,1,ax,0,1)
+create_beta_plot(2,3,ax,1,0)
+create_beta_plot(8,4,ax,1,1)
+fig.subplots_adjust(hspace=0.3)
+fig.savefig("img/fig:2.2.png")
+plt.close("all")
+#+END_SRC
+
+#+RESULTS:
+
+#+CAPTION: Plots of the beta distribution $\text{Beta}(\mu|a, b)$ given by (ref:beta-distribution) as a function of \mu for various values of the hyperparameters $a$ and $b$.
+#+ATTR_LaTeX: scale=0.75
+#+LABEL: fig:2.2
+[[file:img/fig:2.2.png]]
+
+
+The posterior distribution of \mu is now obtained by multiplying the beta prior (ref:beta-distribution) by the binomial likelihood function (ref:binomial-distribution) and normalizing.
+Keeping only the factors that depend on \mu, we see that this posterior distribution has the form
+
+\begin{equation}\label{posterior-distribution-of-beta-distribution-simple}
+p(\mu|m,l,a,b)\varpropto \mu^{m+a-1}(1-\mu)^{l+b-1}
+\end{equation}
+
+where $l = N − m$, and therefore corresponds to the number of ‘tails’ in the coin example.
+We see that (ref:posterior-distribution-of-beta-distribution-simple) has the same functional dependence on \mu as the prior distribution, reflecting the conjugacy properties of the prior with respect to the likelihood function.
+Indeed, it is simply another beta distribution, and its normalization coefficient can therefore be obtained by comparison with (ref:beta-distribution) to give
+
+\begin{equation}\label{posterior-distribution-of-beta-distribution}
+p(\mu|m,l,a,b) = \frac{\Gamma(m+a+b+l)}{\Gamma(m+a)\Gamma(l+b)}\mu^{m+a-1}(1-\mu)^{l+b-1}
+\end{equation}
+
+We see that the effect of observing a data set of $m$ observations of $x = 1$ and $l$ observations of $x = 0$ has been to increase the value of $a$ by $m$, and the value of $b$ by $l$, in going from the prior distribution to the posterior distribution.
+This allows us to provide a simple interpretation of the hyperparameters $a$ and $b$ in the prior as an /effective number of observations(有效观测数)/ of $x = 1$ and $x = 0$, respectively.
+Note that $a$ and $b$ need not be integers.
+Furthermore, the posterior distribution can act as the prior if we subsequently observe additional data.
+To see this, we can imagine taking observations one at a time and after each observation updating the current posterior distribution by multiplying by the likelihood function for the new observation and then normalizing to obtain the new, revised posterior distribution.
+At each stage, the posterior is a beta distribution with some total number of (prior and actual) observed values for $x = 1$ and $x = 0$ given by the parameters $a$ and $b$.
+Incorporation of an additional observation of $x = 1$ simply corresponds to incrementing the value of $a$ by $1$, whereas for an observation of $x = 0$ we increment $b$ by $1$.
+Figure [[fig:2.3]] illustrates one step in this process.
+
+
+#+CAPTION: fig:2.3
+#+BEGIN_SRC python :results silent :session src:2-1
+fig, ax = plt.subplots(3,1)
+a,b = 2,2
+x = np.linspace(0,1, 100)
+ax[0].set_ylim(0,2)
+ax[1].set_ylim(0,2)
+ax[2].set_ylim(0,2)
+ax[0].set_xlim(0,1)
+ax[1].set_xlim(0,1)
+ax[2].set_xlim(0,1)
+ax[0].plot(x, beta.pdf(x, a, b),'r-', lw=1, alpha=0.6)
+ax[1].plot(x, x,'b-', lw=1, alpha=0.6)
+ax[2].plot(x, beta.pdf(x, a+1, b),'r-', lw=1, alpha=0.6)
+ax[0].annotate("prior",xy=(0.1,1.6))
+ax[1].annotate("likelihood function",xy=(0.1,1.6))
+ax[2].annotate("posterior",xy=(0.1,1.6))
+fig.savefig("img/fig:2.3.png")
+plt.close("all")
+#+END_SRC
+
+#+CAPTION: Illustration of one step of sequential Bayesian inference. The prior is given by a beta distribution with parameters $a = 2, b = 2$, and the likelihood function, given by (\ref{binomial-distribution}) with $N = m = 1$, corresponds to a single observation of $x = 1$, so that the posterior is given by a beta distribution with parameters $a = 3, b = 2$.
+#+ATTR_LaTeX: scale=0.75
+#+LABEL: fig:2.3
+[[file:img/fig:2.3.png]]
+
+
+We see that this /sequential(顺序)/ approach to learning arises naturally when we adopt a Bayesian viewpoint.
+It is independent of the choice of prior and of the likelihood function and depends only on the assumption of i.i.d. data.
+Sequential methods make use of observations one at a time, or in small batches(批次), and then discard them before the next observations are used.
+They can be used, for example, in real-time learning scenarios where a steady stream of data is arriving, and predictions must be made before all of the data is seen.
+Because they do not require the whole data set to be stored or loaded into memory, sequential methods are also useful for large data sets.
+Maximum likelihood methods can also be cast into a sequential framework.
+
+If our goal is to predict, as best we can, the outcome of the next trial, then we must evaluate the predictive distribution of $x$, given the observed data set \mathcal{D}.
+From the sum and product rules of probability, this takes the form
+
+\begin{equation}
+p(x=1|\mathcal{D}) = \int_0^1 p(x=1|\mu)p(\mu|\mathcal{D})d\mu = \int_0^1 \mu p(\mu|\mathcal{D})d\mu = \mathbb{E}[\mu|\mathcal{D}]
+\end{equation}
+
+Using the result (ref:posterior-distribution-of-beta-distribution) for the posterior distribution $p(\mu|\mathcal{D})$, together with the result (ref:mean-of-beta-distribution) for the mean of the beta distribution, we obtain
+
+\begin{equation}\label{interpretation-of-a-beta-distribution}
+p(x=1|\mathcal{D}) = \frac{m+a}{m+a+l+b}
+\end{equation}
+
+which has a simple interpretation as the total fraction of observations (both real observations and fictitious prior observations) that correspond to $x = 1$.
+Note that in the limit of an infinitely large data set $m, l \rightarrow\infty$ the result (ref:interpretation-of-a-beta-distribution) reduces to the maximum likelihood result (\ref{equ:2.8}).
+As we shall see, it is a very general property that the *Bayesian and maximum likelihood results will agree in the limit of an infinitely large data set*.
+For a finite data set, *the posterior mean for \mu always lies between the prior mean and the maximum likelihood estimate* for \mu corresponding to the relative frequencies of events given by (\label{equ:2.7}).
+
+From Figure [[fig:2.2]], we see that as the number of observations increases, so the posterior distribution becomes more sharply peaked.
+This can also be seen from the result (ref:variance-of-beta-distribution) for the variance of the beta distribution, in which we see that the variance goes to zero for $a \rightarrow\infty$ or $b \rightarrow\infty$.
+In fact, we might wonder whether it is a general property of Bayesian learning that, as we observe more and more data, the uncertainty represented by the posterior distribution will steadily decrease.
+
+#+BEGIN_QUOTE
+To address this, we can take a frequentist view of Bayesian learning and show that, on average, such a property does indeed hold.
+Consider a general Bayesian inference problem for a parameter \theta for which we have observed a data set \mathcal{D}, described by the joint distribution $p(\theat, \mathcal{D}).
+The follow result
+
+\begin{equation}
+\mathbb{E}_{\pmb{\theta}}[\pmb{\theta}] = \mathbb{E}_{\mathcal{D}}[\mathbb{E}_{\pmb{\theta}}[\pmb{\theta}|\mathcal{D}}]]
+\end{equation}
+
+where
+
+\begin{align}
+
+\end{align}
+
+says that the posterior mean of θ, averaged over the distribution generating the data,is equal to the prior mean of θ. Similarly, we can show that
+
+\begin{equation}
+
+\end{equation}
 
 
 ** Multinomial Variables
