@@ -3,7 +3,7 @@
 
 #+latex:\newpage
 
-* Introduction
+* Introduction <<Introduction>>
 
 
 #+CAPTION: ch01-init
@@ -2547,6 +2547,137 @@ F'(f)h = \int_a^b \left[ \partial_2 L\left( x,f(x),f'(x) \right)
 
 
 
+
+
+** Exercises
+
+
+#+latex:\newpage
+
+
+* Probability Distributions
+
+
+In Chapter [[Introduction]], we emphasized the central role played by probability theory in the solution of pattern recognition problems.
+We turn now to an exploration of some particular examples of probability distributions and their properties.
+As well as being of great interest in their own right, these distributions can form building blocks for more complex models and will be used extensively throughout the book.
+The distributions introduced in this chapter will also serve another important purpose, namely to provide us with the opportunity to discuss some key statistical concepts, such as Bayesian inference, in the context of simple models before we encounter them in more complex situations in later chapters.
+
+One role for the distributions discussed in this chapter is to model the probability distribution $p(\mathbf{x})$ of a random variable \mathbf{x}, given a finite set $\mathbf{x}_1, \cdots , \mathbf{x}_N$ of observations.
+This problem is known as /density estimation(密度估计)/.
+For the purposes of this chapter, we shall assume that the data points are independent and identically distributed.
+It should be emphasized that the problem of density estimation is fundamentally ill-posed, because there are infinitely many probability distributions that could have given rise to the observed finite data set.
+Indeed, any distribution $p(\mathbf{x})$ that is nonzero at each of the data points $\mathbf{x}_1, \cdots , \mathbf{x}_N$ is a potential candidate.
+The issue of choosing an appropriate distribution relates to the problem of model selection that has already been encountered in the context of polynomial curve fitting in Chapter [[Introduction]] and that is a central issue in pattern recognition.
+
+We begin by considering the binomial and multinomial distributions for discrete random variables and the Gaussian distribution for continuous random variables.
+These are specific examples of /parametric distributions(参数分布)/, so-called because they are governed by a small number of adaptive parameters, such as the mean and variance in the case of a Gaussian for example.
+To apply such models to the problem of density estimation, we need a procedure for determining suitable values for the parameters, given an observed data set.
+In a frequentist treatment, we choose specific values for the parameters by optimizing some criterion, such as the likelihood function.
+By contrast, in a Bayesian treatment we introduce prior distributions over the parameters and then use Bayes’ theorem to compute the corresponding posterior distribution given the observed data.
+
+
+#+BEGIN_QUOTE
+在频率学家的观点中, 我们通过最优化某些准则(例如似然函数)来确定参数的具体值.
+相反, 在贝叶斯观点中, 给定观察数据, 我们引入参数的先验分布, 然后使用贝叶斯定理来计算对应后验概率分布。
+#+END_QUOTE
+
+
+We shall see that an important role is played by /conjugate priors(共轭先验)/, that lead to posterior distributions having the same functional form as the prior, and that therefore lead to a greatly simplified Bayesian analysis.
+For example, the conjugate prior for the parameters of the multinomial distribution is called the /Dirichlet distribution(狄利克雷分布)/, while the conjugate prior for the mean of a Gaussian is another Gaussian.
+All of these distributions are examples of the exponential family of distributions, which possess a number of important properties, and which will be discussed in some detail.
+
+One limitation of the parametric approach is that it assumes a specific functional form for the distribution, which may turn out to be inappropriate for a particular application.
+An alternative approach is given by /nonparametric(非参数)/ density estimation methods in which the form of the distribution typically depends on the size of the data set.
+Such models still contain parameters, but these control the model complexity rather than the form of the distribution.
+We end this chapter by considering three nonparametric methods based respectively on histograms, nearest-neighbors, and kernels.
+
+
+** Binary Variables
+
+
+We begin by considering a single binary random variable $x \in \{0, 1\}$.
+For example, $x$ might describe the outcome of flipping a coin, with $x = 1$ representing ‘heads’, and $x = 0$ representing ‘tails’.
+We can imagine that this is a damaged coin so that the probability of landing heads is not necessarily the same as that of landing tails.
+The probability of $x = 1$ will be denoted by the parameter \mu so that
+
+\begin{equation}
+p(x=1|\mu) = \mu
+\end{equation}
+
+where $0 \leqslant \mu \leqslant 1$, from which it follows that $p(x = 0|\mu) = 1 − \mu$.
+The probability distribution over $x$ can therefore be written in the form
+
+\begin{equation}\label{Bernoulli-distribution}
+\text{Bern}(x|\mu) = \mu^{x}(1-\mu)^{1-x}
+\end{equation}
+
+which is known as the Bernoulli distribution.
+It is easily verified that this distribution is normalized and that it has mean and variance given by
+
+\begin{align}
+\mathbb{E}[x] &= \mu \label{mean-of-Bernoulli-distribution} \\
+var[x] &= \mu(1-\mu) \label{variance-of-Bernoulli-distribution}
+\end{align}
+
+*** The beta distribution
+
+
+** Multinomial Variables
+
+
+*** The Dirichlet distribution
+
+
+** The Gaussian Distribution
+
+
+*** Conditional Gaussian distributions
+
+
+*** Marginal Gaussian distributions
+
+
+*** Bayes’ theorem for Gaussian variables
+
+
+*** Maximum likelihood for the Gaussian
+
+
+*** Sequential estimation
+
+
+*** Bayesian inference for the Gaussian
+
+
+*** Student’s t-distribution
+
+
+*** Periodic variables
+
+
+*** Mixtures of Gaussians
+
+
+** The Exponential Family
+
+
+*** Maximum likelihood and sufficient statistics
+
+
+*** Conjugate priors
+
+
+*** Noninformative priors
+
+
+*** Nonparametric Methods
+
+
+*** Kernel density estimators
+
+
+*** Nearest-neighbour methods
 
 
 ** Exercises
