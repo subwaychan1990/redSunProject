@@ -982,7 +982,7 @@ From the form of (ref:gaussian-distribution-single) we see that the Gaussian dis
 
 Also it is straightforward to show that the Gaussian is normalized, so that
 
-\begin{equation}
+\begin{equation}\label{equ:1.48}
 \int_{-\infty}^{\infty}\mathcal{N}(x|\mu,\sigma^2) = 1
 \end{equation}
 
@@ -2566,6 +2566,7 @@ F'(f)h = \int_a^b \left[ \partial_2 L\left( x,f(x),f'(x) \right)
   from scipy import linalg
   from scipy.stats import dirichlet
   from scipy.stats import beta
+  from scipy.stats import uniform
   np.random.seed(1234)
 #+END_SRC
 
@@ -2814,18 +2815,14 @@ Figure [[fig:2.3]] illustrates one step in this process.
   ax = fig.subplots(1, 3)
   a, b = 2, 2
   x = np.linspace(0, 1, 100)
-  ax[0].set_ylim(0, 2)
-  ax[1].set_ylim(0, 2)
-  ax[2].set_ylim(0, 2)
-  ax[0].set_xlim(0, 1)
-  ax[1].set_xlim(0, 1)
-  ax[2].set_xlim(0, 1)
-  ax[0].plot(x, beta.pdf(x, a, b), 'r-', lw=1, alpha=0.6)
-  ax[1].plot(x, x, 'b-', lw=1, alpha=0.6)
-  ax[2].plot(x, beta.pdf(x, a + 1, b), 'r-', lw=1, alpha=0.6)
-  ax[0].annotate("prior", xy=(0.1, 1.6))
-  ax[1].annotate("likelihood function", xy=(0.1, 1.6))
-  ax[2].annotate("posterior", xy=(0.1, 1.6))
+  y_plot = [beta.pdf(x, a, b), x, beta.pdf(x, a + 1, b)]
+  for index, (y, annotation) in enumerate(
+          zip(y_plot, ["prior", "likelihood", "posterior"])):
+      ax[index].set_ylim(0, 2)
+      ax[index].set_xlim(0, 1)
+      ax[index].set_ylim(0, 2)
+      ax[index].plot(x, y, 'r-', lw=1, alpha=0.6)
+      ax[index].annotate(annotation, xy=(0.1, 1.6))
   fig.savefig("img/fig:2.3.png")
   plt.close("all")
 #+END_SRC
@@ -3092,14 +3089,469 @@ Note that two-state quantities can either be represented as binary variables and
 The Gaussian, also known as the normal distribution, is a widely used model for the distribution of continuous variables.
 In the case of a single variable $x$, the Gaussian distribution can be written in the form
 
-\begin{equation}
+\begin{equation}\label{Gaussian-distribution-single-variable}
 \mathcal{N}(x|\mu,\sigma^2) = \frac{1}{(2\pi\sigma^2)^{1/2}} \exp\left\{ -\frac{1}{2\sigma^2}(x-\mu)^2 \right\}
 \end{equation}
 
-where \mu is the mean and \sigma^2 is the variance.
+where $\mu$ is the mean and $\sigma^2$ is the variance.
+For a D-dimensional vector $\mathbf{x}$, the multivariate Gaussian distribution takes the form
+
+\begin{equation}\label{Gaussian-distribution-multivariate}
+\mathcal{N}(\mathbf{x}|\pmb{\mu},\pmb{\Sigma}) = \frac{1}{(2\pi)^{D/2}}\frac{1}{|\pmb{\Sigma}|^{1/2}} \exp\{ -\frac{1}{2}(\mathbf{x}-\pmb{\mu})^T\pmb{\Sigma}^{-1}(\mathbf{x}-\pmb{\mu}) \}
+\end{equation}
+
+where $\pmb{\mu}$ is a D-dimensional mean vector, $\pmb{\Sigma}$ is a $D \times D$ covariance matrix, and $|\pmb{\Sigma}|$ denotes the determinant of $\pmb{\Sigma}$.
+
+The Gaussian distribution arises in many different contexts and can be motivated from a variety of different perspectives.
+For example, we have already seen that for a single real variable, the distribution that maximizes the entropy is the Gaussian.
+This property applies also to the multivariate Gaussian.
+
+Another situation in which the Gaussian distribution arises is when we consider the sum of multiple random variables.
+The /central limit theorem(中心极限定理)/ (due to Laplace) tells us that, subject to certain mild(温和的) conditions, the sum of a set of random variables, which is of course itself a random variable, has a distribution that becomes increasingly Gaussian as the number of terms in the sum increases (Walker, 1969).
+We can illustrate this by considering $N$ variables $x_1 , \cdots , x_N$ each of which has a uniform distribution over the interval $[0, 1]$ and then considering the distribution of the mean $(x_1 + \cdots + x_N )/N$ .
+For large $N$ , this distribution tends to a Gaussian, as illustrated in Figure [fig:2.6]].
+In practice, the convergence to a Gaussian as $N$ increases can be very rapid.
+One consequence of this result is that the binomial distribution (ref:binomial-distribution), which is a distribution over m defined by the sum of $N$ observations of the random binary variable $x$, will tend to a Gaussian as $N \rightarrow\infty$ (see Figure [[fig:2.1]] for the case of $N = 10$).
+
+#+CAPTION: fig:2.6(python2)
+#+BEGIN_SRC python :results silent
+  from pacal import *
+  import matplotlib.pyplot as plt
+  fig = plt.figure(figsize=(12,4))
+  U = UniformDistr()
+  for index, N in enumerate([1,2,10]):
+      ax = fig.add_subplot(1,3,index+1)
+      ax.set_ylim(0,5)
+      ax.set_xlim(0,1)
+      S = iid_average(U,N)
+      S.hist(bins=20,color="blue", edgecolor="b")
+      ax.annotate("$N=%d$"%N, xy=(0.1,4))
+  plt.savefig("img/fig:2.6.png")
+  plt.close("all")
+#+END_SRC
+
+#+RESULTS:
+
+#+CAPTION: Histogram plots of the mean of $N$ uniformly distributed numbers for various values of $N$. We observe that as $N$ increases, the distribution tends towards a Gaussian.
+#+ATTR_LaTeX: scale=0.75
+#+LABEL: fig:2.6
+[[file:img/fig:2.6.png]]
+
+The Gaussian distribution has many important analytical properties, and we shall consider several of these in detail.
+As a result, this section will be rather more technically involved than some of the earlier sections, and will require familiarity with various matrix identities.
+However, we strongly encourage the reader to become proficient(精通的) in manipulating Gaussian distributions using the techniques presented here as this will prove invaluable in understanding the more complex models presented in later chapters.
+
+We begin by considering the geometrical form of the Gaussian distribution.
+The functional dependence of the Gaussian on \mathbf{x} is through the quadratic form
+
+\begin{equation}\label{Mahalanobis-distance}
+\Delta^2 = (\mathbf{x} - \pmb{\mu})^T\pmb{\Sigma}^{-1}(\mathbf{x}-\pmb{\mu})
+\end{equation}
+
+which appears in the exponent.
+The quantity $\Delta$ is called the /Mahalanobis distance(马氏距离)/ from $\pmb{\mu}$ to $\mathbf{x}$ and reduces to the Euclidean distance when $\Sigma$ is the identity matrix.
+The Gaussian distribution will be constant on surfaces in x-space for which this quadratic form is constant.
+
+First of all, we note that the matrix \Sigma can be taken to be symmetric, without loss of generality, because any antisymmetric component would disappear from the exponent.
+Now consider the eigenvector equation for the covariance matrix
+
+\begin{equation}\label{eigenvector-equation-of-covariance-Gauss-distribution}
+\Sigma\mathbf{u}_i = \lambda_i\mathbf{u}_i
+\end{equation}
+
+where $i = 1, \cdots, D$.
+Because $\Sigma$ is a real, symmetric matrix its eigenvalues will be real, and its eigenvectors can be chosen to form an orthonormal set, so that
+
+\begin{equation}\label{equ:2.46}
+\mathbf{u}_i^T\mathbf{u}_j = I_{ij}
+\end{equation}
+
+where $I_{ij}$ is the $i, j$ element of the identity matrix and satisfies
+
+\begin{equation}
+I_ij =
+\left\{\begin{aligned}
+1,\quad &\text{if}\quad i=j \\
+0,\quad &\text{otherwise}
+\end{equation}
+
+The covariance matrix $\Sigma$ can be expressed as an expansion in terms of its eigenvectors in the form
+
+\begin{equation}\label{equ:2.48}
+\Sigma = \sum_{i=1}^{D}\lambda_i\mathbf{u}_i\mathbf{u}_i^T
+\end{equation}
+
+and similarly the inverse covariance matrix $\Sigma^{-1}$ can be expressed as
+
+\begin{equation}\label{equ:2.49}
+\Sigma^{-1} =\sum_{i=1}^{D}\frac{1}{\lambda_i}\mathbf{u}_i\mathbf{u}_i^T
+\end{equation}
+
+Substituting (\ref{equ:2.49}) into (ref:Mahalanobis-distance), the quadratic form becomes
+
+\begin{equation}
+\Delta^2 = \sum_{i=1}^D \frac{y_i^2}{\lambda_i}
+\end{equation}
+
+where we have defined
+
+\begin{equation}\label{equ:2.51}
+y_i = \mathbf{u}_i(\mathbf{x}-\pmb{\mu})
+\end{equation}
+
+We can interpret $\{y_i\}$ as a new coordinate system defined by the orthonormal vectors $u_i$ that are shifted and rotated with respect to the original $x_i$ coordinates.
+Forming the vector $\mathbf{y} = (y_1,\cdots,y_D)^T$, we have
+
+\begin{equation}
+\mathbf{y} = \mathbf{U}(\mathbf{x}-\pmb{\mu})
+\end{equation}
+
+where $\mathbf{U}$ is a matrix whose rows are given by $u^T_i$.
+From (\ref{equ:2.46}) it follows that $\mathbf{U}$ is an orthogonal matrix, i.e., it satisfies $\mathbf{U}\mathbf{U}^T = \mathbf{I}$, and hence also $\mathbf{U}^T\mathbf{U} = \mathbf{I}$, where $\mathbf{I}$ is the identity matrix.
+
+The quadratic form, and hence the Gaussian density, will be constant on surfaces for which (\ref{equ:2.51}) is constant.
+If all of the eigenvalues $\lambda_i$ are positive, then these surfaces represent ellipsoids, with their centers at $\mu$ and their axes oriented along $u_i$, and with scaling factors in the directions of the axes given by $\lambda_i^{1/2}, as illustrated in Figure [[fig:2.7]].
+
+
+#+CAPTION: The red curve shows the elliptical surface of constant probability density for a Gaussian in a two-dimensional space $\mathbf{x} = (x_1,x_2)$ on which the density is $\exp(−1/2)$ of its value at $x = \mu$. The major axes of the ellipse are defined by the eigenvectors $u_i$ of the covariance matrix, with corresponding eigenvalues $\lambda_i$.
+#+ATTR_LaTeX: scale=0.75
+#+LABEL: fig:2.7
+[[file:img/fig:2.7.png]]
+
+
+For the Gaussian distribution to be well defined, it is necessary for all of the eigenvalues $\lambda_i$ of the covariance matrix to be strictly positive, otherwise the distribution cannot be properly normalized.
+A matrix whose eigenvalues are strictly positive is said to be /positive definite(正定)/.
+In Chapter 12(?), we will encounter Gaussian distributions for which one or more of the eigenvalues are zero, in which case the distribution is singular and is confined to a subspace of lower dimensionality.
+If all of the eigenvalues are nonnegative, then the covariance matrix is said to be /positive semidefinite(半正定)/.
+
+Now consider the form of the Gaussian distribution in the new coordinate system defined by the $y_i$.
+In going from the $\mathbf{x}$ to the $\mathbf{y}$ coordinate system, we have a Jacobian matrix $\mathbf{J}$ with elements given by
+
+\begin{equation}
+J_{ij} = \frac{\partial x_i}{\partial y_j} = U_{ji}
+\end{equation}
+
+where $U_{ji}$ are the elements of the matrix $\mathbf{U}^T$.
+Using the orthonormality property of the matrix $\mathbf{U}$, we see that the square of the determinant of the Jacobian matrix is
+
+\begin{equation}
+|\mathbf{J}|^2 = |\mathbf{U}^T|^2 = |\mathbf{U}^T||\mathbf{U}| = |\mathbf{U}^T\mathbf{U}| = |\mathbf{I}| = 1
+\end{equation}
+
+and hence $|\mathbf{J}| = 1$.
+Also, the determinant $|\Sigma|$ of the covariance matrix can be written as the product of its eigenvalues, and hence
+
+\begin{equation}\label{equ:2.55}
+|\Sigma|^{1/2} = \prod_{j=1}^D \lambda_j^{1/2}.
+\end{equation}
+
+Thus in the $y_j$ coordinate system, the Gaussian distribution takes the form
+
+\begin{equation}
+p(\mathbf{y}) = p(\mathbf{x})|\mathbf{J}| = \prod_{j=1}^D\frac{1}{(2\pi\lambda_j)^{1/2}} \exp\left\{ -\frac{y_i^2}{2\lambda_i} \right\}
+\end{equation}
+
+which is the product of $D$ independent univariate Gaussian distributions.
+The eigenvectors therefore define a new set of shifted and rotated coordinates with respect to which the joint probability distribution factorizes into a product of independent distributions.
+The integral of the distribution in the $\mathbf{y}$ coordinate system is then
+
+\begin{equation}
+\int p(\mathbf{y})d\mathbf{y} = \prod_{j=1}^D \int_{-\infty}^{\infty} \frac{1}{(2\pi\lambda_j)^{1/2}} \exp\left\{ -\frac{y_j^2}{2\lambda_j} \right\} dy_j =1
+\end{equation}
+
+where we have used the result (\ref{equ:1.48}) for the normalization of the univariate Gaussian.
+This confirms that the multivariate Gaussian (ref:Gaussian-distribution-multivariate) is indeed normalized.
+
+We now look at the moments of the Gaussian distribution and thereby provide an interpretation of the parameters $\pmb{\mu}$ and $\Sigma$.
+The expectation of $\mathbf{x}$ under the Gaussian distribution is given by
+
+\begin{equation}
+\begin{split}
+\mathbb{E}[\mathbf{x}] &= \frac{1}{(2\pi)^{D/2}}\frac{1}{|\Sigma|^{1/2}}
+\int \exp \left\{ -\frac{1}{2}(\mathbf{x}-\pmb{\mu})^T\Sigma^{-1}(\mathbf{x}-\pmb{\mu}) \right\}\mathbf{x}d\mathbf{x} \\
+&= \frac{1}{(2\pi)^{D/2}}\frac{1}{|\Sigma|^{1/2}}
+\int \exp \left\{ -\frac{1}{2}\mathbf{z}^T\Sigma^{-1}\mathbf{z} \right\}(\mathbf{z}+\pmb{\mu})d\mathbf{z}
+\end{split}
+\end{equation}
+
+where we have changed variables using $\mathbf{z} = \mathbf{x} − \pmb{\mu}$.
+We now note that the exponent is an even function of the components of $\mathbf{z}$ and, because the integrals over these are taken over the range $(-\infty,\infty)$, the term in $\mathbf{z}$ in the factor $(\mathbf{z} + \pmb{\mu})$ will vanish by symmetry.
+Thus
+
+\begin{equation}
+\mathbb{E}[\mathbf{x}] = \pmb{\mu}
+\end{equation}
+
+and so we refer to $\pmb{\mu}$ as the mean of the Gaussian distribution.
+
+We now consider second order moments of the Gaussian.
+In the univariate case, we considered the second order moment given by $\mathbb{E}[x^2]$.
+For the multivariate Gaussian, there are $D^2$ second order moments given by $\mathbb{E}[x_ix_j]$, which we can group together to form the matrix $\mathbb{E}[\mathbf{x}\mathbf{x}^T]$.
+This matrix can be written as
+
+\begin{equation}
+\begin{split}
+\mathbb{E}[\mathbf{x}\mathbf{x}^T] &= \frac{1}{(2\pi)^{D/2}}\frac{1}{|\Sigma|^{1/2}}
+\int \exp \left\{ -\frac{1}{2}(\mathbf{x}-\pmb{\mu})^T\Sigma^{-1}(\mathbf{x}-\pmb{\mu}) \right\}\mathbf{x}\mathbf{x}^Td\mathbf{x} \\
+&= \frac{1}{(2\pi)^{D/2}}\frac{1}{|\Sigma|^{1/2}}
+\int \exp \left\{ -\frac{1}{2}\mathbf{z}^T\Sigma^{-1}\mathbf{z} \right\}(\mathbf{z}+\pmb{\mu})(\mathbf{z}+\pmb{\mu})^Td\mathbf{z}
+\end{split}
+\end{equation}
+
+where again we have changed variables using $\mathbf{z} = \mathbf{x} − \pmb{\mu}$.
+Note that the cross-terms involving $\pmb{\mu}\mathbf{z}^T$ and $\mathbf{z}\pmb{\mu}^T$ will again vanish by symmetry.
+The term $\pmb{\mu}\pmb{\mu}^T$ is constant and can be taken outside the integral, which itself is unity because the Gaussian distribution is normalized.
+Consider the term involving $\mathbf{z}\mathbf{z}^T$.
+Again, we can make use of the eigenvector expansion of the covariance matrix given by (ref:eigenvector-equation-of-covariance-Gauss-distribution), together with the completeness of the set of eigenvectors, to write
+
+\begin{equation}
+\mathbf{z} = \sum_{j=1}^D y_j\mathbf{u}_j
+\end{equation}
+
+where $y_j = \mathbf{u}^T_j\mathbf{z}$, which gives
+
+\begin{equation}\label{equ:2.62}
+\begin{split}
+&\frac{1}{(2\pi)^{D/2}}\frac{1}{|\Sigma|^{1/2}}
+\int \exp \left\{ -\frac{1}{2}\mathbf{z}^T\Sigma^{-1}\mathbf{z} \right\}\mathbf{z}\mathbf{z}^Td\mathbf{z} \\
+&= \frac{1}{(2\pi)^{D/2}}\frac{1}{|\Sigma|^{1/2}} \sum_{i=1}^D\sum_{j=1}^D \mathbf{u}_i\mathbf{u}_j^T \int \exp \left\{ -\sum_{k=1}^D \frac{y_k^2}{2\lambda_k} \right\} y_iy_j d\mathbf{y} \\
+&= \sum_{i=1}^D\mathbf{u}_i\mathbf{u}_i^T \frac{1}{(2\pi)^{D/2}}\frac{1}{|\Sigma|^{1/2}}\int \exp\left\{ -\sum_{k=1}^D \frac{y_k^2}{2\lambda_k} \right\}y_i^2 d\mathbf{y} \\
+&= \sum_{i=1}^D\mathbf{u}_i\mathbf{u}_i^T \frac{1}{(2\pi)^{D/2}}\frac{1}{|\Sigma|^{1/2}} (2\pi)^{D/2}\lambda_i\prod_{k=1}^D\lambda_k^{1/2} \\
+&= \sum_{i=1}^D \mathbf{u}_i\mathbf{u}_i^T\lambda_i
+= \Sigma
+\end{split}
+\end{equation}
+
+where we have made use of the eigenvector equation (ref:eigenvector-equation-of-covariance-Gauss-distribution), together with the fact that the integral on the right-hand side of the middle line vanishes by symmetry unless $i = j$, and in the final line we have made use of the results (ref:gaussian-distribution-single-second-order-moment) and (\ref{equ:2.55}), together with (\ref{equ:2.48}).
+Thus we have
+
+\begin{equation}
+\mathbb{E}[\mathbf{x}\mathbf{x}^T] = \pmb{\mu}\pmb{\mu}^T + \Sigma.
+\end{equation}
+
+For single random variables, we subtracted the mean before taking second moments in order to define a variance.
+Similarly, in the multivariate case it is again convenient to subtract off the mean, giving rise to the /covariance(协方差)/ of a random vector $\mathbf{x}$ defined by
+
+\begin{equation}
+var[\mathbf{x}] = \mathbb{E}[(\mathbf{x} - \mathbb{E}[\mathbf{x}])(\mathbf{x} - \mathbb{E}[\mathbf{x}])^T]
+\end{equation}
+
+For the specific case of a Gaussian distribution, we can make use of $E[\mathbf{x}] = \pmb{\mu}$, together with the result (\ref{equ:2.62}), to give
+
+\begin{equation}\label{covariance-of-Gaussian-distribution}
+cov[\mathbf{x}] = \Sigma
+\end{equation}
+
+Because the parameter matrix $\Sigma$ governs the covariance of $\mathbf{x}$ under the Gaussian distribution, it is called the covariance matrix.
+
+Although the Gaussian distribution (ref:Gaussian-distribution-multivariate) is widely used as a density model, it suffers from some significant limitations.
+Consider the number of free parameters in the distribution.
+A general symmetric covariance matrix $\Sigma$ will have $D(D + 1)/2$ independent parameters, and there are another $D$ independent parameters in $\pmb{\mu}$, giving $D(D + 3)/2$ parameters in total.
+For large $D$, the total number of parameters therefore grows quadratically with $D$, and the computational task of manipulating and inverting large matrices can become prohibitive.
+One way to address this problem is to use restricted forms of the covariance matrix.
+If we consider covariance matrices that are /diagonal(对角的)/, so that $\Sigma = diag(\sigma_i^2)$, we then have a total of $2D$ independent parameters in the density model.
+The corresponding contours of constant density are given by axis-aligned ellipsoids.
+We could further restrict the covariance matrix to be proportional to the identity matrix, $\Sigma = \sigma^2\mathbf{I}$, known as an /isotropic(各向同性的)/ covariance, giving $D + 1$ independent parameters in the model and spherical surfaces of constant density.
+The three possibilities of general, diagonal, and isotropic covariance matrices are illustrated in Figure [[fig:2.8]].
+Unfortunately,where as such approaches limit the number of degrees of freedom in the distribution and make inversion of the covariance matrix a much faster operation, they also greatly restrict the form of the probability density and limit its ability to capture interesting correlations in the data.
+
+
+#+CAPTION: Contours of constant probability density for a Gaussian distribution in two dimensions in which the covariance matrix is (a) of general form, (b) diagonal, in which the elliptical contours are aligned with the coordinate axes, and (c) proportional to the identity matrix, in which the contours are concentric circles.
+#+ATTR_LaTeX: scale=0.75
+#+LABEL: fig:2.8
+[[file:img/fig:2.8.png]]
+
+
+A further limitation of the Gaussian distribution is that it is intrinsically(内在的) unimodal(单峰的) (i.e., has a single maximum) and so is unable to provide a good approximation to multimodal distributions.
+Thus the Gaussian distribution can be both too flexible, in the sense of having too many parameters, while also being too limited in the range of distributions that it can adequately represent.
+We will see later that the introduction of /latent variables(潜在变量)/, also called /hidden variables(隐藏变量)/ or /unobserved variables(未观察变量)/, allows both of these problems to be addressed.
+In particular, a rich family of multimodal(多峰的) distributions is obtained by introducing discrete latent variables leading to mixtures of Gaussians, as discussed in Section [[Mixtures of Gaussians]].
+Similarly, the introduction of continuous latent variables, as described in Chapter 12(?), leads to models in which the number of free parameters can be controlled independently of the dimensionality $D$ of the data space while still allowing the model to capture the dominant correlations in the data set.
+Indeed, these two approaches can be combined and further extended to derive a very rich set of hierarchical models that can be adapted to a broad range of practical applications.
+For instance, the Gaussian version of the /Markov random field(马尔科夫随机场)/, which is widely used as a probabilistic model of images, is a Gaussian distribution over the joint space of pixel intensities but rendered tractable through the imposition of considerable structure reflecting the spatial organization of the pixels.
+Similarly, the /linear dynamical system(线性动态系统)/, used to model time series data for applications such as tracking, is also a joint Gaussian distribution over a potentially large number of observed and latent variables and again is tractable due to the structure imposed on the distribution.
+A powerful framework for expressing the form and properties of such complex distributions is that of probabilistic graphical models, which will form the subject of Chapter 8(?).
 
 
 *** Conditional Gaussian distributions
+
+
+An important property of the multivariate Gaussian distribution is that if two sets of variables are jointly Gaussian, then the conditional distribution of one set conditioned on the other is again Gaussian.
+Similarly, the marginal distribution of either set is also Gaussian.
+
+Consider first the case of conditional distributions.
+Suppose $\mathbf{x}$ is a D-dimensional vector with Gaussian distribution $\mathcal{N}(\mathbf{x}|\pmb{\mu}, \Sigma)$ and that we partition $\mathbf{x}$ into two disjoint subsets $\mathbf{x}_a$ and $\mathbf{x}_b$.
+Without loss of generality, we can take $\mathbf{x}_a$ to form the first $M$ components of $\mathbf{x}$, with $\mathbf{x}_b$ comprising the remaining D − M components, so that
+
+\begin{equation}\label{equ:2.65}
+\mathbf{x} =
+\begin{pmatrix}
+\mathbf{x}_a \\
+\mathbf{x}_b
+\end{pmatrix}
+\end{equation}
+
+We also define corresponding partitions of the mean vector $\pmb{\mu}$ given by
+
+\begin{equation}\label{equ:2.66}
+\pmb{\mu} =
+\begin{pmatrix}
+\pmb{\mu}_a \\
+\pmb{\mu}_b
+\end{pmatrix}
+\end{equation}
+
+and of the covariance matrix $\Sigma$ given by
+
+\begin{equation}
+\Sigma =
+\begin{pmatrix}
+\Sigma_{aa} & \Sigma_{ab} \\
+\Sigma_{ba} & \Sigma_{bb}
+\end{pmatrix}
+\end{equation}
+
+Note that the symmetry $\Sigma^T = \Sigma$ of the covariance matrix implies that $\Sigma_{aa}$ and $\Sigma_{bb}$ are symmetric, while $\Sigma_{ba} = \Sigma_{ab}^T$.
+
+In many situations, it will be convenient to work with the inverse of the covariance matrix
+
+\begin{equation}\label{precision-matrix-define}
+\Lambda \equiv \Sigma^{-1}
+\end{equation}
+
+which is known as the /precision matrix(精度矩阵)/.
+In fact, we shall see that some properties of Gaussian distributions are most naturally expressed in terms of the covariance, whereas others take a simpler form when viewed in terms of the precision.
+We therefore also introduce the partitioned form of the precision matrix
+
+\begin{equation}\label{equ:2.69}
+\Lambda =
+\begin{pmatrix}
+\Lambda_{aa} & \Lambda_{ab} \\
+\Lambda_{ba} & \Lambda_{bb}
+\end{pmatrix}
+\end{equation}
+
+corresponding to the partitioning (\ref{equ:2.65}) of the vector $\mathbf{x}$.
+Because the inverse of a symmetric matrix is also symmetric, we see that $\Lambda_{aa}$ and $\Lambda_{bb}$ are symmetric, while $\Lambda_{ab}^T = \Lambda_{ba}$.
+It should be stressed(强调) at this point that, for instance, $\Lambda_{aa}$ is not simply given by the inverse of $\Sigma_{aa}$.
+In fact, we shall shortly examine the relation between the inverse of a partitioned matrix and the inverses of its partitions.
+
+Let us begin by finding an expression for the conditional distribution $p(\mathbf{x}_a|\mathbf{x}_b)$.
+From the product rule of probability, we see that this conditional distribution can be evaluated from the joint distribution $p(\mathbf{x}) = p(\mathbf{x}_a,\mathbf{x}_b)$ simply by fixing $\mathbf{x}_b$ to the observed value and normalizing the resulting expression to obtain a valid probability distribution over $\mathbf{x}_a$.
+Instead of performing this normalization explicitly, we can obtain the solution more efficiently by considering the quadratic form in the exponent of the Gaussian distribution given by (ref:Mahalanobis-distance) and then reinstating the normalization coefficient at the end of the calculation.
+If we make use of the partitioning (\ref{equ:2.65}), (\ref{equ:2.66}), and (\ref{equ:2.69}), we obtain
+
+\begin{equation}\label{equ:2.70}
+\begin{split}
+-\frac{1}{2}(&\mathbf{x} - \pmb{\mu})^T\Sigma^{-1}(\mathbf{x} - \pmb{\mu}) = \\
+&-\frac{1}{2}(\mathbf{x} - \pmb{\mu})^T\Lambda_{aa}(\mathbf{x} - \pmb{\mu}) -\frac{1}{2}(\mathbf{x} - \pmb{\mu})^T\Lambda_{ab}(\mathbf{x} - \pmb{\mu}) \\
+&-\frac{1}{2}(\mathbf{x} - \pmb{\mu})^T\Lambda_{ba}(\mathbf{x} - \pmb{\mu})
+-\frac{1}{2}(\mathbf{x} - \pmb{\mu})^T\Lambda_{bb}(\mathbf{x} - \pmb{\mu}) \\
+\end{split}
+\end{equation}
+
+We see that as a function of $\mathbf{x}_a$, this is again a quadratic form, and hence the corresponding conditional distribution $p(\mathbf{x}_a|\mathbf{x}_b)$ will be Gaussian.
+Because this distribution is completely characterized by its mean and its covariance, our goal will be to identify expressions for the mean and covariance of $p(\mathbf{x}_a|\mathbf{x}_b)$ by inspection of (\ref{equ:2.70}).
+
+This is an example of a rather common operation associated with Gaussian distributions, sometimes called ‘completing the square’, in which we are given a quadratic form defining the exponent terms in a Gaussian distribution, and we need to determine the corresponding mean and covariance.
+Such problems can be solved straightforwardly by noting that the exponent in a general Gaussian distribution $\mathcal{N}(\mathbf{x}|\pmb{\mu}, \Sigma)$ can be written
+
+\begin{equation}\label{equ:2.71}
+-\frac{1}{2}(\mathbf{x}-\pmb{\mu})^T\Sigma^{-1}(\mathbf{x}-\pmb{\mu})
+= \frac{1}{2}\mathbf{x}^T\Sigma^T\mathbf{x} + \mathbf{x}^T\Sigma^T\pmb{\mu} + \text{const}
+\end{equation}
+
+where ‘const’ denotes terms which are independent of $\mathbf{x}$, and we have made use of the symmetry of $\Sigma$.
+Thus if we take our general quadratic form and express it in the form given by the right-hand side of (\ref{equ:2.71}), then we can immediately equate the matrix of coefficients entering the second order term in $\mathbf{x}$ to the inverse covariance matrix $\Sigma^{−1}$ and the coefficient of the linear term in $\mathbf{x}$ to $\Sigma^{-1}\pmb{\mu}$, from which we can obtain $\pmb{\mu}$.
+
+Now let us apply this procedure to the conditional Gaussian distribution $p(\mathbf{x}_a|\mathbf{x}_b)$ for which the quadratic form in the exponent is given by (\ref{equ:2.70}).
+We will denote the mean and covariance of this distribution by $\pmb{\mu}_{a|b}$ and $\Sigma_{a|b}$, respectively.
+Consider the functional dependence of (\ref{equ:2.70}) on $\mathbf{x}_a$ in which $\mathbf{x}_b$ is regarded as a constant.
+If we pick out all terms that are second order in $\mathbf{x}_a$, we have
+
+\begin{equation}
+-\frac{1}{2}\mathbf{x}_a^T\Lambda_{aa}\mathbf{x}_a
+\end{equation}
+
+from which we can immediately conclude that the covariance (inverse precision) of $p(\mathbf{x}_a|\mathbf{x}_b)$ is given by
+
+\begin{equation}\label{equ:2.73}
+\Sigma_{a|b} = \Lambda_{aa}^{-1}.
+\end{equation}
+
+
+Now consider all of the terms in (\ref{equ:2.70}) that are linear in $\mathbf{x}_a$
+
+\begin{equation}
+\mathbf{x}_a^T\{ \Lambda_{aa}\pmb{\mu}_a - \Lambda_{ab} (\mathbf{x}_b - \pmb{\mu})_b) \}
+\end{equation}
+
+where we have used $\Lambda^T_{ba} = \Lambda_{ab}$.
+From our discussion of the general form (\ref{reu:2.71}), the coefficient of $\mathbf{x}_a$ in this expression must equal $\Sigma^{−1}_{a|b}\pmb{\mu}_{a|b}$ and hence
+
+\begin{equation}\label{equ:2.75}
+\begin{split}
+\pmb{\mu}_{a|b} &= \Sigma_{a|b}\{ \Lambda_{aa}\pmb{\mu}_a - \Lambda_{ab}(\mathbf{x}_b - \pmb{\mu}_b) \} \\
+&= \pmb{\mu}_a - \Lambda_{aa}^{-1}\Lambda_{ab}(\mathbf{x}_b - \pmb{\mu}_b)
+\end{split}
+\end{equation}
+
+where we have made use of (\ref{equ:2.73}).
+
+The results (\ref{equ:2.73}) and (\ref{equ:2.75}) are expressed in terms of the partitioned precision matrix of the original joint distribution $p(\mathbf{x}_a, \mathbf{x}_b)$.
+We can also express these results in terms of the corresponding partitioned covariance matrix.
+To do this, we make use of the following identity for the inverse of a partitioned matrix
+
+\begin{equation}\label{equ:2.76}
+\begin{pmatrix}
+A & B \\
+C & D
+\end{pmatrix}^{-1}
+=
+\begin{pmatrix}
+M & -MBD^{-1} \\
+-D^{-1}CM & D^{-1} + D^{-1}CMBD^{-1}
+\end{pmatrix}
+\end{equation}
+
+where we have defined
+
+\begin{equation}
+M = (A - BD^{-1}C)^{-1}
+\end{equation}
+
+The quantity $M^{−1}$ is known as the /Schur complement(舒尔补)/ of the matrix on the left-hand side of (\ref{equ:2.76}) with respect to the submatrix $D$.
+Using the definition
+
+\begin{equation}
+\begin{pmatrix}
+\Sigma_{aa} & \Sigma_{ab} \\
+\Sigma_{ba} & \Sigma_{bb}
+\end{pmatrix}^{-1}
+=
+\begin{pmatrix}
+\Lambda_{aa} & \Lambda_{ab} \\
+\Lambda_{ba} & \Lambda_{bb}
+\end{pmatrix}
+\end{equation}
+
+and making use of (\ref{equ:2.76}), we have
+
+\begin{align}
+\Lambda_{aa} &= (\Sigma_{aa} - \Sigma_{ab}\Sigma_{bb}^{-1}\Sigma_{ba})^{-1} \\
+\Lambda_{ab} &= - (\Sigma_{aa} - \Sigma_{ab}\Sigma_{bb}^{-1}\Sigma_{ba})^{-1}\Sigma_{ab}\Sigma_{bb}^{-1}
+\end{align}
+
+From these we obtain the following expressions for the mean and covariance of the conditional distribution $p(\mathbf{x}_a|\mathbf{x}_b)$
+
+\begin{align}
+\pmb{\mu}_{a|b} &= \pmb{\mu}_a + \Sigma_{ab}\Sigma_{bb}^{-1}(\mathbf{x} - \pmb{\mu}_b) \label{equ:2.81} \\
+\Sigma_{a|b} &= \Sigma_{aa} - \Sigma_{ab}\Sigma_{bb}^{-1}\Sigma_{ba} \label{equ:2.82}
+\end{align}
+
+Comparing (\ref{equ:2.73}) and (\ref{equ:2.82}), we see that the conditional distribution $p(\mathbf{x}_a|\mathbf{x}_b)$ takes a simpler form when expressed in terms of the partitioned precision matrix than when it is expressed in terms of the partitioned covariance matrix.
+Note that the mean of the conditional distribution $p(\mathbf{x}_a|\mathbf{x}_b)$, given by (\ref{equ:2.81}), is a linear function of $\mathbf{x}_b$ and that the covariance, given by (\ref{equ:2.82}), is independent of ${x}_a$.
+This represents an example of a linear-Gaussian model.
 
 
 *** Marginal Gaussian distributions
@@ -3123,7 +3575,9 @@ where \mu is the mean and \sigma^2 is the variance.
 *** Periodic variables
 
 
-*** Mixtures of Gaussians
+*** Mixtures of Gaussians <<Mixtures of Gaussians>>
+
+
 
 
 ** The Exponential Family
@@ -3148,3 +3602,4 @@ where \mu is the mean and \sigma^2 is the variance.
 
 
 ** Exercises
+
