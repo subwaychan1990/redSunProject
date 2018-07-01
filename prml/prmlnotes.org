@@ -1,5 +1,5 @@
 #+TITLE:  Notes of PRML and Scikit-learn
-#+OPTIONS: ::t
+#+OPTIONS: ::t ^:nil
 
 #+latex:\newpage
 
@@ -2567,7 +2567,7 @@ F'(f)h = \int_a^b \left[ \partial_2 L\left( x,f(x),f'(x) \right)
   from matplotlib import cm
   import pandas as pd
   from scipy import linalg
-  from scipy.special import i0,i1
+  from scipy.special import i0, i1
   from scipy.stats import dirichlet
   from scipy.stats import beta
   from scipy.stats import uniform
@@ -2577,6 +2577,13 @@ F'(f)h = \int_a^b \left[ \partial_2 L\left( x,f(x),f'(x) \right)
   from scipy.stats import t
   from scipy.stats import vonmises
   from scipy.stats import vonmises_line
+  from sklearn.mixture import GaussianMixture
+  from matplotlib.colors import LogNorm
+
+
+  def Rot(x):
+      theta_ = x*np.pi/180
+      return np.array([[np.cos(theta_), -np.sin(theta_)], [np.sin(theta_), np.cos(theta_)]])
 #+END_SRC
 
 
@@ -4680,7 +4687,7 @@ The von Mises distribution is plotted in Figure [[fig:2.19]], and the function $
 #+LABEL: fig:2.19
 [[file:img/fig:2.19.png]]
 
-#+CAPTION: fig:2.20
+#+CAPTION: [[fig:2.20]]
 #+BEGIN_SRC python :exports both :results output :session src:2-1
   fig = plt.figure(figsize=(12, 6))
   x_plot = np.linspace(0, 10, 100)
@@ -4766,15 +4773,427 @@ For an example of a machine learning application that makes use of von Mises dis
 *** Mixtures of Gaussians <<Mixtures of Gaussians>>
 
 
+While the Gaussian distribution has some important analytical properties, it suffers from significant limitations when it comes to modeling real data sets.
+Consider the example shown in Figure [[fig:2.21]].
+This is known as the ‘Old Faithful’ data set, and comprises 272 measurements of the eruption of the Old Faithful geyser at Yellowstone National Park in the USA.
+Each measurement comprises the duration of the eruption in minutes (horizontal axis) and the time in minutes to the next eruption (vertical axis).
+We see that the data set forms two dominant clumps(块), and that a simple Gaussian distribution is unable to capture this structure, whereas a linear superposition of two Gaussians gives a better characterization of the data set.
+
+
+#+CAPTION:fig:2.21
+#+BEGIN_SRC python :exports both :results output :session src:2-1
+  x1 = multivariate_normal.rvs(
+      mean=[2, 55],
+      cov=np.diag([0.2, 40]) @ Rot_(5 * np.pi / 180),
+      size=100,
+      random_state=1234)
+  x2 = multivariate_normal.rvs(
+      mean=[5, 80],
+      cov=np.diag([0.4, 40]) @ Rot_(10 * np.pi / 180),
+      size=100,
+      random_state=4321)
+  X_train = np.vstack((x1, x2))
+  fig = plt.figure(figsize=(12, 6))
+  x = np.linspace(1, 6)
+  y = np.linspace(40, 100)
+  X, Y = np.meshgrid(x, y)
+  XX = np.array([X.ravel(), Y.ravel()]).T
+  model = GaussianMixture(n_components=1)
+  model.fit(X_train)
+  Z1 = -model.score_samples(XX)
+  Z1 = Z1.reshape(X.shape)
+  ax1 = fig.add_subplot(121)
+  ax1.contour(X, Y, Z1, colors="b", levels=np.logspace(0.61, 0.7, 3))
+  ax1.scatter(X_train[:, 0], X_train[:, 1], facecolor="none", edgecolor="g")
+  ax1.set_xlim(1, 6)
+  ax1.set_ylim(40, 100)
+  model = GaussianMixture(n_components=2)
+  model.fit(X_train)
+  Z2 = -model.score_samples(XX)
+  Z2 = Z2.reshape(X.shape)
+  ax2 = fig.add_subplot(122)
+  ax2.contour(X, Y, Z2, colors="b", levels=np.logspace(0.61, 0.8, 3))
+  ax2.scatter(X_train[:, 0], X_train[:, 1], facecolor="none", edgecolor="g")
+  ax2.set_xlim(1, 6)
+  ax2.set_ylim(40, 100)
+  fig.savefig("img/fig:2.21.png")
+  plt.close("all")
+#+END_SRC
+
+#+RESULTS:
+
+#+CAPTION: Plots of the ‘old faithful’ data(synthetic data actually) in which the blue curves show contours of constant probability density. On the left is a single Gaussian distribution which has been fitted to the data using maximum likelihood. Note that this distribution fails to capture the two clumps in the data and indeed places much of its probability mass in the central region between the clumps where the data are relatively sparse. On the right the distribution is given by a linear combination of two Gaussians which has been fitted to the data by maximum likelihood using techniques discussed Chapter 9, and which gives a better rep- resentation of the data.
+#+ATTR_LaTeX: scale=0.75
+#+LABEL: fig:2.21
+[[file:img/fig:2.21.png]]
+
+
+Such superpositions(叠加), formed by taking linear combinations of more basic distributions such as Gaussians, can be formulated as probabilistic models known as /mixture distributions(混合模型)/ (McLachlan and Basford, 1988; McLachlan and Peel, 2000).
+In Figure [[fig:2.22]] we see that a linear combination of Gaussians can give rise to(产生) very complex densities.
+By using a sufficient number of Gaussians, and by adjusting their means and covariances as well as the coefficients in the linear combination, almost any continuous density can be approximated to arbitrary accuracy.
+
+
+#+CAPTION: fig:2.22
+#+BEGIN_SRC python :exports both :results output :session src:2-1
+  x_plot = np.linspace(0, 10, 1000)
+  Loc = [2, 4, 6]
+  Scale = [0.5, 1, 0.2]
+  fig = plt.figure(figsize=(10, 6.18))
+  ax = fig.add_subplot(111)
+  Y = np.zeros(x_plot.shape)
+  for loc, scale in zip(Loc, Scale):
+      y = normal.pdf(x_plot, loc=loc, scale=scale)
+      ax.plot(x_plot, y, "b")
+      Y += y
+  ax.plot(x_plot, Y, "r")
+  fig.savefig("img/fig:2.22.png")
+  plt.close("all")
+#+END_SRC
+
+#+RESULTS:
+
+#+CAPTION: Example of a Gaussian mixture distribution $p(x)$ in one dimension showing three Gaussians (each scaled by a coefficient) in blue and their sum in red.
+#+ATTR_LaTeX: scale=0.75
+#+LABEL: fig:2.22
+[[file:img/fig:2.22.png]]
+
+
+We therefore consider a superposition of $K$ Gaussian densities of the form
+
+\begin{equation}\label{mixture-of-Gaussian}
+p(\mathbf{x}) = \sum_{k=1}^K \pi_k\mathcal{N}(\mathbf{x}|\pmb{\mu}_k,\Sigma_k)
+\end{equation}
+
+which is called a /mixture of Gaussians(混合高斯)/.
+Each Gaussian density $\mathcal{N}(\mathbf{x}|\pmb{\mu}_k, \Sigma_k)$ is called a /component(成分)/ of the mixture and has its own mean $\pmb{\mu}_k$ and covariance $\Sigma_k$.
+Contour and surface plots for a Gaussian mixture having 3 components are shown in Figure [[fig:2.23]]
+
+
+#+CAPTION: fig:2.23
+#+BEGIN_SRC python :exports both :results output :session src:2-1
+  fig = plt.figure(figsize=(12, 4))
+  x_plot = np.linspace(0, 1)
+  y_plot = np.linspace(0, 1)
+  X, Y = np.meshgrid(x_plot, y_plot)
+  Z = pd.DataFrame()
+  Mean = np.array([[0.3, 0.4], [0.5, 0.5], [0.8, 0.6]])
+  Color = ["r", "g", "b"]
+  Cov = np.stack((np.diag((.01, .02)) @ Rot(30), np.diag((.01, .015)) @ Rot(-30),
+                  np.diag((.01, .02)) @ Rot(30)))
+  Proportion = [0.5, 0.3, 0.2]
+  ax1 = fig.add_subplot(131)
+  Z = np.zeros(X.shape)
+  for index, (mean, color, cov, proportion) in enumerate(
+          zip(Mean, Color, Cov, Proportion)):
+      z = multivariate_normal.pdf(np.dstack((X, Y)), mean=mean, cov=cov)
+      Z += proportion * z
+      ax1.contour(X, Y, z, 3, colors=color)
+      ax1.annotate(proportion, xy=mean - [0, 0.35], color=color, fontsize=20)
+  ax2 = fig.add_subplot(132)
+  ax2.contour(X, Y, Z, 7, colors="darkorchid")
+  ax3 = fig.add_subplot(133, projection="3d")
+  ax3.plot_surface(X, Y, Z, color="sienna")
+  ax3.view_init(45, -105)
+  ax3.axis("off")
+  ax3.grid(False)
+  fig.savefig("img/fig:2.23.png")
+  plt.close("all")
+#+END_SRC
+
+#+RESULTS:
+
+#+CAPTION: Illustration of a mixture of 3 Gaussians in a two-dimensional space. (a) Contours of constant density for each of the mixture components, in which the 3 components are denoted red, blue and green, and the values of the mixing coefficients are shown below each component. (b) Contours of the marginal probability density $p(\mathbf{x})$ of the mixture distribution. (c) A surface plot of the distribution $p(\mathbf{x})$.
+#+ATTR_LaTeX: scale=0.75
+#+LABEL: fig:2.23
+[[file:img/fig:2.23.png]]
+
+
+In this section we shall consider Gaussian components to illustrate the framework of mixture models.
+More generally, mixture models can comprise linear combinations of other distributions.
+For instance, in Section 9.3.3(?) we shall consider mixtures of Bernoulli distributions as an example of a mixture model for discrete variables.
+
+The parameters $\pi_k$ in (ref:mixture-of-Gaussian) are called /mixing coefficients(混合系数)/.
+If we integrate both sides of (ref:mixture-of-Gaussian) with respect to $\mathbf{x}$, and note that both $p(\mathbf{x})$ and the individual Gaussian components are normalized, we obtain
+
+\begin{equation}\label{equ:2.189}
+\sum_{k=1}^K \pi_k = 1.
+\end{equation}
+
+Also, the requirement that $p(\mathbf{x}) \geqslant 0$, together with $\mathcal{N}(\mathbf{x}|\pmb{\mu}_k,\Sigma_k) \geqslant 0$, implies $\pi_k \geqslant 0$ for all $k$.
+Combining this with the condition (\ref{equ:2.189}) we obtain
+
+\begin{equation}
+0\leqslant\pi_k\leqslant1.
+\end{equation}
+
+We therefore see that the mixing coefficients satisfy the requirements to be probabilities.
+
+From the sum and product rules, the marginal density is given by
+
+\begin{equation}
+p(\mathbf{x}) = \sum_{k=1}^K p(k)p(\mathbf{x}|k)
+\end{equation}
+
+which is equivalent to (ref:mixture-of-Gaussian) in which we can view $\pi_k = p(k)$ as the prior probability of picking the $k^{th}$ component, and the density $\mathcal{N}(\mathbf{x}|\pmb{\mu}_k,\Sigma_k) = p(\mathbf{x}|k)$ as the probability of $\mathbf{x}$ conditioned on $k$.
+As we shall see in later chapters, an important role is played by the posterior probabilities $p(k|\mathbf{x})$, which are also known as /responsibilities(责任)/.
+From Bayes’ theorem these are given by
+
+\begin{equation}
+\begin{split}
+\gamma_k(\mathbf{x}) &\equiv p(k|\mathbf{x}) \\
+&= \frac{p(k)p(\mathbf{x}|k)}{\sum_lp(l)p(\mathbf{x}|l)} \\
+&= \frac{\pi_k\mathcal{N}(\mathbf{x}|\pmb{\mu}_k,\Sigma_k)}{\sum_l\pi_l\mathcal{N}(\mathbf{x}|\pmb{\mu}_l,\Sigma_l)}.
+\end{split}
+\end{equation}
+
+We shall discuss the probabilistic interpretation of the mixture distribution in greater detail in Chapter 9(?).
+
+The form of the Gaussian mixture distribution is governed by the parameters $\pmb{\pi}, \pmb{\mu}$ and $\Sigma$, where we have used the notation $\pmb{\pi} \equiv \{\pi_1,\cdots,\pi_K\}, \pmb{\mu} \equiv \{\pmb{\mu}_1,\cdots,\pmb{\mu}_K\}$ and $\Sigma \equiv \{\Sigma_1,\cdots,\Sigma_K\}$. One way to set the values of these parameters is to use maximum likelihood.
+From (ref:mixture-of-Gaussian) the log of the likelihood function is given by
+
+\begin{equation}
+\ln p(\mathbf{X}|\pmb{\pi},\pmb{\mu},\Sigma) = \sum_{n=1}^N\ln\left\{ \sum_{k=1}^K\pi_k\mathcal{N}(\mathbf{x}_n|\pmb{\mu}_k,\Sigma_k) \right\}
+\end{equation}
+
+where $\mathbf{X} = \{\mathbf{x}1 , \cdots , \mathbf{x}_N \}$.
+We immediately see that the situation is now much more complex than with a single Gaussian, due to the presence of the summation over $k$ inside the logarithm.
+As a result, the maximum likelihood solution for the parameters no longer has a closed-form analytical solution.
+One approach to maximizing the likelihood function is to use iterative numerical optimization techniques (Fletcher, 1987; Nocedal and Wright, 1999; Bishop and Nabney, 2008).
+Alternatively we can employ a powerful framework called expectation maximization, which will be discussed at length in Chapter 9(?).
 
 
 ** The Exponential Family
 
 
+The probability distributions that we have studied so far in this chapter (with the exception of the Gaussian mixture) are specific examples of a broad class of distributions called the /exponential family(指数族)/ (Duda and Hart, 1973; Bernardo and Smith, 1994).
+Members of the exponential family have many important properties in common, and it is illuminating to discuss these properties in some generality.
+
+The exponential family of distributions over $\mathbf{x}$, given parameters $\pmb{\eta}$, is defined to be the set of distributions of the form
+
+\begin{equation}\label{exponential-family}
+p(\mathbf{x}|\pmb{\eta}) = h(\mathbf{x})g(\pmb{\eta})\exp\{\pmb{\eta}^T\mathbf{u}(\mathbf{x})\}
+\end{equation}
+
+where $\mathbf{x}$ may be scalar or vector, and may be discrete or continuous.
+Here $\pmb{\eta}$ are called the /natural parameters(自然参数)/ of the distribution, and $\mathbf{u}(\mathbf{x})$ is some function of $\mathbf{x}$.
+The function $g(\pmb{\eta})$ can be interpreted as the coefficient that ensures that the distribution is normalized and therefore satisfies
+
+\begin{equation}\label{normalized-coefficient-of-exponential-family}
+g(\pmb{\eta})\int h(\mathbf{x})\exp\{\pmb{\eta}^T\mathbf{u}(\mathbf{x})\}d\mathbf{x} = 1
+\end{equation}
+
+where the integration is replaced by summation if $\mathbf{x}$ is a discrete variable.
+
+We begin by taking some examples of the distributions introduced earlier in the chapter and showing that they are indeed members of the exponential family.
+Consider first the Bernoulli distribution
+
+\begin{equation}
+p(x|\mu) = \text{Bern}(x|\mu) = \mu^x(1-\mu)^{1-x}.
+\end{equation}
+
+Expressing the right-hand side as the exponential of the logarithm, we have
+
+\begin{equation}
+\begin{split}
+p(x|\mu) &= \exp \{ x\ln\mu + (1-x)\ln(1-\mu) \} \\
+&= (1-\mu) \exp\left\{ \ln(\frac{\mu}{1-\mu})x \right\}.
+\end{split}
+\end{equation}
+
+Comparison with (ref:exponential-family) allows us to identify
+
+\begin{equation}
+\eta = \ln(\frac{\mu}{1-\mu})
+\end{equation}
+
+which we can solve for $\mu$ to give $\mu = \sigma(\eta)$, where
+
+\begin{equation}\label{logistic-sigmoid-function}
+\sigma(\eta) = \frac{1}{1+\exp(-\eta)}
+\end{equation}
+
+is called the /logistic sigmoid/ function.
+Thus we can write the Bernoulli distribution using the standard representation (ref:exponential-family) in the form
+
+\begin{equation}
+p(x|\eta) = \sigma(−\eta) \exp(\eta x)
+\end{equation}
+
+where we have used $1 - \sigma(\eta) = \sigma(−\eta)$, which is easily proved from (ref:logistic-sigmoid-function).
+Comparison with (ref:exponential-family) shows that
+
+\begin{align}
+u(x) &= x \\
+h(x) &= 1 \\
+g(\eta) &= \sigma(-\eta)
+\end{align}
+
+Next consider the multinomial distribution that, for a single observation $\mathbf{x}$, takes the form
+
+\begin{equation}
+p(\mathbf{x}|\pmb{\mu}) = \prod_{k=1}^{M}\mu_k^{x_k} = \exp\left\{ \sum_{k=1}^M x_k\ln\mu_k \right\}
+\end{equation}
+
+where $\mathbf{x} = (x_1, \cdots , x_N )^T$.
+Again, we can write this in the standard representation (ref:exponential-family) so that
+
+\begin{equation}
+p(\mathbf{x}|\pmb{\eta}) = \exp(\pmb{\eta}^T\mathbf{x})
+\end{equation}
+
+where $\eta_k = \ln \mu_k$, and we have defined $\pmb{\eta} = (\eta_1, \cdots , \eta_M )^T$.
+Again, comparing with (ref:exponential-family) we have
+
+\begin{align}
+\mathbf{u}(\mathbf{x}) &= \mathbf{x} \\
+h(\mathbf{x}) &= 1 \\
+g(\pmb{\eta}) &= 1.
+\end{align}
+
+Note that the parameters $\eta_k$ are not independent because the parameters $\mu_k$ are subject to the constraint
+
+\begin{equation}\label{equ:2.209}
+\sum_{k=1}^M \mu_k = 1
+\end{equation}
+
+so that, given any $M - 1$ of the parameters $\mu_k$, the value of the remaining parameter is fixed.
+In some circumstances, it will be convenient to remove this constraint by expressing the distribution in terms of only $M - 1$ parameters.
+This can be achieved by using the relationship (\ref{equ:2.209}) to eliminate $\mu_M$ by expressing it in terms of the remaining $\{\mu_k\}$ where $k = 1, \cdots , M - 1$, thereby leaving $M - 1$ parameters.
+Note that these remaining parameters are still subject to the constraints
+
+\begin{equation}
+0\leqslant\mu_k\leqslant1, \quad \sum_{k=1}^{M-1}\mu_k\leqslant1.
+\end{equation}
+
+Making use of the constraint (\ref{equ:2.209}), the multinomial distribution in this representation then becomes
+
+\begin{equation}
+\begin{split}
+\exp&\left\{ \sum_{k=1}^Mx_k\ln\mu_k \right\} \\
+&= \exp\left\{ \sum_{k=1}^{M-1}x_k\ln\mu_k \left( 1-\sum_{k=1}^{M-1}x_k \right) \ln \left( 1-\sum_{k=1}^{M-1}\mu_k \right)\right\} \\
+&= \exp\left\{ \sum_{k=1}^{M-1}x_k\ln \left( \frac{\mu_k}{1-\sum_{k=1}^{M-1}x_k} \right) +  \ln \left( 1-\sum_{k=1}^{M-1}\mu_k \right)\right\}
+\end{split}
+\end{equation}
+
+We now identify
+
+\begin{equation}
+\ln\left( \frac{\mu_k}{1-\sum_j\mu_j} \right) = \eta_k
+\end{equation}
+
+which we can solve for $\mu_k$ by first summing both sides over $k$ and then rearranging and back-substituting to give
+
+\begin{equation}
+\mu_k = \frac{\exp(\eta_k)}{1+\sum_j\exp(\eta_j)}
+\end{equation}
+
+This is called the /softmax/ function, or the /normalized exponential(归一化指数)/.
+In this representation, the multinomial distribution therefore takes the form
+
+\begin{equation}
+p(\mathbf{x}|\pmb{\eta}) = \left( 1 + \sum_{k=1}^{M-1}\exp(\eta_k) \right)^{-1} \exp(\pmb{\eta}^T\mathbf{x})
+\end{equation}
+
+This is standard form of exponential family, with parameter vector $\pmb{\mu} = (\eta_1,\cdots,\eta_{M−1})^T$ in which
+
+\begin{align}
+\mathbf{u}(\mathbf{x}) &= \mathbf{x} \\
+h(\mathbf{x}) &= 1 \\
+g(\pmb{\eta}) &= \left( 1 + \sum_{k=1}^{M-1}\exp(\eta_k) \right)^{-1}
+\end{align}
+
+Finally, let us consider the Gaussian distribution.
+For the univariate Gaussian, we have
+
+\begin{equation}
+\begin{split}
+p(x|\mu,\sigma^2) &= \frac{1}{(2\pi\sigma^2)^{1/2}} \exp\left\{ -\frac{1}{2\sigma^2}(x-\mu)^2 \right\} \\
+&= \frac{1}{(2\pi\sigma^2)^{1/2}} \exp \left\{ -\frac{1}{2\sigma^2}x^2 + \frac{\mu}{\sigma^2}x - \frac{1}{2\sigma^2}\mu^2 \right\}
+\end{split}
+\end{equation}
+
+which, after some simple rearrangement, can be cast in the standard exponential family form (ref:exponential-family) with
+
+\begin{align}
+\pmb{\eta} &= \begin{pmatrix} \mu/\sigma^2 \\ -1/2\sigma^2 \end{pmatrix} \\
+\mathbf{u}(\mathbf{x}) &= \begin{pmatrix} x \\ x^2 \end{pmatrix} \\
+h(\mathbf{x}) &= (2\pi)^{-1/2} \\
+g(\pmb{\eta}) &= (-2\eta_2)^{1/2} \exp \left( \frac{\eta_1^2}{4\eta_2} \right).
+\end{align}
+
+
+
 *** Maximum likelihood and sufficient statistics
 
 
+Let us now consider the problem of estimating the parameter vector $\pmb{\eta}$ in the general exponential family distribution (ref:exponential-family) using the technique of maximum likelihood.
+Taking the gradient of both sides of (ref:normalized-coefficient-of-exponential-family) with respect to $\pmb{\eta}$, we have
+
+\begin{equation}
+\begin{split}
+\nabla &g(\pmb{\eta}) \int h(\mathbf{x})\exp\{ \pmb{\eta}^T\mathbf{u}(\mathbf{x}) \}d\mathbf{x} \\
+&+ g(\mathbf{\mu}) \int h(\mathbf{x}) \exp\{ \pmb{\eta}^T\pmb{\mu}(\mathbf{x}) \} \mathbf{u}(\mathbf{x}) d\mathbf{x} = 0
+\end{split}
+\end{equation}
+
+Rearranging, and making use again of (ref:normalized-coefficient-of-exponential-family) then gives
+
+\begin{equation}
+-\frac{1}{g(\pmb{\eta})} \nabla g(\pmb{\eta}) = g(\pmb{\eta}) \int h(\mathbf{x}) \exp\{ \pmb{\eta}^T\mathbf{u}(\mathbf{x}) \} \mathbf{u}(\mathbf{x}) d\mathbf{x} = \mathbb{E}[\mathbf{u}(\mathbf{x})]
+\end{equation}
+
+where we have used (ref:exponential-family).
+We therefore obtain the result
+
+\begin{equation}\label{equ:2.226}
+-\nabla\ln g(\pmb{\eta}) = \mathbb{E}[\mathbf{u}(\mathbf{x})].
+\end{equation}
+
+Note that the covariance of $\mathbf{u}(\mathbf{x})$ can be expressed in terms of the second derivatives of $g(\pmb{\eta})$, and similarly for higher order moments.
+Thus, provided we can normalize a distribution from the exponential family, we can always find its moments by simple differentiation.
+
+Now consider a set of independent identically distributed data denoted by $\mathbf{X} = \{x_1 , \cdots , x_n \}$, for which the likelihood function is given by
+
+\begin{equation}\label{equ:2.227}
+p(\mathbf{X}|\pmb{\mu}) = \left( \prod_{n=1}^N h(\mathbf{x}_n) \right) g(\pmb{\eta})^N \exp\left\{ \pmb{\eta}^T \sum_{n=1}^N \mathbf{u}(\mathbf{x}_n) \right\}.
+\end{equation}
+
+Setting the gradient of $\ln p(\mathbf{X}|\pmb{\eta})$ with respect to $\pmb{\eta}$ to zero, we get the following condition to be satisfied by the maximum likelihood estimator $\pmb{\eta}_{ML}$
+
+\begin{equation}\label{equ:2.228}
+- \nabla \ln g(\pmb{\eta}_{ML}) = \frac{1}{N} \sum_{n=1}^N \mathbf{u}(\mathbf{x}_n)
+\end{equation}
+
+which can in principle be solved to obtain $\pmb{\eta}_{ML}$.
+We see that th e solution for the maximum likelihood estimator depends on the data only through $\sum_n \mathbf{u}(\mathbf{x})$, which is therefore called the /sufficient statistic(充分统计量)/ of the distribution (ref:exponential-family).
+We do not need to store the entire data set itself but only the value of the sufficient statistic.
+For the Bernoulli distribution, for example, the function $\mathbf{u}(\mathbf{x})$ is given just by $\mathbf{x}$ and so we need only keep the sum of the data points $\{x_n\}$, whereas for the Gaussian $\mathbf{u}(x) = (x, x^2)^T$, and so we should keep both the sum of $\{x_n\}$ and the sum of $\{x^2_n\}$.
+
+If we consider the limit $N \rightarrow \infty$, then the right-hand side of (\ref{equ:2.228}) becomes $\mathbb{E}[\mathbf{u}(\mathbf{x})]$, and so by comparing with (\ref{equ:2.226}) we see that in this limit $\pmb{\eta}_{ML}$ will equal the true value $\pmb{\eta}$.
+
+In fact, this sufficiency property holds also for Bayesian inference, although we shall defer discussion of this until Chapter 8(?) when we have equipped ourselves with the tools of graphical models and can thereby gain a deeper insight into these important concepts.
+
+
 *** Conjugate priors
+
+
+We have already encountered the concept of a conjugate prior several times, for example in the context of the Bernoulli distribution (for which the conjugate prior is the beta distribution) or the Gaussian (where the conjugate prior for the mean is a Gaussian, and the conjugate prior for the precision is the Wishart distribution).
+In general, for a given probability distribution $p(\mathbf{x}|\pmb{\eta})$, we can seek a prior $p(\pmb{\eta})$ that is conjugate to the likelihood function, so that the posterior distribution has the same functional form as the prior.
+For any member of the exponential family (ref:exponential-family), there exists a conjugate prior that can be written in the form
+
+\begin{equation}\label{conjugate-prior-of-exponential-family}
+p(\pmb{\eta}|\pmb{\chi}, \nu) = f(\pmb{\chi},\nu)g(\pmb{\eta})^{\nu}\exp\{ \nu\pmb{\eta}^T\pmb{\chi} \}
+\end{equation}
+
+where $f(\pmb{\chi},\nu)$ is a normalization coefficient, and $g(\pmb{\eta})$ is the same function as appears in (ref:exponential-family).
+To see that this is indeed conjugate, let us multiply the prior (ref:conjugate-prior-of-exponential-family) by the likelihood function (\ref{equ:2.227}) to obtain the posterior distribution, up to a normalization coefficient, in the form
+
+\begin{equation}
+p(\pmb{\mu}|\mathbf{X}, \pmb{\chi}, \nu) \varpropto g(\pmb{\eta})^{\nu+N}\exp\left\{ \pmb{\eta}^T \left( \sum_{n=1}^N \mathbf{u}(\mathbf{x}_n) + \nu\pmb{\chi} \right) \right\}.
+\end{equation}
+
+This again takes the same functional form as the prior (ref:conjugate-prior-of-exponential-family), confirming conjugacy(共轭性).
+Furthermore, we see that the parameter $\nu$ can be interpreted as a effective number of pseudo-observations(假想观测) in the prior, each of which has a value for the sufficient statistic $\mathbf{u}(\mathbf{x})$ given by $\pmb{\chi}$.
 
 
 *** Noninformative priors
@@ -5441,12 +5860,119 @@ The pvalue in this case is high, so we can be quite confident that our random sa
 
 
 
+** TODO [[http://scikit-learn.org/stable/modules/mixture.html][Guide: Gaussian mixture models]]
 
 
+~sklearn.mixture~ is a package which enables one to learn Gaussian Mixture Models (diagonal, spherical, tied and full covariance matrices supported), sample them, and estimate them from data.
+Facilities(设施) to help determine the appropriate number of components are also provided.
+
+A Gaussian mixture model is a probabilistic model that assumes all the data points are generated from a mixture of a finite number of Gaussian distributions with unknown parameters.
+*One can think of mixture models as generalizing k-means clustering to incorporate information about the covariance structure of the data as well as the centers of the latent Gaussians*.
+
+Scikit-learn implements different classes to estimate Gaussian mixture models, that correspond to different estimation strategies, detailed below.
 
 
+*** TODO Gaussian Mixture
 
 
+The ~GaussianMixture~ object implements the expectation-maximization (EM) algorithm for fitting mixture-of-Gaussian models.
+It can also draw confidence ellipsoids for multivariate models, and compute the Bayesian Information Criterion to assess the number of clusters in the data.
+A ~GaussianMixture.fit~ method is provided that learns a Gaussian Mixture Model from train data.
+Given test data, it can assign to each sample the Gaussian it mostly probably belong to using the ~GaussianMixture.predict~ method.
+
+The ~GaussianMixture~ comes with different options to constrain the covariance of the difference classes estimated: spherical, diagonal, tied or full covariance.
+
+
+**** [[http://scikit-learn.org/stable/auto_examples/mixture/plot_gmm_pdf.html#sphx-glr-auto-examples-mixture-plot-gmm-pdf-py][Example: Density Estimation for a Gaussian mixture]]
+
+
+Plot the density estimation of a mixture of two Gaussians. Data is generated from two Gaussians with different centers and covariance matrices.
+
+
+#+BEGIN_SRC python :results silent
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.colors import LogNorm
+from sklearn import mixture
+
+n_samples = 300
+
+# generate random sample, two components
+np.random.seed(0)
+
+# generate spherical data centered on (20, 20)
+shifted_gaussian = np.random.randn(n_samples, 2) + np.array([20, 20])
+
+# generate zero centered stretched Gaussian data
+C = np.array([[0., -0.7], [3.5, .7]])
+stretched_gaussian = np.dot(np.random.randn(n_samples, 2), C)
+
+# concatenate the two datasets into the final training set
+X_train = np.vstack([shifted_gaussian, stretched_gaussian])
+
+# fit a Gaussian Mixture Model with two components
+clf = mixture.GaussianMixture(n_components=2, covariance_type='full')
+clf.fit(X_train)
+
+# display predicted scores by the model as a contour plot
+x = np.linspace(-20., 30.)
+y = np.linspace(-20., 40.)
+X, Y = np.meshgrid(x, y)
+XX = np.array([X.ravel(), Y.ravel()]).T
+Z = -clf.score_samples(XX)
+Z = Z.reshape(X.shape)
+
+CS = plt.contour(X, Y, Z, norm=LogNorm(vmin=1.0, vmax=1000.0),
+                 levels=np.logspace(0, 3, 10))
+CB = plt.colorbar(CS, shrink=0.8, extend='both')
+plt.scatter(X_train[:, 0], X_train[:, 1], .8)
+
+plt.title('Negative log-likelihood predicted by a GMM')
+plt.axis('tight')
+plt.savefig("img/2.sk.Density-Estimation-for-a-Gaussian-mixture.png")
+plt.close("all")
+#+END_SRC
+
+[[file:img/2.sk.Density-Estimation-for-a-Gaussian-mixture.png]]
+
+
+**** TODO [[http://scikit-learn.org/stable/auto_examples/mixture/plot_gmm_covariances.html#sphx-glr-auto-examples-mixture-plot-gmm-covariances-py][Example: GMM covariances]]
+
+
+Demonstration of several covariances types for Gaussian mixture models.
+
+See Gaussian mixture models for more information on the estimator.
+
+Although GMM are often used for clustering, we can compare the obtained clusters with the actual classes from the dataset. We initialize the means of the Gaussians with the means of the classes from the training set to make this comparison valid.
+
+We plot predicted labels on both training and held out test data using a variety of GMM covariance types on the iris dataset. We compare GMMs with spherical, diagonal, full, and tied covariance matrices in increasing order of performance. Although one would expect full covariance to perform best in general, it is prone to overfitting on small datasets and does not generalize well to held out test data.
+
+On the plots, train data is shown as dots, while test data is shown as crosses. The iris dataset is four-dimensional. Only the first two dimensions are shown here, and thus some points are separated in other dimensions.
+
+
+**** Pros and cons of class GaussianMixture
+
+#+CAPTION: Pros
+| Speed    | It is the fastest algorithm for learning mixture models                     |
+| Agnostic | As this algorithm maximizes only the likelihood, it will not bias the means |
+|          | towards zero, or bias the cluster sizes to have specific structures that    |
+|          | might or might not apply.                                                   |
+
+
+#+CAPTION: Cons
+| Singularities        | When one has insufficiently many points per mixture, estimating the     |
+|                      | covariance matrices becomes difficult, and the algorithm is known to    |
+|                      | diverge and find solutions with infinite likelihood unless one          |
+|                      | regularizes the covariances artificially.                               |
+| Number of components | This algorithm will always use all the components it has access to,     |
+|                      | needing held-out data or information theoretical criteria to decide how |
+|                      | many components to use in the absence of external cues.                 |
+
+
+**** TODO Selecting the number of components in a classical Gaussian Mixture Model
+
+
+*** TODO Variational Bayesian Gaussian Mixture
 
 
 
