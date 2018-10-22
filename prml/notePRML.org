@@ -1,0 +1,11 @@
+#+TITLE:  Note of PRML and Scikit-learn
+#+OPTIONS: ::t
+
+#+latex:\newpage
+
+* Introduction
+
+* Probability Distributions
+
+* Linear Models for Regression
+

@@ -1,0 +1,10 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{scipy.stats} \PYGmanni{k+kn}{import} \PYGmanni{n}{binom}
+\PYGmanni{n}{fig}\PYGmanni{p}{,} \PYGmanni{n}{ax} \PYGmanni{o}{=} \PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{subplots}\PYGmanni{p}{(}\PYGmanni{l+m+mi}{1}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{1}\PYGmanni{p}{)}
+\PYGmanni{n}{n}\PYGmanni{p}{,} \PYGmanni{n}{p} \PYGmanni{o}{=} \PYGmanni{l+m+mi}{10}\PYGmanni{p}{,} \PYGmanni{l+m+mf}{0.25}
+\PYGmanni{n}{x} \PYGmanni{o}{=} \PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{arange}\PYGmanni{p}{(}\PYGmanni{l+m+mi}{11}\PYGmanni{p}{)}
+\PYGmanni{n}{y} \PYGmanni{o}{=} \PYGmanni{n}{binom}\PYGmanni{o}{.}\PYGmanni{n}{pmf}\PYGmanni{p}{(}\PYGmanni{n}{x}\PYGmanni{p}{,} \PYGmanni{n}{n}\PYGmanni{p}{,} \PYGmanni{n}{p}\PYGmanni{p}{)}
+\PYGmanni{n}{ax}\PYGmanni{o}{.}\PYGmanni{n}{bar}\PYGmanni{p}{(}\PYGmanni{n}{x}\PYGmanni{p}{,}\PYGmanni{n}{y}\PYGmanni{p}{,}\PYGmanni{n}{color}\PYGmanni{o}{=}\PYGmanni{l+s+s2}{\PYGmanniZdq{}b\PYGmanniZdq{}}\PYGmanni{p}{)}
+\PYGmanni{n}{ax}\PYGmanni{o}{.}\PYGmanni{n}{set\PYGmanniZus{}xlabel}\PYGmanni{p}{(}\PYGmanni{l+s+s2}{\PYGmanniZdq{}\PYGmanniZdl{}m\PYGmanniZdl{}\PYGmanniZdq{}}\PYGmanni{p}{)}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{savefig}\PYGmanni{p}{(}\PYGmanni{l+s+s2}{\PYGmanniZdq{}img/fig:2.1.png\PYGmanniZdq{}}\PYGmanni{p}{)}
+\end{Verbatim}

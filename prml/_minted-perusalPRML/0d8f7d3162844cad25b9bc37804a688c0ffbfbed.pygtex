@@ -1,0 +1,37 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{c+c1}{\PYGmanniZsh{} \PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}\PYGmanniZsh{}}
+\PYGmanni{c+c1}{\PYGmanniZsh{} Plot true weights, estimated weights, histogram of the weights, and}
+\PYGmanni{c+c1}{\PYGmanniZsh{} predictions with standard deviations}
+\PYGmanni{n}{lw} \PYGmanni{o}{=} \PYGmanni{l+m+mi}{2}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{figure}\PYGmanni{p}{(}\PYGmanni{n}{figsize}\PYGmanni{o}{=}\PYGmanni{p}{(}\PYGmanni{l+m+mi}{6}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{5}\PYGmanni{p}{))}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{title}\PYGmanni{p}{(}\PYGmanni{l+s+s2}{\PYGmanniZdq{}Weights of the model\PYGmanniZdq{}}\PYGmanni{p}{)}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{plot}\PYGmanni{p}{(}
+    \PYGmanni{n}{clf}\PYGmanni{o}{.}\PYGmanni{n}{coef\PYGmanniZus{}}\PYGmanni{p}{,}
+    \PYGmanni{n}{color}\PYGmanni{o}{=}\PYGmanni{l+s+s1}{\PYGmanniZsq{}lightgreen\PYGmanniZsq{}}\PYGmanni{p}{,}
+    \PYGmanni{n}{linewidth}\PYGmanni{o}{=}\PYGmanni{n}{lw}\PYGmanni{p}{,}
+    \PYGmanni{n}{label}\PYGmanni{o}{=}\PYGmanni{l+s+s2}{\PYGmanniZdq{}Bayesian Ridge estimate\PYGmanniZdq{}}\PYGmanni{p}{)}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{plot}\PYGmanni{p}{(}\PYGmanni{n}{w}\PYGmanni{p}{,} \PYGmanni{n}{color}\PYGmanni{o}{=}\PYGmanni{l+s+s1}{\PYGmanniZsq{}gold\PYGmanniZsq{}}\PYGmanni{p}{,} \PYGmanni{n}{linewidth}\PYGmanni{o}{=}\PYGmanni{n}{lw}\PYGmanni{p}{,} \PYGmanni{n}{label}\PYGmanni{o}{=}\PYGmanni{l+s+s2}{\PYGmanniZdq{}Ground truth\PYGmanniZdq{}}\PYGmanni{p}{)}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{plot}\PYGmanni{p}{(}\PYGmanni{n}{ols}\PYGmanni{o}{.}\PYGmanni{n}{coef\PYGmanniZus{}}\PYGmanni{p}{,} \PYGmanni{n}{color}\PYGmanni{o}{=}\PYGmanni{l+s+s1}{\PYGmanniZsq{}navy\PYGmanniZsq{}}\PYGmanni{p}{,} \PYGmanni{n}{linestyle}\PYGmanni{o}{=}\PYGmanni{l+s+s1}{\PYGmanniZsq{}\PYGmanniZhy{}\PYGmanniZhy{}\PYGmanniZsq{}}\PYGmanni{p}{,} \PYGmanni{n}{label}\PYGmanni{o}{=}\PYGmanni{l+s+s2}{\PYGmanniZdq{}OLS estimate\PYGmanniZdq{}}\PYGmanni{p}{)}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{xlabel}\PYGmanni{p}{(}\PYGmanni{l+s+s2}{\PYGmanniZdq{}Features\PYGmanniZdq{}}\PYGmanni{p}{)}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{ylabel}\PYGmanni{p}{(}\PYGmanni{l+s+s2}{\PYGmanniZdq{}Values of the weights\PYGmanniZdq{}}\PYGmanni{p}{)}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{legend}\PYGmanni{p}{(}\PYGmanni{n}{loc}\PYGmanni{o}{=}\PYGmanni{l+s+s2}{\PYGmanniZdq{}best\PYGmanniZdq{}}\PYGmanni{p}{,} \PYGmanni{n}{prop}\PYGmanni{o}{=}\PYGmanni{n+nb}{dict}\PYGmanni{p}{(}\PYGmanni{n}{size}\PYGmanni{o}{=}\PYGmanni{l+m+mi}{12}\PYGmanni{p}{))}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{savefig}\PYGmanni{p}{(}\PYGmanni{l+s+s2}{\PYGmanniZdq{}img/1.s.BayesianRidgeRegression.1.png\PYGmanniZdq{}}\PYGmanni{p}{)}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{figure}\PYGmanni{p}{(}\PYGmanni{n}{figsize}\PYGmanni{o}{=}\PYGmanni{p}{(}\PYGmanni{l+m+mi}{6}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{5}\PYGmanni{p}{))}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{title}\PYGmanni{p}{(}\PYGmanni{l+s+s2}{\PYGmanniZdq{}Histogram of the weights\PYGmanniZdq{}}\PYGmanni{p}{)}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{hist}\PYGmanni{p}{(}\PYGmanni{n}{clf}\PYGmanni{o}{.}\PYGmanni{n}{coef\PYGmanniZus{}}\PYGmanni{p}{,} \PYGmanni{n}{bins}\PYGmanni{o}{=}\PYGmanni{n}{n\PYGmanniZus{}features}\PYGmanni{p}{,} \PYGmanni{n}{color}\PYGmanni{o}{=}\PYGmanni{l+s+s1}{\PYGmanniZsq{}gold\PYGmanniZsq{}}\PYGmanni{p}{,} \PYGmanni{n}{log}\PYGmanni{o}{=}\PYGmanni{n+nb+bp}{True}\PYGmanni{p}{,} \PYGmanni{n}{edgecolor}\PYGmanni{o}{=}\PYGmanni{l+s+s1}{\PYGmanniZsq{}black\PYGmanniZsq{}}\PYGmanni{p}{)}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{scatter}\PYGmanni{p}{(}
+    \PYGmanni{n}{clf}\PYGmanni{o}{.}\PYGmanni{n}{coef\PYGmanniZus{}}\PYGmanni{p}{[}\PYGmanni{n}{relevant\PYGmanniZus{}features}\PYGmanni{p}{],}
+    \PYGmanni{l+m+mi}{5} \PYGmanni{o}{*} \PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{ones}\PYGmanni{p}{(}\PYGmanni{n+nb}{len}\PYGmanni{p}{(}\PYGmanni{n}{relevant\PYGmanniZus{}features}\PYGmanni{p}{)),}
+    \PYGmanni{n}{color}\PYGmanni{o}{=}\PYGmanni{l+s+s1}{\PYGmanniZsq{}navy\PYGmanniZsq{}}\PYGmanni{p}{,}
+    \PYGmanni{n}{label}\PYGmanni{o}{=}\PYGmanni{l+s+s2}{\PYGmanniZdq{}Relevant features\PYGmanniZdq{}}\PYGmanni{p}{)}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{ylabel}\PYGmanni{p}{(}\PYGmanni{l+s+s2}{\PYGmanniZdq{}Features\PYGmanniZdq{}}\PYGmanni{p}{)}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{xlabel}\PYGmanni{p}{(}\PYGmanni{l+s+s2}{\PYGmanniZdq{}Values of the weights\PYGmanniZdq{}}\PYGmanni{p}{)}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{legend}\PYGmanni{p}{(}\PYGmanni{n}{loc}\PYGmanni{o}{=}\PYGmanni{l+s+s2}{\PYGmanniZdq{}upper left\PYGmanniZdq{}}\PYGmanni{p}{)}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{savefig}\PYGmanni{p}{(}\PYGmanni{l+s+s2}{\PYGmanniZdq{}img/1.s.BayesianRidgeRegression.2.png\PYGmanniZdq{}}\PYGmanni{p}{)}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{figure}\PYGmanni{p}{(}\PYGmanni{n}{figsize}\PYGmanni{o}{=}\PYGmanni{p}{(}\PYGmanni{l+m+mi}{6}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{5}\PYGmanni{p}{))}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{title}\PYGmanni{p}{(}\PYGmanni{l+s+s2}{\PYGmanniZdq{}Marginal log\PYGmanniZhy{}likelihood\PYGmanniZdq{}}\PYGmanni{p}{)}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{plot}\PYGmanni{p}{(}\PYGmanni{n}{clf}\PYGmanni{o}{.}\PYGmanni{n}{scores\PYGmanniZus{}}\PYGmanni{p}{,} \PYGmanni{n}{color}\PYGmanni{o}{=}\PYGmanni{l+s+s1}{\PYGmanniZsq{}navy\PYGmanniZsq{}}\PYGmanni{p}{,} \PYGmanni{n}{linewidth}\PYGmanni{o}{=}\PYGmanni{n}{lw}\PYGmanni{p}{)}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{ylabel}\PYGmanni{p}{(}\PYGmanni{l+s+s2}{\PYGmanniZdq{}Score\PYGmanniZdq{}}\PYGmanni{p}{)}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{xlabel}\PYGmanni{p}{(}\PYGmanni{l+s+s2}{\PYGmanniZdq{}Iterations\PYGmanniZdq{}}\PYGmanni{p}{)}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{savefig}\PYGmanni{p}{(}\PYGmanni{l+s+s2}{\PYGmanniZdq{}img/1.s.BayesianRidgeRegression.3.png\PYGmanniZdq{}}\PYGmanni{p}{)}
+\end{Verbatim}

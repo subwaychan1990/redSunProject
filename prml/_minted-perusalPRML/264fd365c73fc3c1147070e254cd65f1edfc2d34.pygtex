@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{n}{rv} \PYGmanni{o}{=} \PYGmanni{n}{gamma}\PYGmanni{p}{(}\PYGmanni{l+m+mi}{1}\PYGmanni{p}{,} \PYGmanni{n}{scale}\PYGmanni{o}{=}\PYGmanni{l+m+mf}{2.}\PYGmanni{p}{)}
+\end{Verbatim}

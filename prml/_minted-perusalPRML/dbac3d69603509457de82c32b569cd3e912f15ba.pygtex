@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{n}{norm}\PYGmanni{o}{.}\PYGmanni{n}{rvs}\PYGmanni{p}{(}\PYGmanni{n}{size}\PYGmanni{o}{=}\PYGmanni{l+m+mi}{5}\PYGmanni{p}{,} \PYGmanni{n}{random\PYGmanniZus{}state}\PYGmanni{o}{=}\PYGmanni{l+m+mi}{1234}\PYGmanni{p}{)}
+\end{Verbatim}

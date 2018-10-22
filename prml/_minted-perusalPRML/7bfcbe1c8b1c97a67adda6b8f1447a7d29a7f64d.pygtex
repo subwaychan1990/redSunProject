@@ -1,0 +1,13 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{n}{npoints} \PYGmanni{o}{=} \PYGmanni{l+m+mi}{20}   \PYGmanni{c+c1}{\PYGmanniZsh{} number of integer support points of the distribution minus 1}
+\PYGmanni{n}{npointsh} \PYGmanni{o}{=} \PYGmanni{n}{npoints} \PYGmanni{o}{//} \PYGmanni{l+m+mi}{2}
+\PYGmanni{n}{npointsf} \PYGmanni{o}{=} \PYGmanni{n+nb}{float}\PYGmanni{p}{(}\PYGmanni{n}{npoints}\PYGmanni{p}{)}
+\PYGmanni{n}{nbound} \PYGmanni{o}{=} \PYGmanni{l+m+mi}{4}   \PYGmanni{c+c1}{\PYGmanniZsh{} bounds for the truncated normal}
+\PYGmanni{n}{normbound} \PYGmanni{o}{=} \PYGmanni{p}{(}\PYGmanni{l+m+mi}{1}\PYGmanni{o}{+}\PYGmanni{l+m+mi}{1}\PYGmanni{o}{/}\PYGmanni{n}{npointsf}\PYGmanni{p}{)} \PYGmanni{o}{*} \PYGmanni{n}{nbound}   \PYGmanni{c+c1}{\PYGmanniZsh{} actual bounds of truncated normal}
+\PYGmanni{n}{grid} \PYGmanni{o}{=} \PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{arange}\PYGmanni{p}{(}\PYGmanni{o}{\PYGmanniZhy{}}\PYGmanni{n}{npointsh}\PYGmanni{p}{,} \PYGmanni{n}{npointsh}\PYGmanni{o}{+}\PYGmanni{l+m+mi}{2}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{1}\PYGmanni{p}{)}   \PYGmanni{c+c1}{\PYGmanniZsh{} integer grid}
+\PYGmanni{n}{gridlimitsnorm} \PYGmanni{o}{=} \PYGmanni{p}{(}\PYGmanni{n}{grid}\PYGmanni{o}{\PYGmanniZhy{}}\PYGmanni{l+m+mf}{0.5}\PYGmanni{p}{)} \PYGmanni{o}{/} \PYGmanni{n}{npointsh} \PYGmanni{o}{*} \PYGmanni{n}{nbound}   \PYGmanni{c+c1}{\PYGmanniZsh{} bin limits for the truncnorm}
+\PYGmanni{n}{gridlimits} \PYGmanni{o}{=} \PYGmanni{n}{grid} \PYGmanni{o}{\PYGmanniZhy{}} \PYGmanni{l+m+mf}{0.5}   \PYGmanni{c+c1}{\PYGmanniZsh{} used later in the analysis}
+\PYGmanni{n}{grid} \PYGmanni{o}{=} \PYGmanni{n}{grid}\PYGmanni{p}{[:}\PYGmanni{o}{\PYGmanniZhy{}}\PYGmanni{l+m+mi}{1}\PYGmanni{p}{]}
+\PYGmanni{n}{probs} \PYGmanni{o}{=} \PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{diff}\PYGmanni{p}{(}\PYGmanni{n}{stats}\PYGmanni{o}{.}\PYGmanni{n}{truncnorm}\PYGmanni{o}{.}\PYGmanni{n}{cdf}\PYGmanni{p}{(}\PYGmanni{n}{gridlimitsnorm}\PYGmanni{p}{,} \PYGmanni{o}{\PYGmanniZhy{}}\PYGmanni{n}{normbound}\PYGmanni{p}{,} \PYGmanni{n}{normbound}\PYGmanni{p}{))}
+\PYGmanni{n}{gridint} \PYGmanni{o}{=} \PYGmanni{n}{grid}
+\end{Verbatim}

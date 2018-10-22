@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{scipy.stats} \PYGmanni{k+kn}{import} \PYGmanni{n}{norm}
+\end{Verbatim}

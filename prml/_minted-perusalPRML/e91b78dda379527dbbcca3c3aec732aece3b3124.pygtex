@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{l+s+s1}{\PYGmanniZsq{}bounds of distribution lower: }\PYGmanni{l+s+si}{\PYGmanniZpc{}s}\PYGmanni{l+s+s1}{, upper: }\PYGmanni{l+s+si}{\PYGmanniZpc{}s}\PYGmanni{l+s+s1}{\PYGmanniZsq{}} \PYGmanni{o}{\PYGmanniZpc{}} \PYGmanni{p}{(}\PYGmanni{n}{norm}\PYGmanni{o}{.}\PYGmanni{n}{a}\PYGmanni{p}{,} \PYGmanni{n}{norm}\PYGmanni{o}{.}\PYGmanni{n}{b}\PYGmanni{p}{))}
+\end{Verbatim}

@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{scipy.stats} \PYGmanni{k+kn}{import} \PYGmanni{n}{hypergeom}
+\PYGmanni{p}{[}\PYGmanni{n}{M}\PYGmanni{p}{,} \PYGmanni{n}{n}\PYGmanni{p}{,} \PYGmanni{n}{N}\PYGmanni{p}{]} \PYGmanni{o}{=} \PYGmanni{p}{[}\PYGmanni{l+m+mi}{20}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{7}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{12}\PYGmanni{p}{]}
+\end{Verbatim}

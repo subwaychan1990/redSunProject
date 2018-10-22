@@ -1,0 +1,1507 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     47965,       1499]
+NotebookOptionsPosition[     43553,       1340]
+NotebookOutlinePosition[     43954,       1357]
+CellTagsIndexPosition[     43911,       1354]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Probability Distributions", "Chapter",
+ CellChangeTimes->{{3.7433814822100697`*^9, 3.743381520495097*^9}, {
+  3.743384639129184*^9, 3.7433846404503403`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Binary Variables", "Subchapter",
+ CellChangeTimes->{{3.7433815353706083`*^9, 3.7433815485930243`*^9}, {
+  3.7433846458064737`*^9, 3.743384647641406*^9}, {3.743384710659897*^9, 
+  3.743384712179044*^9}, {3.743419620586175*^9, 3.743419625087029*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Bernoulli distribution", "Subsection",
+ CellChangeTimes->{{3.743384678511271*^9, 3.743384688313476*^9}, 
+   3.743384733131339*^9, {3.7433847755196466`*^9, 3.743384802293076*^9}, {
+   3.7433852024611197`*^9, 3.743385203869179*^9}, {3.743386551616537*^9, 
+   3.743386552541325*^9}}],
+
+Cell[BoxData[
+ RowBox[{"dist1", ":=", 
+  RowBox[{"BernoulliDistribution", "[", "\[Mu]", "]"}]}]], "Input",
+ CellChangeTimes->{{3.743381574938571*^9, 3.743381689539343*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["PDF of Bernoulli distribution", "Subsubsection",
+ CellChangeTimes->{{3.743384724401668*^9, 3.743384770593451*^9}, {
+  3.743386557334499*^9, 3.743386559165842*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"PDF", "[", 
+  RowBox[{"dist1", ",", "x"}], "]"}]], "Input",
+ CellChangeTimes->{{3.7433816948992777`*^9, 3.7433816990251627`*^9}, {
+  3.7433817297611*^9, 3.74338172996133*^9}}],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\[Piecewise]", GridBox[{
+       {
+        RowBox[{"1", "-", "\[Mu]"}], 
+        RowBox[{"x", "\[Equal]", "0"}]},
+       {"\[Mu]", 
+        RowBox[{"x", "\[Equal]", "1"}]},
+       {"0", 
+        TagBox["True",
+         "PiecewiseDefault",
+         AutoDelete->True]}
+      },
+      AllowedDimensions->{2, Automatic},
+      Editable->True,
+      GridBoxAlignment->{
+       "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+        "RowsIndexed" -> {}},
+      GridBoxItemSize->{
+       "Columns" -> {{Automatic}}, "ColumnsIndexed" -> {}, "Rows" -> {{1.}}, 
+        "RowsIndexed" -> {}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.84]}, 
+          Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}, "RowsIndexed" -> {}},
+      Selectable->True]}
+   },
+   GridBoxAlignment->{
+    "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+     "RowsIndexed" -> {}},
+   GridBoxItemSize->{
+    "Columns" -> {{Automatic}}, "ColumnsIndexed" -> {}, "Rows" -> {{1.}}, 
+     "RowsIndexed" -> {}},
+   GridBoxSpacings->{"Columns" -> {
+       Offset[0.27999999999999997`], {
+        Offset[0.35]}, 
+       Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+       Offset[0.2], {
+        Offset[0.4]}, 
+       Offset[0.2]}, "RowsIndexed" -> {}}],
+  "Piecewise",
+  DeleteWithContents->True,
+  Editable->False,
+  SelectWithContents->True,
+  Selectable->False]], "Output",
+ CellChangeTimes->{3.743386203339081*^9}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Manipulate", "[", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"DiscretePlot", "[", 
+    RowBox[{
+     RowBox[{"PDF", "[", 
+      RowBox[{
+       RowBox[{"BernoulliDistribution", "[", "\[Mu]", "]"}], ",", "x"}], 
+      "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"x", ",", "0", ",", "1"}], "}"}], ",", 
+     RowBox[{"AxesOrigin", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"1", "/", "2"}], ",", "0"}], "}"}]}], ",", 
+     RowBox[{"PlotRange", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"0", ",", "1"}], "}"}]}]}], "]"}], ",", "\[IndentingNewLine]", 
+   
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"\[Mu]", ",", "0.3"}], "}"}], ",", "0", ",", "1"}], "}"}]}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.743381776369193*^9, 3.743381917471141*^9}, {
+  3.743381958936249*^9, 3.743381980730012*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`\[Mu]$$ = 0.3, Typeset`show$$ = True, 
+    Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Menu", 
+    Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
+    "\"\:65e0\:6807\:9898\"", Typeset`specs$$ = {{{
+       Hold[$CellContext`\[Mu]$$], 0.3}, 0, 1}}, Typeset`size$$ = {
+    720., {238., 248.}}, Typeset`update$$ = 0, Typeset`initDone$$, 
+    Typeset`skipInitDone$$ = True, $CellContext`\[Mu]$59076$$ = 0}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, "Variables" :> {$CellContext`\[Mu]$$ = 0.3}, 
+      "ControllerVariables" :> {
+        Hold[$CellContext`\[Mu]$$, $CellContext`\[Mu]$59076$$, 0]}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> DiscretePlot[
+        PDF[
+         BernoulliDistribution[$CellContext`\[Mu]$$], $CellContext`x], \
+{$CellContext`x, 0, 1}, AxesOrigin -> {1/2, 0}, PlotRange -> {0, 1}], 
+      "Specifications" :> {{{$CellContext`\[Mu]$$, 0.3}, 0, 1}}, 
+      "Options" :> {}, "DefaultOptions" :> {}],
+     ImageSizeCache->{804., {314., 326.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UndoTrackedVariables:>{Typeset`show$$, Typeset`bookmarkMode$$},
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{3.743386203372155*^9}]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["CDF of Bernoulli distribution", "Subsubsection",
+ CellChangeTimes->{{3.7433848138271923`*^9, 3.743384816960533*^9}, {
+  3.743386564907688*^9, 3.743386567104793*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"CDF", "[", 
+  RowBox[{"dist1", ",", "x"}], "]"}]], "Input",
+ CellChangeTimes->{{3.743382548042645*^9, 3.743382551329184*^9}}],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\[Piecewise]", GridBox[{
+       {"0", 
+        RowBox[{"x", "<", "0"}]},
+       {
+        RowBox[{"1", "-", "\[Mu]"}], 
+        RowBox[{"0", "\[LessEqual]", "x", "<", "1"}]},
+       {"1", 
+        TagBox["True",
+         "PiecewiseDefault",
+         AutoDelete->True]}
+      },
+      AllowedDimensions->{2, Automatic},
+      Editable->True,
+      GridBoxAlignment->{
+       "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+        "RowsIndexed" -> {}},
+      GridBoxItemSize->{
+       "Columns" -> {{Automatic}}, "ColumnsIndexed" -> {}, "Rows" -> {{1.}}, 
+        "RowsIndexed" -> {}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.84]}, 
+          Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}, "RowsIndexed" -> {}},
+      Selectable->True]}
+   },
+   GridBoxAlignment->{
+    "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+     "RowsIndexed" -> {}},
+   GridBoxItemSize->{
+    "Columns" -> {{Automatic}}, "ColumnsIndexed" -> {}, "Rows" -> {{1.}}, 
+     "RowsIndexed" -> {}},
+   GridBoxSpacings->{"Columns" -> {
+       Offset[0.27999999999999997`], {
+        Offset[0.35]}, 
+       Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+       Offset[0.2], {
+        Offset[0.4]}, 
+       Offset[0.2]}, "RowsIndexed" -> {}}],
+  "Piecewise",
+  DeleteWithContents->True,
+  Editable->False,
+  SelectWithContents->True,
+  Selectable->False]], "Output",
+ CellChangeTimes->{3.743386203455142*^9}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Manipulate", "[", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"DiscretePlot", "[", 
+    RowBox[{
+     RowBox[{"CDF", "[", 
+      RowBox[{
+       RowBox[{"BernoulliDistribution", "[", "\[Mu]", "]"}], ",", "x"}], 
+      "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"x", ",", 
+       RowBox[{"-", "1"}], ",", "1"}], "}"}], ",", 
+     RowBox[{"ExtentSize", "\[Rule]", "Right"}], ",", 
+     RowBox[{"ExtentMarkers", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"\"\<Filled\>\"", ",", "\"\<Empty\>\""}], "}"}]}]}], "]"}], 
+   ",", "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"\[Mu]", ",", ".3"}], "}"}], ",", "0", ",", "1"}], "}"}]}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.743382265739263*^9, 3.743382337177459*^9}, {
+  3.743382372660232*^9, 3.743382451628528*^9}, {3.7433825782549887`*^9, 
+  3.743382609976737*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`\[Mu]$$ = 0.3, Typeset`show$$ = True, 
+    Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Menu", 
+    Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
+    "\"\:65e0\:6807\:9898\"", Typeset`specs$$ = {{{
+       Hold[$CellContext`\[Mu]$$], 0.3}, 0, 1}}, Typeset`size$$ = {
+    720., {223., 234.}}, Typeset`update$$ = 0, Typeset`initDone$$, 
+    Typeset`skipInitDone$$ = True, $CellContext`\[Mu]$59110$$ = 0}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, "Variables" :> {$CellContext`\[Mu]$$ = 0.3}, 
+      "ControllerVariables" :> {
+        Hold[$CellContext`\[Mu]$$, $CellContext`\[Mu]$59110$$, 0]}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> DiscretePlot[
+        CDF[
+         BernoulliDistribution[$CellContext`\[Mu]$$], $CellContext`x], \
+{$CellContext`x, -1, 1}, ExtentSize -> Right, 
+        ExtentMarkers -> {"Filled", "Empty"}], 
+      "Specifications" :> {{{$CellContext`\[Mu]$$, 0.3}, 0, 1}}, 
+      "Options" :> {}, "DefaultOptions" :> {}],
+     ImageSizeCache->{804., {300., 311.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UndoTrackedVariables:>{Typeset`show$$, Typeset`bookmarkMode$$},
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{3.743386203488934*^9}]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Moments of Bernoulli distribution", "Subsubsection",
+ CellChangeTimes->{{3.743384885353546*^9, 3.7433848945878887`*^9}, {
+   3.743384948300392*^9, 3.743384950231607*^9}, {3.743386570988564*^9, 
+   3.7433865724685698`*^9}, 3.74338702912363*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Mean", "[", "dist1", "]"}]], "Input",
+ CellChangeTimes->{{3.743382660849237*^9, 3.743382665403739*^9}}],
+
+Cell[BoxData["\[Mu]"], "Output",
+ CellChangeTimes->{3.743386203572489*^9}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Variance", "[", "dist1", "]"}]], "Input",
+ CellChangeTimes->{{3.74338266947933*^9, 3.74338267614396*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(", 
+   RowBox[{"1", "-", "\[Mu]"}], ")"}], " ", "\[Mu]"}]], "Output",
+ CellChangeTimes->{3.743386203606703*^9}]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Moments of samples with Bernoulli distribution", "Subsubsection",
+ CellChangeTimes->{{3.743384933476667*^9, 3.743384998085063*^9}, {
+   3.743386575566456*^9, 3.743386577314612*^9}, 3.743387031992111*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"sample", "=", 
+   RowBox[{"RandomVariate", "[", 
+    RowBox[{
+     RowBox[{"BernoulliDistribution", "[", "0.4", "]"}], ",", 
+     RowBox[{"10", "^", "4"}]}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.74338270355905*^9, 3.743382744151269*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Mean", "[", "sample", "]"}], "//", "N"}]], "Input",
+ CellChangeTimes->{3.743382758524295*^9}],
+
+Cell[BoxData["0.3957`"], "Output",
+ CellChangeTimes->{3.7433862036489267`*^9}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Variance", "[", "sample", "]"}], "//", "N"}]], "Input",
+ CellChangeTimes->{{3.743382778895918*^9, 3.743382789725664*^9}}],
+
+Cell[BoxData["0.23914542454245424`"], "Output",
+ CellChangeTimes->{3.743386203690898*^9}]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Likelihood Estimate", "Subsubsection",
+ CellChangeTimes->{{3.743385004132983*^9, 3.74338502106674*^9}, {
+  3.743385969193981*^9, 3.743385970167261*^9}, {3.743386580150667*^9, 
+  3.743386581646538*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Likelihood", "[", 
+  RowBox[{"dist1", ",", 
+   RowBox[{"{", 
+    RowBox[{
+     SubscriptBox["x", "1"], ",", 
+     SubscriptBox["x", "2"], ",", 
+     SubscriptBox["x", "3"], ",", 
+     SubscriptBox["x", "4"], ",", 
+     SubscriptBox["x", "5"]}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.743383604041107*^9, 3.7433836450549383`*^9}}],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\[Piecewise]", GridBox[{
+       {
+        RowBox[{
+         SuperscriptBox[
+          RowBox[{"(", 
+           RowBox[{"1", "-", "\[Mu]"}], ")"}], 
+          RowBox[{"5", "-", 
+           SubscriptBox["x", "1"], "-", 
+           SubscriptBox["x", "2"], "-", 
+           SubscriptBox["x", "3"], "-", 
+           SubscriptBox["x", "4"], "-", 
+           SubscriptBox["x", "5"]}]], " ", 
+         SuperscriptBox["\[Mu]", 
+          RowBox[{
+           SubscriptBox["x", "1"], "+", 
+           SubscriptBox["x", "2"], "+", 
+           SubscriptBox["x", "3"], "+", 
+           SubscriptBox["x", "4"], "+", 
+           SubscriptBox["x", "5"]}]]}], 
+        RowBox[{
+         RowBox[{"0", "\[LessEqual]", 
+          SubscriptBox["x", "1"], "\[LessEqual]", "1"}], "&&", 
+         RowBox[{"0", "\[LessEqual]", 
+          SubscriptBox["x", "2"], "\[LessEqual]", "1"}], "&&", 
+         RowBox[{"0", "\[LessEqual]", 
+          SubscriptBox["x", "3"], "\[LessEqual]", "1"}], "&&", 
+         RowBox[{"0", "\[LessEqual]", 
+          SubscriptBox["x", "4"], "\[LessEqual]", "1"}], "&&", 
+         RowBox[{"0", "\[LessEqual]", 
+          SubscriptBox["x", "5"], "\[LessEqual]", "1"}]}]},
+       {"0", 
+        TagBox["True",
+         "PiecewiseDefault",
+         AutoDelete->True]}
+      },
+      AllowedDimensions->{2, Automatic},
+      Editable->True,
+      GridBoxAlignment->{
+       "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+        "RowsIndexed" -> {}},
+      GridBoxItemSize->{
+       "Columns" -> {{Automatic}}, "ColumnsIndexed" -> {}, "Rows" -> {{1.}}, 
+        "RowsIndexed" -> {}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.84]}, 
+          Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}, "RowsIndexed" -> {}},
+      Selectable->True]}
+   },
+   GridBoxAlignment->{
+    "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+     "RowsIndexed" -> {}},
+   GridBoxItemSize->{
+    "Columns" -> {{Automatic}}, "ColumnsIndexed" -> {}, "Rows" -> {{1.}}, 
+     "RowsIndexed" -> {}},
+   GridBoxSpacings->{"Columns" -> {
+       Offset[0.27999999999999997`], {
+        Offset[0.35]}, 
+       Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+       Offset[0.2], {
+        Offset[0.4]}, 
+       Offset[0.2]}, "RowsIndexed" -> {}}],
+  "Piecewise",
+  DeleteWithContents->True,
+  Editable->False,
+  SelectWithContents->True,
+  Selectable->False]], "Output",
+ CellChangeTimes->{3.743386203741419*^9}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"loglike1", "=", 
+  RowBox[{"LogLikelihood", "[", 
+   RowBox[{"dist1", ",", 
+    RowBox[{"{", 
+     RowBox[{
+      SubscriptBox["x", "1"], ",", 
+      SubscriptBox["x", "2"], ",", 
+      SubscriptBox["x", "3"], ",", 
+      SubscriptBox["x", "4"], ",", 
+      SubscriptBox["x", "5"]}], "}"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.743383677290833*^9, 3.7433836939045763`*^9}, {
+   3.7433837518882713`*^9, 3.743383752873962*^9}, {3.743384126460009*^9, 
+   3.7433841805085*^9}, 3.743384507576461*^9}],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\[Piecewise]", GridBox[{
+       {
+        RowBox[{
+         RowBox[{
+          RowBox[{"Log", "[", 
+           RowBox[{"1", "-", "\[Mu]"}], "]"}], " ", 
+          RowBox[{"(", 
+           RowBox[{"5", "-", 
+            SubscriptBox["x", "1"], "-", 
+            SubscriptBox["x", "2"], "-", 
+            SubscriptBox["x", "3"], "-", 
+            SubscriptBox["x", "4"], "-", 
+            SubscriptBox["x", "5"]}], ")"}]}], "+", 
+         RowBox[{
+          RowBox[{"Log", "[", "\[Mu]", "]"}], " ", 
+          RowBox[{"(", 
+           RowBox[{
+            SubscriptBox["x", "1"], "+", 
+            SubscriptBox["x", "2"], "+", 
+            SubscriptBox["x", "3"], "+", 
+            SubscriptBox["x", "4"], "+", 
+            SubscriptBox["x", "5"]}], ")"}]}]}], 
+        RowBox[{
+         RowBox[{"0", "\[LessEqual]", 
+          SubscriptBox["x", "1"], "\[LessEqual]", "1"}], "&&", 
+         RowBox[{"0", "\[LessEqual]", 
+          SubscriptBox["x", "2"], "\[LessEqual]", "1"}], "&&", 
+         RowBox[{"0", "\[LessEqual]", 
+          SubscriptBox["x", "3"], "\[LessEqual]", "1"}], "&&", 
+         RowBox[{"0", "\[LessEqual]", 
+          SubscriptBox["x", "4"], "\[LessEqual]", "1"}], "&&", 
+         RowBox[{"0", "\[LessEqual]", 
+          SubscriptBox["x", "5"], "\[LessEqual]", "1"}]}]},
+       {
+        RowBox[{"-", "\[Infinity]"}], 
+        TagBox["True",
+         "PiecewiseDefault",
+         AutoDelete->True]}
+      },
+      AllowedDimensions->{2, Automatic},
+      Editable->True,
+      GridBoxAlignment->{
+       "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+        "RowsIndexed" -> {}},
+      GridBoxItemSize->{
+       "Columns" -> {{Automatic}}, "ColumnsIndexed" -> {}, "Rows" -> {{1.}}, 
+        "RowsIndexed" -> {}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.84]}, 
+          Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}, "RowsIndexed" -> {}},
+      Selectable->True]}
+   },
+   GridBoxAlignment->{
+    "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+     "RowsIndexed" -> {}},
+   GridBoxItemSize->{
+    "Columns" -> {{Automatic}}, "ColumnsIndexed" -> {}, "Rows" -> {{1.}}, 
+     "RowsIndexed" -> {}},
+   GridBoxSpacings->{"Columns" -> {
+       Offset[0.27999999999999997`], {
+        Offset[0.35]}, 
+       Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+       Offset[0.2], {
+        Offset[0.4]}, 
+       Offset[0.2]}, "RowsIndexed" -> {}}],
+  "Piecewise",
+  DeleteWithContents->True,
+  Editable->False,
+  SelectWithContents->True,
+  Selectable->False]], "Output",
+ CellChangeTimes->{3.7433862037725143`*^9}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"loglike1", "=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"Log", "[", 
+     RowBox[{"1", "-", "\[Mu]"}], "]"}], " ", 
+    RowBox[{"(", 
+     RowBox[{"5", "-", 
+      SubscriptBox["x", "1"], "-", 
+      SubscriptBox["x", "2"], "-", 
+      SubscriptBox["x", "3"], "-", 
+      SubscriptBox["x", "4"], "-", 
+      SubscriptBox["x", "5"]}], ")"}]}], "+", 
+   RowBox[{
+    RowBox[{"Log", "[", "\[Mu]", "]"}], " ", 
+    RowBox[{"(", 
+     RowBox[{
+      SubscriptBox["x", "1"], "+", 
+      SubscriptBox["x", "2"], "+", 
+      SubscriptBox["x", "3"], "+", 
+      SubscriptBox["x", "4"], "+", 
+      SubscriptBox["x", "5"]}], ")"}]}]}]}]], "Input",
+ CellChangeTimes->{{3.743384208383065*^9, 3.7433843215351963`*^9}, {
+  3.7433844803521347`*^9, 3.743384491235413*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"Log", "[", 
+    RowBox[{"1", "-", "\[Mu]"}], "]"}], " ", 
+   RowBox[{"(", 
+    RowBox[{"5", "-", 
+     SubscriptBox["x", "1"], "-", 
+     SubscriptBox["x", "2"], "-", 
+     SubscriptBox["x", "3"], "-", 
+     SubscriptBox["x", "4"], "-", 
+     SubscriptBox["x", "5"]}], ")"}]}], "+", 
+  RowBox[{
+   RowBox[{"Log", "[", "\[Mu]", "]"}], " ", 
+   RowBox[{"(", 
+    RowBox[{
+     SubscriptBox["x", "1"], "+", 
+     SubscriptBox["x", "2"], "+", 
+     SubscriptBox["x", "3"], "+", 
+     SubscriptBox["x", "4"], "+", 
+     SubscriptBox["x", "5"]}], ")"}]}]}]], "Output",
+ CellChangeTimes->{3.743386203805684*^9}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Solve", "[", 
+  RowBox[{
+   RowBox[{"Refine", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"D", "[", 
+       RowBox[{"loglike1", ",", "\[Mu]"}], "]"}], "\[Equal]", "0"}], ",", 
+     RowBox[{
+      RowBox[{"0", "\[LessEqual]", 
+       SubscriptBox["x", "1"], "\[LessEqual]", "1"}], "&&", 
+      RowBox[{"0", "\[LessEqual]", 
+       SubscriptBox["x", "2"], "\[LessEqual]", "1"}], "&&", 
+      RowBox[{"0", "\[LessEqual]", 
+       SubscriptBox["x", "3"], "\[LessEqual]", "1"}], "&&", 
+      RowBox[{"0", "\[LessEqual]", 
+       SubscriptBox["x", "4"], "\[LessEqual]", "1"}], "&&", 
+      RowBox[{"0", "\[LessEqual]", 
+       SubscriptBox["x", "5"], "\[LessEqual]", "1"}]}]}], "]"}], ",", 
+   "\[Mu]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.743384466888031*^9, 3.743384477341434*^9}, {
+  3.743384513569244*^9, 3.743384533536106*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{"\[Mu]", "\[Rule]", 
+    RowBox[{
+     FractionBox["1", "5"], " ", 
+     RowBox[{"(", 
+      RowBox[{
+       SubscriptBox["x", "1"], "+", 
+       SubscriptBox["x", "2"], "+", 
+       SubscriptBox["x", "3"], "+", 
+       SubscriptBox["x", "4"], "+", 
+       SubscriptBox["x", "5"]}], ")"}]}]}], "}"}], "}"}]], "Output",
+ CellChangeTimes->{3.743386203831078*^9}]
+}, Closed]]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Binomial Distribution", "Subsection",
+ CellChangeTimes->{{3.743386208461637*^9, 3.7433862104143887`*^9}, {
+  3.7433865870605373`*^9, 3.743386588469429*^9}}],
+
+Cell[BoxData[
+ RowBox[{"dist2", ":=", " ", 
+  RowBox[{"BinomialDistribution", "[", 
+   RowBox[{"N", ",", "\[Mu]"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.743386232307331*^9, 3.743386244253702*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["PDF of Binomial distribution", "Subsubsection",
+ CellChangeTimes->{{3.743386251600134*^9, 3.743386259630145*^9}, {
+  3.7433863551236563`*^9, 3.743386378896883*^9}, {3.743386590452298*^9, 
+  3.743386591751086*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"PDF", "[", 
+  RowBox[{"dist2", ",", "x"}], "]"}]], "Input",
+ CellChangeTimes->{{3.743386267011817*^9, 3.74338630361798*^9}}],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\[Piecewise]", GridBox[{
+       {
+        RowBox[{
+         SuperscriptBox[
+          RowBox[{"(", 
+           RowBox[{"1", "-", "\[Mu]"}], ")"}], 
+          RowBox[{"N", "-", "x"}]], " ", 
+         SuperscriptBox["\[Mu]", "x"], " ", 
+         RowBox[{"Binomial", "[", 
+          RowBox[{"N", ",", "x"}], "]"}]}], 
+        RowBox[{"0", "\[LessEqual]", "x", "\[LessEqual]", "N"}]},
+       {"0", 
+        TagBox["True",
+         "PiecewiseDefault",
+         AutoDelete->True]}
+      },
+      AllowedDimensions->{2, Automatic},
+      Editable->True,
+      GridBoxAlignment->{
+       "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+        "RowsIndexed" -> {}},
+      GridBoxItemSize->{
+       "Columns" -> {{Automatic}}, "ColumnsIndexed" -> {}, "Rows" -> {{1.}}, 
+        "RowsIndexed" -> {}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.84]}, 
+          Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}, "RowsIndexed" -> {}},
+      Selectable->True]}
+   },
+   GridBoxAlignment->{
+    "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+     "RowsIndexed" -> {}},
+   GridBoxItemSize->{
+    "Columns" -> {{Automatic}}, "ColumnsIndexed" -> {}, "Rows" -> {{1.}}, 
+     "RowsIndexed" -> {}},
+   GridBoxSpacings->{"Columns" -> {
+       Offset[0.27999999999999997`], {
+        Offset[0.35]}, 
+       Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+       Offset[0.2], {
+        Offset[0.4]}, 
+       Offset[0.2]}, "RowsIndexed" -> {}}],
+  "Piecewise",
+  DeleteWithContents->True,
+  Editable->False,
+  SelectWithContents->True,
+  Selectable->False]], "Output",
+ CellChangeTimes->{3.743386304323234*^9}]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Moment of Binomial distribution", "Subsubsection",
+ CellChangeTimes->{{3.7433863878201838`*^9, 3.743386396230566*^9}, {
+  3.7433865949662447`*^9, 3.743386599322946*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Mean", "[", "dist2", "]"}]], "Input",
+ CellChangeTimes->{{3.743386399239245*^9, 3.743386405846653*^9}}],
+
+Cell[BoxData[
+ RowBox[{"N", " ", "\[Mu]"}]], "Output",
+ CellChangeTimes->{3.7433864068965597`*^9}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Variance", "[", "dist2", "]"}]], "Input",
+ CellChangeTimes->{{3.74338641217247*^9, 3.7433864165843163`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"N", " ", 
+  RowBox[{"(", 
+   RowBox[{"1", "-", "\[Mu]"}], ")"}], " ", "\[Mu]"}]], "Output",
+ CellChangeTimes->{3.743386417805066*^9}]
+}, Closed]]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ "Beta Distribution [",
+ StyleBox["TODO",
+  FontWeight->"Bold"],
+ "]"
+}], "Section",
+ CellChangeTimes->{{3.743386523682019*^9, 3.743386530783452*^9}, {
+   3.74338660400846*^9, 3.743386605929731*^9}, 3.743386689234333*^9, {
+   3.743387662390915*^9, 3.743387668920802*^9}}],
+
+Cell[BoxData[
+ RowBox[{"distBeta", ":=", " ", 
+  RowBox[{"BetaDistribution", "[", 
+   RowBox[{"a", ",", "b"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.743386690571342*^9, 3.743386742094026*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"PDF", "[", 
+  RowBox[{"distBeta", ",", "\[Mu]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.743386759651108*^9, 3.743386766247563*^9}}],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\[Piecewise]", GridBox[{
+       {
+        FractionBox[
+         RowBox[{
+          SuperscriptBox[
+           RowBox[{"(", 
+            RowBox[{"1", "-", "\[Mu]"}], ")"}], 
+           RowBox[{
+            RowBox[{"-", "1"}], "+", "b"}]], " ", 
+          SuperscriptBox["\[Mu]", 
+           RowBox[{
+            RowBox[{"-", "1"}], "+", "a"}]]}], 
+         RowBox[{"Beta", "[", 
+          RowBox[{"a", ",", "b"}], "]"}]], 
+        RowBox[{"0", "<", "\[Mu]", "<", "1"}]},
+       {"0", 
+        TagBox["True",
+         "PiecewiseDefault",
+         AutoDelete->True]}
+      },
+      AllowedDimensions->{2, Automatic},
+      Editable->True,
+      GridBoxAlignment->{
+       "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+        "RowsIndexed" -> {}},
+      GridBoxItemSize->{
+       "Columns" -> {{Automatic}}, "ColumnsIndexed" -> {}, "Rows" -> {{1.}}, 
+        "RowsIndexed" -> {}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.84]}, 
+          Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}, "RowsIndexed" -> {}},
+      Selectable->True]}
+   },
+   GridBoxAlignment->{
+    "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+     "RowsIndexed" -> {}},
+   GridBoxItemSize->{
+    "Columns" -> {{Automatic}}, "ColumnsIndexed" -> {}, "Rows" -> {{1.}}, 
+     "RowsIndexed" -> {}},
+   GridBoxSpacings->{"Columns" -> {
+       Offset[0.27999999999999997`], {
+        Offset[0.35]}, 
+       Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+       Offset[0.2], {
+        Offset[0.4]}, 
+       Offset[0.2]}, "RowsIndexed" -> {}}],
+  "Piecewise",
+  DeleteWithContents->True,
+  Editable->False,
+  SelectWithContents->True,
+  Selectable->False]], "Output",
+ CellChangeTimes->{3.743386767325157*^9}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Moments of Beta Distribution", "Subsubsection",
+ CellChangeTimes->{{3.743387008826421*^9, 3.743387020878193*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Mean", "[", "distBeta", "]"}]], "Input",
+ CellChangeTimes->{{3.743387045264934*^9, 3.743387053087058*^9}}],
+
+Cell[BoxData[
+ FractionBox["a", 
+  RowBox[{"a", "+", "b"}]]], "Output",
+ CellChangeTimes->{3.743387053671094*^9}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Variance", "[", "distBeta", "]"}]], "Input",
+ CellChangeTimes->{{3.743387059533731*^9, 3.7433870637195463`*^9}}],
+
+Cell[BoxData[
+ FractionBox[
+  RowBox[{"a", " ", "b"}], 
+  RowBox[{
+   SuperscriptBox[
+    RowBox[{"(", 
+     RowBox[{"a", "+", "b"}], ")"}], "2"], " ", 
+   RowBox[{"(", 
+    RowBox[{"1", "+", "a", "+", "b"}], ")"}]}]]], "Output",
+ CellChangeTimes->{3.7433870640839767`*^9}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Manipulate", "[", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"Plot", "[", 
+    RowBox[{
+     RowBox[{"PDF", "[", 
+      RowBox[{
+       RowBox[{"BetaDistribution", "[", 
+        RowBox[{"a", ",", "b"}], "]"}], ",", "\[Mu]"}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"\[Mu]", ",", "0", ",", "1"}], "}"}], ",", 
+     RowBox[{"PlotRange", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"0", ",", "1"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "3"}], "}"}]}], "}"}]}]}], "]"}], ",", 
+   "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"a", ",", ".1"}], "}"}], ",", ".1", ",", "10"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"b", ",", ".1"}], "}"}], ",", ".1", ",", "10"}], "}"}]}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.743387089495242*^9, 3.743387189542165*^9}, {
+  3.7433872253540993`*^9, 3.7433872617645197`*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`a$$ = 8, $CellContext`b$$ = 4, 
+    Typeset`show$$ = True, Typeset`bookmarkList$$ = {}, 
+    Typeset`bookmarkMode$$ = "Menu", Typeset`animator$$, Typeset`animvar$$ = 
+    1, Typeset`name$$ = "\"\:65e0\:6807\:9898\"", Typeset`specs$$ = {{{
+       Hold[$CellContext`a$$], 0.1}, 0.1, 10}, {{
+       Hold[$CellContext`b$$], 0.1}, 0.1, 10}}, Typeset`size$$ = {
+    720., {224., 234.}}, Typeset`update$$ = 0, Typeset`initDone$$, 
+    Typeset`skipInitDone$$ = True, $CellContext`a$72667$$ = 
+    0, $CellContext`b$72668$$ = 0}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, 
+      "Variables" :> {$CellContext`a$$ = 0.1, $CellContext`b$$ = 0.1}, 
+      "ControllerVariables" :> {
+        Hold[$CellContext`a$$, $CellContext`a$72667$$, 0], 
+        Hold[$CellContext`b$$, $CellContext`b$72668$$, 0]}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> Plot[
+        PDF[
+         BetaDistribution[$CellContext`a$$, $CellContext`b$$], $CellContext`\
+\[Mu]], {$CellContext`\[Mu], 0, 1}, PlotRange -> {{0, 1}, {0, 3}}], 
+      "Specifications" :> {{{$CellContext`a$$, 0.1}, 0.1, 
+         10}, {{$CellContext`b$$, 0.1}, 0.1, 10}}, "Options" :> {}, 
+      "DefaultOptions" :> {}],
+     ImageSizeCache->{804., {316., 328.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UndoTrackedVariables:>{Typeset`show$$, Typeset`bookmarkMode$$},
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{
+  3.743387157349057*^9, 3.743387190545491*^9, {3.743387236352714*^9, 
+   3.7433872623544683`*^9}}]
+}, Closed]]
+}, Closed]]
+}, Closed]]
+}, Closed]]
+}, Open  ]],
+
+Cell[TextData[{
+ "Multinomial Variables [",
+ StyleBox["todo",
+  FontWeight->"Bold"],
+ "]"
+}], "Chapter",
+ CellChangeTimes->{{3.7433875794138193`*^9, 3.743387639784696*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["The Gaussian Distribution", "Chapter",
+ CellChangeTimes->{
+  3.743387591550165*^9, {3.743387677334051*^9, 3.743387677957155*^9}}],
+
+Cell[BoxData[
+ RowBox[{"distNormal", ":=", 
+  RowBox[{"NormalDistribution", "[", 
+   RowBox[{"\[Mu]", ",", "\[Sigma]"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.743387680514132*^9, 3.7433877332171993`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"pdfNormal", "=", 
+  RowBox[{"PDF", "[", 
+   RowBox[{"distNormal", ",", "x"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.743387744774762*^9, 3.7433877698691072`*^9}}],
+
+Cell[BoxData[
+ FractionBox[
+  SuperscriptBox["\[ExponentialE]", 
+   RowBox[{"-", 
+    FractionBox[
+     SuperscriptBox[
+      RowBox[{"(", 
+       RowBox[{"x", "-", "\[Mu]"}], ")"}], "2"], 
+     RowBox[{"2", " ", 
+      SuperscriptBox["\[Sigma]", "2"]}]]}]], 
+  RowBox[{
+   SqrtBox[
+    RowBox[{"2", " ", "\[Pi]"}]], " ", "\[Sigma]"}]]], "Output",
+ CellChangeTimes->{
+  3.743387770614203*^9, 3.743422135304387*^9, {3.743422609831462*^9, 
+   3.743422638290359*^9}}]
+}, Open  ]],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"X", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     SubscriptBox["x", "i"], ",", 
+     RowBox[{"{", 
+      RowBox[{"i", ",", "1", ",", "5"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[CapitalMu]", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     SubscriptBox["\[Mu]", "i"], ",", 
+     RowBox[{"{", 
+      RowBox[{"i", ",", "1", ",", "5"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[CapitalSigma]", "=", 
+   RowBox[{"DiagonalMatrix", "[", 
+    RowBox[{"Table", "[", 
+     RowBox[{
+      SubscriptBox["\[Lambda]", "i"], ",", 
+      RowBox[{"{", 
+       RowBox[{"i", ",", "1", ",", "5"}], "}"}]}], "]"}], "]"}]}], ";"}]}], \
+"Input",
+ CellChangeTimes->{{3.743423156229985*^9, 3.743423305331428*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"distMultiNormal", ":=", 
+   RowBox[{"MultinormalDistribution", "[", 
+    RowBox[{"\[CapitalMu]", ",", "\[CapitalSigma]"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"pdfMultiNormal", "=", 
+  RowBox[{
+   RowBox[{"PDF", "[", 
+    RowBox[{"distMultiNormal", ",", "X"}], "]"}], "//", 
+   "TraditionalForm"}]}]}], "Input",
+ CellChangeTimes->{{3.743387818789282*^9, 3.7433878379963293`*^9}, {
+   3.743387921300609*^9, 3.743387924565494*^9}, 3.743420595126143*^9, {
+   3.743420629474451*^9, 3.743420668989297*^9}, {3.743421907377337*^9, 
+   3.7434219372189493`*^9}, {3.743423335228199*^9, 3.743423352022373*^9}}],
+
+Cell[BoxData[
+ FormBox[
+  FractionBox[
+   RowBox[{"exp", "(", 
+    RowBox[{
+     FractionBox["1", "2"], " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"-", 
+        FractionBox[
+         SuperscriptBox[
+          RowBox[{"(", 
+           RowBox[{
+            SubscriptBox["x", "1"], "-", 
+            SubscriptBox["\[Mu]", "1"]}], ")"}], "2"], 
+         SubscriptBox["\[Lambda]", "1"]]}], "-", 
+       FractionBox[
+        SuperscriptBox[
+         RowBox[{"(", 
+          RowBox[{
+           SubscriptBox["x", "2"], "-", 
+           SubscriptBox["\[Mu]", "2"]}], ")"}], "2"], 
+        SubscriptBox["\[Lambda]", "2"]], "-", 
+       FractionBox[
+        SuperscriptBox[
+         RowBox[{"(", 
+          RowBox[{
+           SubscriptBox["x", "3"], "-", 
+           SubscriptBox["\[Mu]", "3"]}], ")"}], "2"], 
+        SubscriptBox["\[Lambda]", "3"]], "-", 
+       FractionBox[
+        SuperscriptBox[
+         RowBox[{"(", 
+          RowBox[{
+           SubscriptBox["x", "4"], "-", 
+           SubscriptBox["\[Mu]", "4"]}], ")"}], "2"], 
+        SubscriptBox["\[Lambda]", "4"]], "-", 
+       FractionBox[
+        SuperscriptBox[
+         RowBox[{"(", 
+          RowBox[{
+           SubscriptBox["x", "5"], "-", 
+           SubscriptBox["\[Mu]", "5"]}], ")"}], "2"], 
+        SubscriptBox["\[Lambda]", "5"]]}], ")"}]}], ")"}], 
+   RowBox[{"4", " ", 
+    SqrtBox["2"], " ", 
+    SuperscriptBox["\[Pi]", 
+     RowBox[{"5", "/", "2"}]], " ", 
+    SqrtBox[
+     RowBox[{
+      SubscriptBox["\[Lambda]", "1"], " ", 
+      SubscriptBox["\[Lambda]", "2"], " ", 
+      SubscriptBox["\[Lambda]", "3"], " ", 
+      SubscriptBox["\[Lambda]", "4"], " ", 
+      SubscriptBox["\[Lambda]", "5"]}]]}]], TraditionalForm]], "Output",
+ CellChangeTimes->{3.74342193782176*^9, 3.7434233544628773`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Expectation", "[", 
+   RowBox[{"X", ",", 
+    RowBox[{"X", "\[Distributed]", "distMultiNormal"}]}], "]"}], "//", 
+  "MatrixForm"}]], "Input",
+ CellChangeTimes->{{3.743420566464389*^9, 3.7434205745234823`*^9}, {
+  3.7434206802508373`*^9, 3.743420686670781*^9}, {3.743421857639258*^9, 
+  3.7434218588447247`*^9}, {3.743423366689218*^9, 3.743423388147334*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", 
+   TagBox[GridBox[{
+      {
+       SubscriptBox["\[Mu]", "1"]},
+      {
+       SubscriptBox["\[Mu]", "2"]},
+      {
+       SubscriptBox["\[Mu]", "3"]},
+      {
+       SubscriptBox["\[Mu]", "4"]},
+      {
+       SubscriptBox["\[Mu]", "5"]}
+     },
+     GridBoxAlignment->{
+      "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}},
+        "RowsIndexed" -> {}},
+     GridBoxSpacings->{"Columns" -> {
+         Offset[0.27999999999999997`], {
+          Offset[0.5599999999999999]}, 
+         Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+         Offset[0.2], {
+          Offset[0.4]}, 
+         Offset[0.2]}, "RowsIndexed" -> {}}],
+    Column], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{
+  3.743420687604699*^9, 3.7434218595575*^9, {3.743423362421384*^9, 
+   3.7434233890948343`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Expectation", "[", 
+   RowBox[{
+    RowBox[{"KroneckerProduct", "[", 
+     RowBox[{"X", ",", "X"}], "]"}], ",", 
+    RowBox[{"X", "\[Distributed]", "distMultiNormal"}]}], "]"}], "//", 
+  "MatrixForm"}]], "Input",
+ CellChangeTimes->{{3.7434207192403803`*^9, 3.7434207482901163`*^9}, {
+   3.7434207997680264`*^9, 3.743420803050537*^9}, {3.743420856402184*^9, 
+   3.7434208648357153`*^9}, {3.743420991570689*^9, 3.7434210197901*^9}, {
+   3.743421261144664*^9, 3.743421288743348*^9}, 3.743421538957102*^9, 
+   3.743421852975173*^9, {3.743423398757895*^9, 3.743423409672432*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {
+      RowBox[{
+       SubscriptBox["\[Lambda]", "1"], "+", 
+       SubsuperscriptBox["\[Mu]", "1", "2"]}], 
+      RowBox[{
+       SubscriptBox["\[Mu]", "1"], " ", 
+       SubscriptBox["\[Mu]", "2"]}], 
+      RowBox[{
+       SubscriptBox["\[Mu]", "1"], " ", 
+       SubscriptBox["\[Mu]", "3"]}], 
+      RowBox[{
+       SubscriptBox["\[Mu]", "1"], " ", 
+       SubscriptBox["\[Mu]", "4"]}], 
+      RowBox[{
+       SubscriptBox["\[Mu]", "1"], " ", 
+       SubscriptBox["\[Mu]", "5"]}]},
+     {
+      RowBox[{
+       SubscriptBox["\[Mu]", "1"], " ", 
+       SubscriptBox["\[Mu]", "2"]}], 
+      RowBox[{
+       SubscriptBox["\[Lambda]", "2"], "+", 
+       SubsuperscriptBox["\[Mu]", "2", "2"]}], 
+      RowBox[{
+       SubscriptBox["\[Mu]", "2"], " ", 
+       SubscriptBox["\[Mu]", "3"]}], 
+      RowBox[{
+       SubscriptBox["\[Mu]", "2"], " ", 
+       SubscriptBox["\[Mu]", "4"]}], 
+      RowBox[{
+       SubscriptBox["\[Mu]", "2"], " ", 
+       SubscriptBox["\[Mu]", "5"]}]},
+     {
+      RowBox[{
+       SubscriptBox["\[Mu]", "1"], " ", 
+       SubscriptBox["\[Mu]", "3"]}], 
+      RowBox[{
+       SubscriptBox["\[Mu]", "2"], " ", 
+       SubscriptBox["\[Mu]", "3"]}], 
+      RowBox[{
+       SubscriptBox["\[Lambda]", "3"], "+", 
+       SubsuperscriptBox["\[Mu]", "3", "2"]}], 
+      RowBox[{
+       SubscriptBox["\[Mu]", "3"], " ", 
+       SubscriptBox["\[Mu]", "4"]}], 
+      RowBox[{
+       SubscriptBox["\[Mu]", "3"], " ", 
+       SubscriptBox["\[Mu]", "5"]}]},
+     {
+      RowBox[{
+       SubscriptBox["\[Mu]", "1"], " ", 
+       SubscriptBox["\[Mu]", "4"]}], 
+      RowBox[{
+       SubscriptBox["\[Mu]", "2"], " ", 
+       SubscriptBox["\[Mu]", "4"]}], 
+      RowBox[{
+       SubscriptBox["\[Mu]", "3"], " ", 
+       SubscriptBox["\[Mu]", "4"]}], 
+      RowBox[{
+       SubscriptBox["\[Lambda]", "4"], "+", 
+       SubsuperscriptBox["\[Mu]", "4", "2"]}], 
+      RowBox[{
+       SubscriptBox["\[Mu]", "4"], " ", 
+       SubscriptBox["\[Mu]", "5"]}]},
+     {
+      RowBox[{
+       SubscriptBox["\[Mu]", "1"], " ", 
+       SubscriptBox["\[Mu]", "5"]}], 
+      RowBox[{
+       SubscriptBox["\[Mu]", "2"], " ", 
+       SubscriptBox["\[Mu]", "5"]}], 
+      RowBox[{
+       SubscriptBox["\[Mu]", "3"], " ", 
+       SubscriptBox["\[Mu]", "5"]}], 
+      RowBox[{
+       SubscriptBox["\[Mu]", "4"], " ", 
+       SubscriptBox["\[Mu]", "5"]}], 
+      RowBox[{
+       SubscriptBox["\[Lambda]", "5"], "+", 
+       SubsuperscriptBox["\[Mu]", "5", "2"]}]}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{{3.74342126469368*^9, 3.743421290080618*^9}, 
+   3.743421540066053*^9, 3.7434216936911497`*^9, 3.7434218538317957`*^9, 
+   3.743423410693801*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Expectation", "[", 
+   RowBox[{
+    RowBox[{"KroneckerProduct", "[", 
+     RowBox[{
+      RowBox[{"X", "-", "\[CapitalMu]"}], ",", 
+      RowBox[{"X", "-", "\[CapitalMu]"}]}], "]"}], ",", 
+    RowBox[{"X", "\[Distributed]", "distMultiNormal"}]}], "]"}], "//", 
+  "MatrixForm"}]], "Input",
+ CellChangeTimes->{{3.7434220667669897`*^9, 3.7434220993562098`*^9}, {
+  3.743423418821636*^9, 3.743423435280674*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {
+      SubscriptBox["\[Lambda]", "1"], "0", "0", "0", "0"},
+     {"0", 
+      SubscriptBox["\[Lambda]", "2"], "0", "0", "0"},
+     {"0", "0", 
+      SubscriptBox["\[Lambda]", "3"], "0", "0"},
+     {"0", "0", "0", 
+      SubscriptBox["\[Lambda]", "4"], "0"},
+     {"0", "0", "0", "0", 
+      SubscriptBox["\[Lambda]", "5"]}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{3.743422104559128*^9}]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1060, 1034},
+WindowMargins->{{-602, Automatic}, {901, Automatic}},
+Magnification:>1.5 Inherited,
+FrontEndVersion->"11.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (2016\:5e7410\
+\:67088\:65e5)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 163, 2, 96, "Chapter"],
+Cell[CellGroupData[{
+Cell[768, 28, 254, 3, 94, "Subchapter"],
+Cell[CellGroupData[{
+Cell[1047, 35, 286, 4, 145, "Subsection"],
+Cell[1336, 41, 172, 3, 150, "Input"],
+Cell[CellGroupData[{
+Cell[1533, 48, 169, 2, 114, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[1727, 54, 199, 4, 150, "Input"],
+Cell[1929, 60, 1633, 48, 211, "Output"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[3599, 113, 864, 25, 586, "Input"],
+Cell[4466, 140, 1752, 35, 2268, "Output"]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[6267, 181, 171, 2, 229, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[6463, 187, 149, 3, 303, "Input"],
+Cell[6615, 192, 1636, 48, 424, "Output"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[8288, 245, 886, 24, 1174, "Input"],
+Cell[9177, 271, 1776, 36, 2169, "Output"]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[11002, 313, 249, 3, 229, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[11276, 320, 127, 2, 303, "Input"],
+Cell[11406, 324, 74, 1, 211, "Output"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[11517, 330, 129, 2, 303, "Input"],
+Cell[11649, 334, 147, 4, 211, "Output"]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[11845, 344, 209, 2, 229, "Subsubsection"],
+Cell[12057, 348, 283, 7, 454, "Input"],
+Cell[CellGroupData[{
+Cell[12365, 359, 128, 3, 303, "Input"],
+Cell[12496, 364, 78, 1, 211, "Output"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[12611, 370, 156, 3, 303, "Input"],
+Cell[12770, 375, 89, 1, 216, "Output"]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[12908, 382, 207, 3, 235, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[13140, 389, 362, 10, 303, "Input"],
+Cell[13505, 401, 2632, 72, 621, "Output"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[16174, 478, 525, 13, 303, "Input"],
+Cell[16702, 493, 2785, 76, 756, "Output"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[19524, 574, 776, 23, 541, "Input"],
+Cell[20303, 599, 651, 21, 352, "Output"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[20991, 625, 857, 21, 594, "Input"],
+Cell[21851, 648, 416, 13, 303, "Output"]
+}, Closed]]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[22328, 668, 162, 2, 297, "Subsection"],
+Cell[22493, 672, 200, 4, 310, "Input"],
+Cell[CellGroupData[{
+Cell[22718, 680, 219, 3, 235, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[22962, 687, 148, 3, 310, "Input"],
+Cell[23113, 692, 1842, 53, 343, "Output"]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[25004, 751, 175, 2, 235, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[25204, 757, 127, 2, 310, "Input"],
+Cell[25334, 761, 98, 2, 216, "Output"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[25469, 768, 132, 2, 310, "Input"],
+Cell[25604, 772, 157, 4, 211, "Output"]
+}, Closed]]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[25822, 783, 287, 8, 432, "Section"],
+Cell[26112, 793, 195, 4, 303, "Input"],
+Cell[CellGroupData[{
+Cell[26332, 801, 156, 3, 303, "Input"],
+Cell[26491, 806, 1931, 57, 397, "Output"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[28459, 868, 119, 1, 229, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[28603, 873, 130, 2, 303, "Input"],
+Cell[28736, 877, 113, 3, 270, "Output"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[28886, 885, 136, 2, 303, "Input"],
+Cell[29025, 889, 273, 9, 312, "Output"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[29335, 903, 986, 29, 933, "Input"],
+Cell[30324, 934, 2042, 42, 2281, "Output"]
+}, Closed]]
+}, Closed]]
+}, Closed]]
+}, Closed]]
+}, Open  ]],
+Cell[32429, 983, 172, 6, 97, "Chapter"],
+Cell[CellGroupData[{
+Cell[32626, 993, 135, 2, 78, "Chapter"],
+Cell[32764, 997, 207, 4, 68, "Input"],
+Cell[CellGroupData[{
+Cell[32996, 1005, 188, 4, 68, "Input"],
+Cell[33187, 1011, 464, 15, 95, "Output"]
+}, Open  ]],
+Cell[33666, 1029, 801, 26, 176, InheritFromParent],
+Cell[CellGroupData[{
+Cell[34492, 1059, 651, 14, 122, "Input"],
+Cell[35146, 1075, 1784, 55, 122, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[36967, 1135, 392, 8, 68, "Input"],
+Cell[37362, 1145, 938, 30, 166, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[38337, 1180, 609, 12, 68, "Input"],
+Cell[38949, 1194, 3171, 98, 190, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[42157, 1297, 442, 11, 122, "Input"],
+Cell[42602, 1310, 923, 26, 149, "Output"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+

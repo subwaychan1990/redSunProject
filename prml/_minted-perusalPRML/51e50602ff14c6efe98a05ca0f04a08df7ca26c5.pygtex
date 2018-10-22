@@ -1,0 +1,13 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{scatter}\PYGmanni{p}{(}
+    \PYGmanni{n}{data\PYGmanniZus{}train}\PYGmanni{p}{[}\PYGmanni{l+s+s2}{\PYGmanniZdq{}x\PYGmanniZdq{}}\PYGmanni{p}{],}
+    \PYGmanni{n}{data\PYGmanniZus{}train}\PYGmanni{p}{[}\PYGmanni{l+s+s2}{\PYGmanniZdq{}t\PYGmanniZdq{}}\PYGmanni{p}{],}
+    \PYGmanni{n}{facecolor}\PYGmanni{o}{=}\PYGmanni{l+s+s2}{\PYGmanniZdq{}none\PYGmanniZdq{}}\PYGmanni{p}{,}
+    \PYGmanni{n}{edgecolor}\PYGmanni{o}{=}\PYGmanni{l+s+s2}{\PYGmanniZdq{}b\PYGmanniZdq{}}\PYGmanni{p}{,}
+    \PYGmanni{n}{s}\PYGmanni{o}{=}\PYGmanni{l+m+mi}{50}\PYGmanni{p}{,}
+    \PYGmanni{n}{label}\PYGmanni{o}{=}\PYGmanni{l+s+s2}{\PYGmanniZdq{}training data\PYGmanniZdq{}}\PYGmanni{p}{)}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{plot}\PYGmanni{p}{(}\PYGmanni{n}{data\PYGmanniZus{}plot}\PYGmanni{p}{[}\PYGmanni{l+s+s2}{\PYGmanniZdq{}x\PYGmanniZdq{}}\PYGmanni{p}{],} \PYGmanni{n}{data\PYGmanniZus{}plot}\PYGmanni{o}{.}\PYGmanni{n}{apply}\PYGmanni{p}{(}\PYGmanni{n}{func}\PYGmanni{p}{),} \PYGmanni{n}{c}\PYGmanni{o}{=}\PYGmanni{l+s+s2}{\PYGmanniZdq{}g\PYGmanniZdq{}}\PYGmanni{p}{,} \PYGmanni{n}{label}\PYGmanni{o}{=}\PYGmanni{l+s+s2}{\PYGmanniZdq{}\PYGmanniZdl{}\PYGmanniZbs{}sin(2\PYGmanniZbs{}pi x)\PYGmanniZdl{}\PYGmanniZdq{}}\PYGmanni{p}{)}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{legend}\PYGmanni{p}{()}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{savefig}\PYGmanni{p}{(}\PYGmanni{l+s+s2}{\PYGmanniZdq{}img/fig:1.2.png\PYGmanniZdq{}}\PYGmanni{p}{)}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{close}\PYGmanni{p}{(}\PYGmanni{l+s+s2}{\PYGmanniZdq{}all\PYGmanniZdq{}}\PYGmanni{p}{)}
+\end{Verbatim}

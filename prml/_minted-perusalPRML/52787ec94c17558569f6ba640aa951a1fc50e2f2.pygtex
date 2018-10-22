@@ -1,0 +1,15 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{k+kn}{import} \PYGmanni{n+nn}{pandas} \PYGmanni{k+kn}{as} \PYGmanni{n+nn}{pd}
+\PYGmanni{n}{mapping} \PYGmanni{o}{=} \PYGmanni{p}{\PYGmanniZob{}\PYGmanniZcb{}}
+\PYGmanni{n}{infty} \PYGmanni{o}{=} \PYGmanni{n+nb}{float}\PYGmanni{p}{(}\PYGmanni{l+s+s2}{\PYGmanniZdq{}inf\PYGmanniZdq{}}\PYGmanni{p}{)}
+\PYGmanni{k}{for} \PYGmanni{n}{index}\PYGmanni{p}{,} \PYGmanni{n}{\PYGmanniZus{}} \PYGmanni{o+ow}{in} \PYGmanni{n+nb}{enumerate}\PYGmanni{p}{([}\PYGmanni{o}{\PYGmanniZhy{}}\PYGmanni{n}{infty}\PYGmanni{p}{,} \PYGmanni{o}{\PYGmanniZhy{}}\PYGmanni{l+m+mi}{18}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{0}\PYGmanni{p}{]):}
+    \PYGmanni{n}{feature} \PYGmanni{o}{=} \PYGmanni{n}{PolynomialFeatures}\PYGmanni{p}{(}\PYGmanni{l+m+mi}{9}\PYGmanni{p}{)}
+    \PYGmanni{n}{X\PYGmanniZus{}train} \PYGmanni{o}{=} \PYGmanni{n}{feature}\PYGmanni{o}{.}\PYGmanni{n}{fit\PYGmanniZus{}transform}\PYGmanni{p}{(}\PYGmanni{n}{data\PYGmanniZus{}train}\PYGmanni{p}{[}\PYGmanni{l+s+s2}{\PYGmanniZdq{}x\PYGmanniZdq{}}\PYGmanni{p}{][:,} \PYGmanni{n+nb+bp}{None}\PYGmanni{p}{])}
+    \PYGmanni{n}{alpha} \PYGmanni{o}{=} \PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{exp}\PYGmanni{p}{(}\PYGmanni{n}{\PYGmanniZus{}}\PYGmanni{p}{)}
+    \PYGmanni{n}{model\PYGmanniZus{}train} \PYGmanni{o}{=} \PYGmanni{n}{Ridge}\PYGmanni{p}{(}\PYGmanni{n}{alpha}\PYGmanni{o}{=}\PYGmanni{n}{alpha}\PYGmanni{p}{,} \PYGmanni{n}{fit\PYGmanniZus{}intercept}\PYGmanni{o}{=}\PYGmanni{n+nb+bp}{False}\PYGmanni{p}{)}
+    \PYGmanni{n}{model\PYGmanniZus{}train}\PYGmanni{o}{.}\PYGmanni{n}{fit}\PYGmanni{p}{(}\PYGmanni{n}{X\PYGmanniZus{}train}\PYGmanni{p}{,} \PYGmanni{n}{data\PYGmanniZus{}train}\PYGmanni{p}{[}\PYGmanni{l+s+s2}{\PYGmanniZdq{}t\PYGmanniZdq{}}\PYGmanni{p}{]}\PYGmanni{o}{.}\PYGmanni{n}{values}\PYGmanni{p}{)}
+    \PYGmanni{n}{mapping}\PYGmanni{p}{[}\PYGmanni{l+s+s2}{\PYGmanniZdq{}\PYGmanniZdl{}\PYGmanniZbs{}ln\PYGmanniZbs{}lambda=}\PYGmanni{l+s+si}{\PYGmanniZpc{}f}\PYGmanni{l+s+s2}{\PYGmanniZdl{}\PYGmanniZdq{}} \PYGmanni{o}{\PYGmanniZpc{}} \PYGmanni{n}{\PYGmanniZus{}}\PYGmanni{p}{]} \PYGmanni{o}{=} \PYGmanni{n}{model\PYGmanniZus{}train}\PYGmanni{o}{.}\PYGmanni{n}{coef\PYGmanniZus{}}
+\PYGmanni{n}{df} \PYGmanni{o}{=} \PYGmanni{n}{pd}\PYGmanni{o}{.}\PYGmanni{n}{DataFrame}\PYGmanni{p}{(}\PYGmanni{n}{mapping}\PYGmanni{p}{)}
+\PYGmanni{n}{df}\PYGmanni{o}{.}\PYGmanni{n}{index} \PYGmanni{o}{=} \PYGmanni{p}{[}\PYGmanni{l+s+s2}{\PYGmanniZdq{}\PYGmanniZdl{}w\PYGmanniZus{}}\PYGmanni{l+s+si}{\PYGmanniZpc{}d}\PYGmanni{l+s+s2}{\PYGmanniZca{}*\PYGmanniZdl{}\PYGmanniZdq{}} \PYGmanni{o}{\PYGmanniZpc{}} \PYGmanni{n}{\PYGmanniZus{}} \PYGmanni{k}{for} \PYGmanni{n}{\PYGmanniZus{}} \PYGmanni{o+ow}{in} \PYGmanni{n+nb}{range}\PYGmanni{p}{(}\PYGmanni{l+m+mi}{10}\PYGmanni{p}{)]}
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{n}{tbl}\PYGmanni{p}{(}\PYGmanni{n}{df}\PYGmanni{o}{.}\PYGmanni{n}{round}\PYGmanni{p}{(}\PYGmanni{l+m+mi}{2}\PYGmanni{p}{)}\PYGmanni{o}{.}\PYGmanni{n}{fillna}\PYGmanni{p}{(}\PYGmanni{l+s+s2}{\PYGmanniZdq{}\PYGmanniZdq{}}\PYGmanni{p}{)))}
+\end{Verbatim}

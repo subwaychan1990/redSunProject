@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{n}{deterministic}\PYGmanni{o}{.}\PYGmanni{n}{pdf}\PYGmanni{p}{(}\PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{arange}\PYGmanni{p}{(}\PYGmanni{o}{\PYGmanniZhy{}}\PYGmanni{l+m+mi}{3}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{3}\PYGmanni{p}{,} \PYGmanni{l+m+mf}{0.5}\PYGmanni{p}{))}
+\end{Verbatim}

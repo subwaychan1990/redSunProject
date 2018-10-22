@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{scipy.integrate} \PYGmanni{k+kn}{import} \PYGmanni{n}{quad}
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{n}{quad}\PYGmanni{p}{(}\PYGmanni{n}{deterministic}\PYGmanni{o}{.}\PYGmanni{n}{pdf}\PYGmanni{p}{,} \PYGmanni{o}{\PYGmanniZhy{}}\PYGmanni{l+m+mf}{1e\PYGmanniZhy{}1}\PYGmanni{p}{,} \PYGmanni{l+m+mf}{1e\PYGmanniZhy{}1}\PYGmanni{p}{))}
+\end{Verbatim}

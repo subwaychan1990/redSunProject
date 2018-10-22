@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{n}{norm}\PYGmanni{o}{.}\PYGmanni{n}{stats}\PYGmanni{p}{(}\PYGmanni{n}{loc}\PYGmanni{o}{=}\PYGmanni{l+m+mi}{3}\PYGmanni{p}{,} \PYGmanni{n}{scale}\PYGmanni{o}{=}\PYGmanni{l+m+mi}{4}\PYGmanni{p}{,} \PYGmanni{n}{moments}\PYGmanni{o}{=}\PYGmanni{l+s+s2}{\PYGmanniZdq{}mv\PYGmanniZdq{}}\PYGmanni{p}{)}
+\end{Verbatim}

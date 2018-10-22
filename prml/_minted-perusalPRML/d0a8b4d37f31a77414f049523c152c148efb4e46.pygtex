@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{n}{ppf}\PYGmanni{p}{(}\PYGmanni{n}{q}\PYGmanni{p}{)} \PYGmanni{o}{=} \PYGmanni{n+nb}{min}\PYGmanni{p}{\PYGmanniZob{}}\PYGmanni{n}{x} \PYGmanni{p}{:} \PYGmanni{n}{cdf}\PYGmanni{p}{(}\PYGmanni{n}{x}\PYGmanni{p}{)} \PYGmanni{o}{\PYGmanniZgt{}=} \PYGmanni{n}{q}\PYGmanni{p}{,} \PYGmanni{n}{x} \PYGmanni{n}{integer}\PYGmanni{p}{\PYGmanniZcb{}}
+\end{Verbatim}

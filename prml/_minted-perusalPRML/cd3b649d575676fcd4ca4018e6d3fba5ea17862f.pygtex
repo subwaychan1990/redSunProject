@@ -1,0 +1,26 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{k+kn}{import} \PYGmanni{n+nn}{numpy} \PYGmanni{k+kn}{as} \PYGmanni{n+nn}{np}
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{numpy.linalg} \PYGmanni{k+kn}{import} \PYGmanni{n}{norm}
+\PYGmanni{k+kn}{import} \PYGmanni{n+nn}{matplotlib.pyplot} \PYGmanni{k+kn}{as} \PYGmanni{n+nn}{plt}
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{mpl\PYGmanniZus{}toolkits.mplot3d} \PYGmanni{k+kn}{import} \PYGmanni{n}{Axes3D}
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{matplotlib} \PYGmanni{k+kn}{import} \PYGmanni{n}{cm}
+\PYGmanni{k+kn}{import} \PYGmanni{n+nn}{pandas} \PYGmanni{k+kn}{as} \PYGmanni{n+nn}{pd}
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{scipy} \PYGmanni{k+kn}{import} \PYGmanni{n}{linalg}
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{scipy.special} \PYGmanni{k+kn}{import} \PYGmanni{n}{i0}\PYGmanni{p}{,} \PYGmanni{n}{i1}
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{scipy.stats} \PYGmanni{k+kn}{import} \PYGmanni{n}{dirichlet}
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{scipy.stats} \PYGmanni{k+kn}{import} \PYGmanni{n}{beta}
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{scipy.stats} \PYGmanni{k+kn}{import} \PYGmanni{n}{uniform}
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{scipy.stats} \PYGmanni{k+kn}{import} \PYGmanni{n}{norm} \PYGmanni{k}{as} \PYGmanni{n}{normal}
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{scipy.stats} \PYGmanni{k+kn}{import} \PYGmanni{n}{multivariate\PYGmanniZus{}normal}
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{scipy.stats} \PYGmanni{k+kn}{import} \PYGmanni{n}{gamma}
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{scipy.stats} \PYGmanni{k+kn}{import} \PYGmanni{n}{t}
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{scipy.stats} \PYGmanni{k+kn}{import} \PYGmanni{n}{vonmises}
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{scipy.stats} \PYGmanni{k+kn}{import} \PYGmanni{n}{vonmises\PYGmanniZus{}line}
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{sklearn.mixture} \PYGmanni{k+kn}{import} \PYGmanni{n}{GaussianMixture}
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{matplotlib.colors} \PYGmanni{k+kn}{import} \PYGmanni{n}{LogNorm}
+
+
+\PYGmanni{k}{def} \PYGmanni{n+nf}{Rot}\PYGmanni{p}{(}\PYGmanni{n}{x}\PYGmanni{p}{):}
+    \PYGmanni{n}{theta\PYGmanniZus{}} \PYGmanni{o}{=} \PYGmanni{n}{x}\PYGmanni{o}{*}\PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{pi}\PYGmanni{o}{/}\PYGmanni{l+m+mi}{180}
+    \PYGmanni{k}{return} \PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{array}\PYGmanni{p}{([[}\PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{cos}\PYGmanni{p}{(}\PYGmanni{n}{theta\PYGmanniZus{}}\PYGmanni{p}{),} \PYGmanni{o}{\PYGmanniZhy{}}\PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{sin}\PYGmanni{p}{(}\PYGmanni{n}{theta\PYGmanniZus{}}\PYGmanni{p}{)],} \PYGmanni{p}{[}\PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{sin}\PYGmanni{p}{(}\PYGmanni{n}{theta\PYGmanniZus{}}\PYGmanni{p}{),} \PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{cos}\PYGmanni{p}{(}\PYGmanni{n}{theta\PYGmanniZus{}}\PYGmanni{p}{)]])}
+\end{Verbatim}

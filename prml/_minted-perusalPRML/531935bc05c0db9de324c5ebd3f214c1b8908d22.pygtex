@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{n}{norm}\PYGmanni{o}{.}\PYGmanni{n}{mean}\PYGmanni{p}{(),} \PYGmanni{n}{norm}\PYGmanni{o}{.}\PYGmanni{n}{std}\PYGmanni{p}{(),} \PYGmanni{n}{norm}\PYGmanni{o}{.}\PYGmanni{n}{var}\PYGmanni{p}{())}
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{n}{norm}\PYGmanni{o}{.}\PYGmanni{n}{stats}\PYGmanni{p}{(}\PYGmanni{n}{moments}\PYGmanni{o}{=}\PYGmanni{l+s+s2}{\PYGmanniZdq{}mv\PYGmanniZdq{}}\PYGmanni{p}{))}
+\end{Verbatim}

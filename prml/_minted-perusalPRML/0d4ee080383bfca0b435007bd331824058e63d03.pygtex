@@ -1,0 +1,8 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{n}{n\PYGmanniZus{}sample} \PYGmanni{o}{=} \PYGmanni{l+m+mi}{500}
+\PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{random}\PYGmanni{o}{.}\PYGmanni{n}{seed}\PYGmanni{p}{(}\PYGmanni{l+m+mi}{87655678}\PYGmanni{p}{)}   \PYGmanni{c+c1}{\PYGmanniZsh{} fix the seed for replicability}
+\PYGmanni{n}{rvs} \PYGmanni{o}{=} \PYGmanni{n}{normdiscrete}\PYGmanni{o}{.}\PYGmanni{n}{rvs}\PYGmanni{p}{(}\PYGmanni{n}{size}\PYGmanni{o}{=}\PYGmanni{n}{n\PYGmanniZus{}sample}\PYGmanni{p}{)}
+\PYGmanni{n}{f}\PYGmanni{p}{,} \PYGmanni{n}{l} \PYGmanni{o}{=} \PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{histogram}\PYGmanni{p}{(}\PYGmanni{n}{rvs}\PYGmanni{p}{,} \PYGmanni{n}{bins}\PYGmanni{o}{=}\PYGmanni{n}{gridlimits}\PYGmanni{p}{)}
+\PYGmanni{n}{sfreq} \PYGmanni{o}{=} \PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{vstack}\PYGmanni{p}{([}\PYGmanni{n}{gridint}\PYGmanni{p}{,} \PYGmanni{n}{f}\PYGmanni{p}{,} \PYGmanni{n}{probs}\PYGmanni{o}{*}\PYGmanni{n}{n\PYGmanniZus{}sample}\PYGmanni{p}{])}\PYGmanni{o}{.}\PYGmanni{n}{T}
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{n}{sfreq}\PYGmanni{p}{)}
+\end{Verbatim}

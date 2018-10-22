@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{l+s+s1}{\PYGmanniZsq{}chisquare for normdiscrete: chi2 = }\PYGmanni{l+s+si}{\PYGmanniZpc{}6.3f}\PYGmanni{l+s+s1}{ pvalue = }\PYGmanni{l+s+si}{\PYGmanniZpc{}6.4f}\PYGmanni{l+s+s1}{\PYGmanniZsq{}} \PYGmanni{o}{\PYGmanniZpc{}} \PYGmanni{p}{(}\PYGmanni{n}{ch2}\PYGmanni{p}{,} \PYGmanni{n}{pval}\PYGmanni{p}{))}
+\end{Verbatim}

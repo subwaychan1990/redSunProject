@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{scipy.stats} \PYGmanni{k+kn}{import} \PYGmanni{n}{uniform}
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{n}{uniform}\PYGmanni{o}{.}\PYGmanni{n}{cdf}\PYGmanni{p}{([}\PYGmanni{l+m+mi}{0}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{1}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{2}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{3}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{4}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{5}\PYGmanni{p}{],} \PYGmanni{n}{loc}\PYGmanni{o}{=}\PYGmanni{l+m+mi}{1}\PYGmanni{p}{,} \PYGmanni{n}{scale}\PYGmanni{o}{=}\PYGmanni{l+m+mi}{4}\PYGmanni{p}{))}
+\end{Verbatim}

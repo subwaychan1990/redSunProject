@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{l+s+s1}{\PYGmanniZsq{}mean = }\PYGmanni{l+s+si}{\PYGmanniZpc{}6.4f}\PYGmanni{l+s+s1}{, variance = }\PYGmanni{l+s+si}{\PYGmanniZpc{}6.4f}\PYGmanni{l+s+s1}{, skew = }\PYGmanni{l+s+si}{\PYGmanniZpc{}6.4f}\PYGmanni{l+s+s1}{, kurtosis = }\PYGmanni{l+s+si}{\PYGmanniZpc{}6.4f}\PYGmanni{l+s+s1}{\PYGmanniZsq{}} \PYGmanni{o}{\PYGmanniZpc{}}
+      \PYGmanni{n}{normdiscrete}\PYGmanni{o}{.}\PYGmanni{n}{stats}\PYGmanni{p}{(}\PYGmanni{n}{moments}\PYGmanni{o}{=}\PYGmanni{l+s+s1}{\PYGmanniZsq{}mvsk\PYGmanniZsq{}}\PYGmanni{p}{))}
+\end{Verbatim}

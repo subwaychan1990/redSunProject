@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{n}{rv} \PYGmanni{o}{=} \PYGmanni{n}{norm}\PYGmanni{p}{()}
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{n+nb}{dir}\PYGmanni{p}{(}\PYGmanni{n}{rv}\PYGmanni{p}{))}  \PYGmanni{c+c1}{\PYGmanniZsh{} reformatted}
+\end{Verbatim}

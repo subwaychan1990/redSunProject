@@ -1,0 +1,36 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{k+kn}{import} \PYGmanni{n+nn}{matplotlib.pyplot} \PYGmanni{k+kn}{as} \PYGmanni{n+nn}{plt}
+\PYGmanni{k+kn}{import} \PYGmanni{n+nn}{numpy} \PYGmanni{k+kn}{as} \PYGmanni{n+nn}{np}
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{sklearn} \PYGmanni{k+kn}{import} \PYGmanni{n}{datasets}\PYGmanni{p}{,} \PYGmanni{n}{linear\PYGmanniZus{}model}
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{sklearn.metrics} \PYGmanni{k+kn}{import} \PYGmanni{n}{mean\PYGmanniZus{}squared\PYGmanniZus{}error}\PYGmanni{p}{,} \PYGmanni{n}{r2\PYGmanniZus{}score}
+\PYGmanni{c+c1}{\PYGmanniZsh{} Load the diabetes dataset}
+\PYGmanni{n}{diabetes} \PYGmanni{o}{=} \PYGmanni{n}{datasets}\PYGmanni{o}{.}\PYGmanni{n}{load\PYGmanniZus{}diabetes}\PYGmanni{p}{()}
+\PYGmanni{c+c1}{\PYGmanniZsh{} Use only one feature}
+\PYGmanni{n}{diabetes\PYGmanniZus{}X} \PYGmanni{o}{=} \PYGmanni{n}{diabetes}\PYGmanni{o}{.}\PYGmanni{n}{data}\PYGmanni{p}{[:,} \PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{newaxis}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{2}\PYGmanni{p}{]}
+\PYGmanni{c+c1}{\PYGmanniZsh{} Split the data into training/testing sets}
+\PYGmanni{n}{diabetes\PYGmanniZus{}X\PYGmanniZus{}train} \PYGmanni{o}{=} \PYGmanni{n}{diabetes\PYGmanniZus{}X}\PYGmanni{p}{[:}\PYGmanni{o}{\PYGmanniZhy{}}\PYGmanni{l+m+mi}{20}\PYGmanni{p}{]}
+\PYGmanni{n}{diabetes\PYGmanniZus{}X\PYGmanniZus{}test} \PYGmanni{o}{=} \PYGmanni{n}{diabetes\PYGmanniZus{}X}\PYGmanni{p}{[}\PYGmanni{o}{\PYGmanniZhy{}}\PYGmanni{l+m+mi}{20}\PYGmanni{p}{:]}
+\PYGmanni{c+c1}{\PYGmanniZsh{} Split the targets into training/testing sets}
+\PYGmanni{n}{diabetes\PYGmanniZus{}y\PYGmanniZus{}train} \PYGmanni{o}{=} \PYGmanni{n}{diabetes}\PYGmanni{o}{.}\PYGmanni{n}{target}\PYGmanni{p}{[:}\PYGmanni{o}{\PYGmanniZhy{}}\PYGmanni{l+m+mi}{20}\PYGmanni{p}{]}
+\PYGmanni{n}{diabetes\PYGmanniZus{}y\PYGmanniZus{}test} \PYGmanni{o}{=} \PYGmanni{n}{diabetes}\PYGmanni{o}{.}\PYGmanni{n}{target}\PYGmanni{p}{[}\PYGmanni{o}{\PYGmanniZhy{}}\PYGmanni{l+m+mi}{20}\PYGmanni{p}{:]}
+\PYGmanni{c+c1}{\PYGmanniZsh{} Create linear regression object}
+\PYGmanni{n}{regr} \PYGmanni{o}{=} \PYGmanni{n}{linear\PYGmanniZus{}model}\PYGmanni{o}{.}\PYGmanni{n}{LinearRegression}\PYGmanni{p}{()}
+\PYGmanni{c+c1}{\PYGmanniZsh{} Train the model using the training sets}
+\PYGmanni{n}{regr}\PYGmanni{o}{.}\PYGmanni{n}{fit}\PYGmanni{p}{(}\PYGmanni{n}{diabetes\PYGmanniZus{}X\PYGmanniZus{}train}\PYGmanni{p}{,} \PYGmanni{n}{diabetes\PYGmanniZus{}y\PYGmanniZus{}train}\PYGmanni{p}{)}
+\PYGmanni{c+c1}{\PYGmanniZsh{} Make predictions using the testing set}
+\PYGmanni{n}{diabetes\PYGmanniZus{}y\PYGmanniZus{}pred} \PYGmanni{o}{=} \PYGmanni{n}{regr}\PYGmanni{o}{.}\PYGmanni{n}{predict}\PYGmanni{p}{(}\PYGmanni{n}{diabetes\PYGmanniZus{}X\PYGmanniZus{}test}\PYGmanni{p}{)}
+\PYGmanni{c+c1}{\PYGmanniZsh{} The coefficients}
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{l+s+s1}{\PYGmanniZsq{}Coefficients: }\PYGmanni{l+s+se}{\PYGmanniZbs{}n}\PYGmanni{l+s+s1}{\PYGmanniZsq{}}\PYGmanni{p}{,} \PYGmanni{n}{regr}\PYGmanni{o}{.}\PYGmanni{n}{coef\PYGmanniZus{}}\PYGmanni{p}{)}
+\PYGmanni{c+c1}{\PYGmanniZsh{} The mean squared error}
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{l+s+s2}{\PYGmanniZdq{}Mean squared error: }\PYGmanni{l+s+si}{\PYGmanniZpc{}.2f}\PYGmanni{l+s+s2}{\PYGmanniZdq{}}
+      \PYGmanni{o}{\PYGmanniZpc{}} \PYGmanni{n}{mean\PYGmanniZus{}squared\PYGmanniZus{}error}\PYGmanni{p}{(}\PYGmanni{n}{diabetes\PYGmanniZus{}y\PYGmanniZus{}test}\PYGmanni{p}{,} \PYGmanni{n}{diabetes\PYGmanniZus{}y\PYGmanniZus{}pred}\PYGmanni{p}{))}
+\PYGmanni{c+c1}{\PYGmanniZsh{} Explained variance score: 1 is perfect prediction}
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{l+s+s1}{\PYGmanniZsq{}Variance score: }\PYGmanni{l+s+si}{\PYGmanniZpc{}.2f}\PYGmanni{l+s+s1}{\PYGmanniZsq{}} \PYGmanni{o}{\PYGmanniZpc{}} \PYGmanni{n}{r2\PYGmanniZus{}score}\PYGmanni{p}{(}\PYGmanni{n}{diabetes\PYGmanniZus{}y\PYGmanniZus{}test}\PYGmanni{p}{,} \PYGmanni{n}{diabetes\PYGmanniZus{}y\PYGmanniZus{}pred}\PYGmanni{p}{))}
+\PYGmanni{c+c1}{\PYGmanniZsh{} Plot outputs}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{scatter}\PYGmanni{p}{(}\PYGmanni{n}{diabetes\PYGmanniZus{}X\PYGmanniZus{}test}\PYGmanni{p}{,} \PYGmanni{n}{diabetes\PYGmanniZus{}y\PYGmanniZus{}test}\PYGmanni{p}{,}  \PYGmanni{n}{color}\PYGmanni{o}{=}\PYGmanni{l+s+s1}{\PYGmanniZsq{}black\PYGmanniZsq{}}\PYGmanni{p}{)}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{plot}\PYGmanni{p}{(}\PYGmanni{n}{diabetes\PYGmanniZus{}X\PYGmanniZus{}test}\PYGmanni{p}{,} \PYGmanni{n}{diabetes\PYGmanniZus{}y\PYGmanniZus{}pred}\PYGmanni{p}{,} \PYGmanni{n}{color}\PYGmanni{o}{=}\PYGmanni{l+s+s1}{\PYGmanniZsq{}blue\PYGmanniZsq{}}\PYGmanni{p}{,} \PYGmanni{n}{linewidth}\PYGmanni{o}{=}\PYGmanni{l+m+mi}{3}\PYGmanni{p}{)}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{xticks}\PYGmanni{p}{(())}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{yticks}\PYGmanni{p}{(())}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{savefig}\PYGmanni{p}{(}\PYGmanni{l+s+s2}{\PYGmanniZdq{}img/1.s.Linear\PYGmanniZhy{}Regression\PYGmanniZhy{}Example.png\PYGmanniZdq{}}\PYGmanni{p}{)}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{close}\PYGmanni{p}{(}\PYGmanni{l+s+s2}{\PYGmanniZdq{}all\PYGmanniZdq{}}\PYGmanni{p}{)}
+\end{Verbatim}

@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{scipy.stats} \PYGmanni{k+kn}{import} \PYGmanni{n}{gamma}
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{n}{gamma}\PYGmanni{o}{.}\PYGmanni{n}{numargs}\PYGmanni{p}{)}
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{n}{gamma}\PYGmanni{o}{.}\PYGmanni{n}{shapes}\PYGmanni{p}{)}
+\end{Verbatim}

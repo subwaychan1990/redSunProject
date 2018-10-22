@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{sklearn} \PYGmanni{k+kn}{import} \PYGmanni{n}{linear\PYGmanniZus{}model}
+\PYGmanni{n}{reg} \PYGmanni{o}{=} \PYGmanni{n}{linear\PYGmanniZus{}model}\PYGmanni{o}{.}\PYGmanni{n}{RidgeCV}\PYGmanni{p}{(}\PYGmanni{n}{alphas}\PYGmanni{o}{=}\PYGmanni{p}{[}\PYGmanni{l+m+mf}{0.1}\PYGmanni{p}{,} \PYGmanni{l+m+mf}{1.0}\PYGmanni{p}{,} \PYGmanni{l+m+mf}{10.0}\PYGmanni{p}{])}
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{n}{reg}\PYGmanni{o}{.}\PYGmanni{n}{fit}\PYGmanni{p}{([[}\PYGmanni{l+m+mi}{0}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{0}\PYGmanni{p}{],} \PYGmanni{p}{[}\PYGmanni{l+m+mi}{0}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{0}\PYGmanni{p}{],} \PYGmanni{p}{[}\PYGmanni{l+m+mi}{1}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{1}\PYGmanni{p}{]],} \PYGmanni{p}{[}\PYGmanni{l+m+mi}{0}\PYGmanni{p}{,} \PYGmanni{o}{.}\PYGmanni{l+m+mi}{1}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{1}\PYGmanni{p}{]))}
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{n}{reg}\PYGmanni{o}{.}\PYGmanni{n}{alpha\PYGmanniZus{}}\PYGmanni{p}{)}
+\end{Verbatim}

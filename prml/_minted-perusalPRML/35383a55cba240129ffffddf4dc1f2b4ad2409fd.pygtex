@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{n}{norm}\PYGmanni{o}{.}\PYGmanni{n}{cdf}\PYGmanni{p}{([}\PYGmanni{o}{\PYGmanniZhy{}}\PYGmanni{l+m+mf}{1.}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{0}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{1}\PYGmanni{p}{]))}
+\PYGmanni{k+kn}{import} \PYGmanni{n+nn}{numpy} \PYGmanni{k+kn}{as} \PYGmanni{n+nn}{np}
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{n}{norm}\PYGmanni{o}{.}\PYGmanni{n}{cdf}\PYGmanni{p}{(}\PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{array}\PYGmanni{p}{([}\PYGmanni{o}{\PYGmanniZhy{}}\PYGmanni{l+m+mf}{1.}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{0}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{1}\PYGmanni{p}{])))}
+\end{Verbatim}

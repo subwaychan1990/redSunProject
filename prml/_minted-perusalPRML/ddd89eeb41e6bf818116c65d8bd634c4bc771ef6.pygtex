@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{n}{hypergeom}\PYGmanni{o}{.}\PYGmanni{n}{ppf}\PYGmanni{p}{(}\PYGmanni{n}{prb} \PYGmanni{o}{+} \PYGmanni{l+m+mf}{1e\PYGmanniZhy{}8}\PYGmanni{p}{,} \PYGmanni{n}{M}\PYGmanni{p}{,} \PYGmanni{n}{n}\PYGmanni{p}{,} \PYGmanni{n}{N}\PYGmanni{p}{))}
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{n}{hypergeom}\PYGmanni{o}{.}\PYGmanni{n}{ppf}\PYGmanni{p}{(}\PYGmanni{n}{prb} \PYGmanni{o}{\PYGmanniZhy{}} \PYGmanni{l+m+mf}{1e\PYGmanniZhy{}8}\PYGmanni{p}{,} \PYGmanni{n}{M}\PYGmanni{p}{,} \PYGmanni{n}{n}\PYGmanni{p}{,} \PYGmanni{n}{N}\PYGmanni{p}{))}
+\end{Verbatim}

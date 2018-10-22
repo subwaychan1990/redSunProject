@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{n}{nd\PYGmanniZus{}std} \PYGmanni{o}{=} \PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{sqrt}\PYGmanni{p}{(}\PYGmanni{n}{normdiscrete}\PYGmanni{o}{.}\PYGmanni{n}{stats}\PYGmanni{p}{(}\PYGmanni{n}{moments}\PYGmanni{o}{=}\PYGmanni{l+s+s1}{\PYGmanniZsq{}v\PYGmanniZsq{}}\PYGmanni{p}{))}
+\end{Verbatim}

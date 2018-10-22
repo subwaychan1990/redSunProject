@@ -1,0 +1,8 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{scipy} \PYGmanni{k+kn}{import} \PYGmanni{n}{stats}
+\PYGmanni{k}{class} \PYGmanni{n+nc}{deterministic\PYGmanniZus{}gen}\PYGmanni{p}{(}\PYGmanni{n}{stats}\PYGmanni{o}{.}\PYGmanni{n}{rv\PYGmanniZus{}continuous}\PYGmanni{p}{):}
+    \PYGmanni{k}{def} \PYGmanni{n+nf}{\PYGmanniZus{}cdf}\PYGmanni{p}{(}\PYGmanni{n+nb+bp}{self}\PYGmanni{p}{,} \PYGmanni{n}{x}\PYGmanni{p}{):}
+        \PYGmanni{k}{return} \PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{where}\PYGmanni{p}{(}\PYGmanni{n}{x} \PYGmanni{o}{\PYGmanniZlt{}} \PYGmanni{l+m+mi}{0}\PYGmanni{p}{,} \PYGmanni{l+m+mf}{0.}\PYGmanni{p}{,} \PYGmanni{l+m+mf}{1.}\PYGmanni{p}{)}
+    \PYGmanni{k}{def} \PYGmanni{n+nf}{\PYGmanniZus{}stats}\PYGmanni{p}{(}\PYGmanni{n+nb+bp}{self}\PYGmanni{p}{):}
+        \PYGmanni{k}{return} \PYGmanni{l+m+mf}{0.}\PYGmanni{p}{,} \PYGmanni{l+m+mf}{0.}\PYGmanni{p}{,} \PYGmanni{l+m+mf}{0.}\PYGmanni{p}{,} \PYGmanni{l+m+mf}{0.}
+\end{Verbatim}

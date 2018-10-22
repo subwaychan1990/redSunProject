@@ -1,5 +1,5 @@
-#+TITLE:  Notes of PRML and Scikit-learn
-#+OPTIONS: ::t ^:nil
+#+TITLE:  Perusal of PRML and Scikit-learn
+#+OPTIONS: ::t
 
 #+latex:\newpage
 
@@ -2628,7 +2628,7 @@ We end this chapter by considering three nonparametric methods based respectivel
 We begin by considering a single binary random variable $x \in \{0, 1\}$.
 For example, $x$ might describe the outcome of flipping a coin, with $x = 1$ representing ‘heads’, and $x = 0$ representing ‘tails’.
 We can imagine that this is a damaged coin so that the probability of landing heads is not necessarily the same as that of landing tails.
-The probability of $x = 1$ will be denoted by the parameter \mu so that
+The probability of $x = 1$ will be denoted by the parameter $\mu$ so that
 
 \begin{equation}
 p(x=1|\mu) = \mu
@@ -6038,3 +6038,512 @@ task2()
 
 * Linear Models for Regression
 
+
+The focus so far in this book has been on unsupervised learning, including topics such as density estimation and data clustering.
+We turn now to a discussion of supervised learning, starting with regression.
+The goal of regression is to predict the value of one or more continuous target variables t given the value of a D-dimensional vector $\mathbf{x}$ of input variables.
+We have already encountered an example of a regression problem when we considered polynomial curve fitting in Chapter 1.
+The polynomial is a specific example of a broad class of functions called linear regression models, which share the property of being linear functions of the adjustable parameters, and which will form the focus of this chapter.
+The simplest form of linear regression models are also linear functions of the input variables.
+However, we can obtain a much more useful class of functions by taking linear combinations of a fixed set of nonlinear functions of the input variables, known as /basis functions(基函数)/.
+Such models are linear functions of the parameters, which gives them simple analytical properties, and yet can be nonlinear with respect to the input variables.
+
+Given a training data set comprising $N$ observations $\{\mathbf{x}_n\}$, where $n = 1, \cdots, N$, together with corresponding target values $\{t_n\}$, the goal is to predict the value of $t$ for a new value of $\mathbf{x}$.
+In the simplest approach, this can be done by directly constructing an appropriate function $y(\mathbf{x})$ whose values for new inputs $\mathbf{x}$ constitute the predictions for the corresponding values of $t$.
+More generally, from a probabilistic perspective, we aim to model the predictive distribution $p(t|\mathbf{x})$ because this expresses our uncertainty about the value of $t$ for each value of $\mathbf{x}$.
+From this conditional distribution we can make predictions of $t$, for any new value of $\mathbf{x}$, in such a way as to minimize the expected value of a suitably chosen loss function.
+As discussed in Section 1.5.5, a common choice of loss function for real-valued variables is the squared loss, for which the optimal solution is given by the conditional expectation of t.
+
+Although linear models have significant limitations as practical techniques for pattern recognition, particularly for problems involving input spaces of high dimensionality, they have nice analytical properties and form the foundation for more sophisticated models to be discussed in later chapters.
+
+
+** Linear Basis Function Models
+
+
+The simplest linear model for regression is one that involves a linear combination of the input variables
+
+\begin{equation}
+y(x,\mathbf{w}) = w_0 + w_1x_1 + \cdots+ w_Dx_D
+\end{equation}
+
+where $\mathbf{x}=(x_1,\cdots,x_D)^T$.
+This is often simply known as /linear regression(线性回归)/.
+The key property of this model is that it is a linear function of the parameters $w_0, \cdots, w_D$.
+It is also, however, a linear function of the input variables $x_i$, and this imposes significant limitations on the model.
+We therefore extend the class of models by considering linear combinations of fixed nonlinear functions of the input variables, of the form
+
+\begin{equation}\label{linear-models}
+y(\mathbf{x},\mathbf{w}) = w_0 + \sum_{j=1}^{M-1}w_j\phi_j(\mathbf{x})
+\end{equation}
+
+where $\phi_j(x)$ are known as basis functions.
+By denoting the maximum value of the index $j$ by $M - 1$, the total number of parameters in this model will be $M$ .
+
+The parameter $w_0$ allows for any fixed offset in the data and is sometimes called a /bias parameter(偏置参数)/ (not to be confused with ‘bias’ in a statistical sense).
+It is often convenient to define an additional dummy ‘basis function’ $\phi_0(\mathbf{x}) = 1$ so that
+
+\begin{equation}
+y(\mathbf{x},\matplotlib{w}) = \sum_{j=0}^{M-1}w_j\phi_j(\mathbf{x})=\mathbf{w}^T\pmb{\phi}(\mathbf{x})
+\end{equation}
+
+where $\mathbf{w} = (w_0, \cdots, w_{M−1})^T$ and $\pmb{\phi} = (\phi_0, \cdots, \phi_{M−1})^T$.
+In many practical applications of pattern recognition, we will apply some form of fixed pre-processing, or feature extraction, to the original data variables.
+If the original variables comprise the vector $\mathbf{x}$, then the features can be expressed in terms of the basis functions $\{\phi_j(\mathbf{x})\}$.
+
+By using nonlinear basis functions, we allow the function $y(\mathbf{x}, \mathbf{w})$ to be a nonlinear function of the input vector $\mathbf{x}$.
+Functions of the form (ref:linear-models) are called linear models, however, because this function is linear in $\mathbf{w}$.
+It is this linearity in the parameters that will greatly simplify the analysis of this class of models.
+However, it also leads to some significant limitations, as we discuss in Section 3.6.
+
+The example of polynomial regression considered in Chapter 1 is a particular example of this model in which there is a single input variable $x$, and the basis functions take the form of powers of $x$ so that $\phi_j(x) = x^j$.
+One limitation of polynomial basis functions is that they are global functions of the input variable, so that changes in one region of input space affect all other regions.
+This can be resolved by dividing the input space up into regions and fit a different polynomial in each region, leading to /spline functions(样条函数)/ (Hastie et al., 2001).
+
+There are many other possible choices for the basis functions, for example
+
+\begin{equation}
+\phi_j(x) = \exp\left{ −\frac{(x-\mu_j)^2}{2s^2} \right}
+\end{equation}
+
+where the $\mu_j$ govern the locations of the basis functions in input space, and the parameter $s$ governs their spatial scale.
+These are usually referred to as ‘Gaussian’ basis functions, although it should be noted that they are not required to have a probabilistic interpretation, and in particular the normalization coefficient is unimportant because these basis functions will be multiplied by adaptive parameters $w_j$.
+
+Another possibility is the sigmoidal basis function of the form
+
+\begin{equation}
+\phi_j(x) = \sigma\left( \frac{x-\mu_j}{s}\right)
+\end{equation}
+
+where $\sigma(a)$ is the logistic sigmoid function defined by
+
+\begin{equation}
+\sigma(a) = \frac{1}{1+\exp(-a)}.
+\end{equation}
+
+Equivalently, we can use the "$\tanh$" function because this is related to the logistic sigmoid by $tanh(a) = 2\sigma(a) - 1$, and so a general linear combination of logistic sigmoid functions is equivalent to a general linear combination of "$\tanh$" functions.
+These various choices of basis function are illustrated in Figure [[fig:3.1]].
+
+#+CAPTION: Examples of basis functions, showing polynomials on the left, Gaussians of the form (3.4) in the centre, and sigmoidal of the form (3.5) on the right.
+#+ATTR_LaTeX: scale=0.75
+#+LABEL: fig:3.1
+[[file:img/fig:3.1.png]]
+
+Yet another possible choice of basis function is the Fourier basis, which leads to an expansion in sinusoidal functions.
+Each basis function represents a specific frequency and has infinite spatial extent.
+By contrast, basis functions that are localized to finite regions of input space necessarily comprise a spectrum of different spatial frequencies.
+In many signal processing applications, it is of interest to consider basis functions that are localized in both space and frequency, leading to a class of functions known as wavelets(小波).
+These are also defined to be mutually orthogonal, to simplify their application. Wavelets are most applicable when the input values live on a regular lattice, such as the successive time points in a temporal sequence, or the pixels in an image.
+Useful texts on wavelets include Ogden (1997), Mallat (1999), and Vidakovic (1999).
+
+Most of the discussion in this chapter, however, is independent of the particular choice of basis function set, and so for most of our discussion we shall not specify the particular form of the basis functions, except for the purposes of numerical illustration.
+Indeed, much of our discussion will be equally applicable to the situation in which the vector $\pmb{\phi}(x)$ of basis functions is simply the identity $\pmb{\phi}(x) = \mathbf{x}$.
+Furthermore, in order to keep the notation simple, we shall focus on the case of a single target variable $t$.
+However, in Section 3.1.5, we consider briefly the modifications needed to deal with multiple target variables.
+
+
+*** Maximum likelihood and least squares
+
+
+In Chapter 1, we fitted polynomial functions to data sets by minimizing a sum-of-squares error function.
+We also showed that this error function could be motivated as the maximum likelihood solution under an assumed Gaussian noise model.
+Let us return to this discussion and consider the least squares approach, and its relation to maximum likelihood, in more detail.
+
+As before, we assume that the target variable t is given by a deterministic function $y(\mathbf{x}, \mathbf{w})$ with additive Gaussian noise so that
+
+\begin{equation}
+t = y(\mathbf{x},\mathbf{w})+\epsilon
+\end{equation}
+
+where $\epsilon$ is a zero mean Gaussian random variable with precision (inverse variance) $\beta$.
+Thus we can write
+
+\begin{equation}\label{equ:3.8}
+p(t|\mathbf{x},\mathbf{w},\beta)=\mathcal{N}(t|y(\mathbf{x},\mathbf{w}),\beta^{-1}).
+\end{equation}
+
+Recall that, if we assume a squared loss function, then the optimal prediction, for a new value of $\mathbf{x}$, will be given by the conditional mean of the target variable.
+In the case of a Gaussian conditional distribution of the form (\ref{equ:3.8}), the conditional mean will be simply
+
+\begin{equation}
+\mathbb{E}[t|\mathbf{x}] = \int tp(t|\mathbf{x})\, dx = y(\mathbf{x},\mathbf{w})
+\end{equation}
+
+Note that the Gaussian noise assumption implies that the conditional distribution of $t$ given $\mathbf{x}$ is unimodal, which may be inappropriate for some applications.
+An extension to mixtures of conditional Gaussian distributions, which permit multimodal conditional distributions, will be discussed in Section 14.5.1.
+
+Now consider a data set of inputs $\mathbf{X} = \{\mathbf{x}_1 , \cdots, \mathbf{x}_N\}$ with corresponding target values $t_1, \cdots, t_N$.
+We group the target variables $\{t_n\}$ into a column vector that we denote by $\mathbf{t}$ where the typeface is chosen to distinguish it from a single observation of a multivariate target, which would be denoted $\mathbf{t}$.
+Making the assumption that these data points are drawn independently from the distribution (\ref{equ:3.8}), we obtain the following expression for the likelihood function, which is a function of the adjustable parameters $\mathbf{w}$ and $\beta$, in the form
+
+\begin{equation}
+p(\mathbf{t}|\mathbf{X},\mathbf{w},\beta) = \prod_{n=1}^N \mathcal{N}(t_n|\mathbf{w}^T\pmb{\phi}(\mathbf{x}_n),\beta^{-1})
+\end{equation}
+
+where we have used (ref:linear-models).
+Note that in supervised learning problems such as regression (and classification), we are not seeking to model the distribution of the input variables.
+Thus $\mathbf{x}$ will always appear in the set of conditioning variables, and so from now on we will drop the explicit x from expressions such as $p(t|\mathbf{x}, \mathbf{w}, \beta)$ in order to keep the notation uncluttered.
+Taking the logarithm of the likelihood function, and making use of the standard form (1.46) for the univariate Gaussian, we have
+
+\begin{equation}\label{equ:3.11}
+\begin{split}
+\ln p(\mathbf{t}|\mathbf{w},\beta) &= \sum_{n=1}^{N}\mathcal{N}(t_n|\mathbf{w}^T\pmb{\phi}(\mathbf{x}_n),\beta^{-1}) \\
+&= \frac{N}{2}\ln\beta-\frac{N}{2}\ln(2\pi)-\beta E_D(\mathbf{w})
+\end{split}
+\end{equation}
+
+where the sum-of-squares error function is defined by
+
+\begin{equation}\label{equ:3.12}
+E_D(\mathbf{w})=\frac{1}{2}\sum_{n=1}^{N}\{t_n-\mathbf{w}^T\pmb{\Phi}(\mathbf{x}_n)\}^2.
+\end{equation}
+
+Having written down the likelihood function, we can use maximum likelihood to determine $\mathbf{w}$ and $\beta$.
+Consider first the maximization with respect to $\mathbf{w}$.
+As observed already in Section 1.2.5, we see that maximization of the likelihood function under a conditional Gaussian noise distribution for a linear model is equivalent to minimizing a sum-of-squares error function given by $E_D(\mathbf{w})$.
+The gradient of the log likelihood function (\ref{equ:3.11}) takes the form
+
+\begin{equation}
+\nabla\ln p(\pmb{t}|\mathbf{w},\beta)=\sum_{n=1}^N\{t_n-\mathbf{w}^T\pmb{\phi}(x_n)\}\pmb{\phi}(x_n)^T.
+\end{equation}
+
+Setting this gradient to zero gives
+
+\begin{equation}
+0=\sum_{n=1}^Nt_n\pmb{\phi}(\mathbf{x}_n)^T - \mathbf{w}^T\left(\sum_{n=1}^N\pmb{\phi}(\mathbf{x}_n)\pmb{\phi}(\mathbf{x}_n)^T\right).
+\end{equation}
+
+Solving for $\mathbf{w}$ we obtain
+
+\begin{equation}\label{equ:3.15}
+\mathbf{w}_{ML}=(\pmb{\Phi}^T\pmb{\Phi})^{-1}\pmb{\Phi}^T\pmb{t}
+\end{equation}
+
+which are known as the /normal equations(规范方程)/ for the least squares problem.
+Here $\pmb{\Phi}$ is an $N\times M$ matrix, called the /design matrix(设计矩阵)/, whose elements are given by $\pmb{\Phi}_{nj}=\phi_j(\mathbf{x}_n)$, so that
+
+\begin{equation}
+\pmb{\Phi}=
+\begin{pmatrix}
+\phi_0(\mathbf{x}_1)&\phi_1(\mathbf{x}_1)&\cdots&\phi_{M-1}(\mathbf{x}_1)\\
+\phi_0(\mathbf{x}_1)&\phi_1(\mathbf{x}_2)&\cdots&\phi_{M-1}(\mathbf{x}_2)\\
+\vdots&\vdots&\ddots&\vdots\\
+\phi_0(\mathbf{x}_N)&\phi_1(\mathbf{x}_N)&\cdots&\phi_{M-1}(\mathbf{x}_N)
+\end{pmatrix}
+\end{equation}
+
+The quantity
+
+\begin{equation}
+\pmb{\Phi}^{\dagger}\equiv(\pmb{\Phi}^T\pmb{\Phi})^{-1}\pmb{\Phi}^{T}
+\end{equation}
+
+is known as the /Moore-Penrose pseudo-inverse(Moore-Penrose伪逆矩阵)/ of the matrix $\pmb{\Phi}$ (Rao and Mitra, 1971; Golub and Van Loan, 1996).
+It can be regarded as a generalization of the notion of matrix inverse to nonsquare matrices.
+Indeed, if $\pmb{\Phi}$ is square and invertible, then using the property $(\mathbf{AB})^{-1} = \mathbf{B}^{-1}\mathbf{A}^{-1}$ we see that $\pmb{\Phi}^{+}\equiv\pmb{\Phi}^{-1}$.
+
+At this point, we can gain some insight into the role of the bias parameter $w_0$.
+If we make the bias parameter explicit, then the error function (\ref{equ:3.12}) becomes
+
+\begin{equation}
+E_D(\mathbf{w})=\frac{1}{2}\sum_{n=1}^N\{t_n-\w_0-\sum_{j=1}^{M-1}w_j\phi_j(\mathbf{x}_n)\}^2.
+\end{equation}
+
+Setting the derivative with respect to $w_0$ equal to zero, and solving for $w_0$, we obtain
+
+\begin{equation}
+w_0=\bar{t}-\sum_{j=1}^{M-1}w_j\bar{\phi_j}
+\end{equation}
+
+where we have defined
+
+\begin{equation}
+\bar{t}=\frac{1}{N}\sum_{n=1}^Nt_n,\quad\bar{\phi_j}=\frac{1}{N}\sum_{n=1}^N\phi_j(\mathbf{x}_n).
+\end{equation}
+
+Thus the bias $w_0$ compensates for the difference between the averages (over the training set) of the target values and the weighted sum of the averages of the basis function values.
+
+We can also maximize the log likelihood function (\ref{equ:3.11}) with respect to the noise precision parameter $\beta$, giving
+
+\begin{equation}
+\frac{1}{\beta}=\frac{1}{N}\sum_{n=1}^N\{t_n-\mathbf{w}_{ML}^T\pmb{\phi}(\mathbf{x}_n)\}^2
+\end{equation}
+
+and so we see that the inverse of the noise precision is given by the /residual variance(残留方差)/ of the target values around the regression function.
+
+
+*** Geometry of least squares
+
+
+At this point, it is instructive to consider the geometrical interpretation of the least-squares solution.
+To do this we consider an N-dimensional space whose axes are given by the $t_n$, so that $\pmb{t} = (t_1,\cdots,t_N)^T$ is a vector in this space.
+Each basis function $\phi_j(\mathbf{x}_n)$, evaluated at the N data points, can also be represented as a vector in the same space, denoted by $\varphi_j$, as illustrated in Figure [[fig:3.2]].
+Note that $\varphi_j$ corresponds to the j^{th} column of $\pmb{\Phi}$, whereas $\pmb{\phi}(\mathbf{x}_n)$ corresponds to the n^{th} row of $\pmb{\Phi}$.
+If the number $M$ of basis functions is smaller than the number $N$ of data points, then the $M$ vectors $\phi_j(\mathbf{x}_n)$ will span a linear subspace $\mathcal{S}$ of dimensionality $M$.
+We define $\pmb{y}$ to be an N-dimensional vector whose nth element is given by $y(\mathbf{x}_n,\mathbf{w})$, where $n = 1, \cdots,N$.
+Because $\pmb{y}$ is an arbitrary linear combination of the vectors $\varphi_j$ , it can live anywhere in the M-dimensional subspace.
+The sum-of-squares error (\ref{equ:3.12}) is then equal (up to a factor of 1/2) to the squared Euclidean distance between $\pmb{y}$ and $\pmb{t}$.
+Thus the least-squares solution for $\mathbf{w}$ corresponds to that choice of $\pmb{y}$ that lies in subspace $\mathcal{S}$ and that is closest to $\pmb{t}$.
+Intuitively, from Figure [[fig:3.2]], we anticipate(预期) that this solution corresponds to the orthogonal projection of $\pmb{t}$ onto the subspace $\mathcal{S}$.
+This is indeed the case, as can easily be verified by noting that the solution for $\pmb{y}$ is given by $\pmb{\Phi}\mathbf{w}_{ML}$, and then confirming that this takes the form of an orthogonal projection.
+
+#+CAPTION: Geometrical interpretation of the least-squares solution, in an N-dimensional space whose axes are the values of $t_1, \cdots, t_N$. The least-squares regression function is obtained by finding the orthogonal projection of the data vector $t$ onto the subspace spanned by the basis functions $\phi_j(x)$ in which each basis function is viewed as a vector $\phi_j$ of length N with elements $\phi_j(x_n)$.
+#+ATTR_LaTeX: scale=0.75
+#+LABEL: fig:3.2
+[[file:img/fig:3.2.png]]
+
+In practice, a direct solution of the normal equations can lead to numerical difficulties when $\pmb{\Phi}^T\pmb{\Phi}$ is close to singular.
+In particular, when two or more of the basis vectors $\varphi_j$ are co-linear, or nearly so, the resulting parameter values can have large magnitudes.
+Such near degeneracies will not be uncommon when dealing with real data sets.
+The resulting numerical difficulties can be addressed using the technique of /singular value decomposition(奇异值分解)/, or SVD (Press et al., 1992; Bishop and Nabney, 2008).
+Note that the addition of a regularization term ensures that the matrix is non- singular, even in the presence of degeneracies.
+
+
+*** Sequential learning
+
+
+Batch techniques, such as the maximum likelihood solution (\ref{equ:3.15}), which in- volve processing the entire training set in one go, can be computationally costly for large data sets. As we have discussed in Chapter 1, if the data set is sufficiently large, it may be worthwhile to use sequential algorithms, also known as /on-line/ algorithms, in which the data points are considered one at a time, and the model parameters up-dated after each such presentation.
+Sequential learning is also appropriate for real-time applications in which the data observations are arriving in a continuous stream, and predictions must be made before all of the data points are seen.
+
+We can obtain a sequential learning algorithm by applying the technique of /stochastic gradient descent(随机梯度下降)/, also known as /sequential gradient descent(顺序梯度下降)/, as follows.
+If the error function comprises a sum over data points $E = \sum_n E_n$, then after presentation(展示) of pattern $n$, the stochastic gradient descent
+
+\begin{equation}
+\mathbf{w}^{\tau+1}=\mathbf{w}^{\tau}-\eta\nabla E_n
+\end{equation}
+
+where $\tau$ denotes the iteration number, and $\eta$ is a learning rate parameter.
+We shall discuss the choice of value for $\eta$ shortly.
+The value of $\mathbf{w}$ is initialized to some starting vector $\mathbf{w}^{(0)}$.
+For the case of the sum-of-squares error function (\ref{equ:3.12}), this gives
+
+\begin{equation}
+\mathbf{w}^{\tau+1}=\mathbf{w}^{\tau}-\eta(t_n-\mathbf{w}^{(\tau)T}\phi_n)\phi_n
+\end{equation}
+
+where $\phi_n = \phi(\mathbf{x}_n)$.
+This is known as /least-mean-squares(最小均方)/ or the /LMS algorithm/.
+The value of $\eta$ needs to be chosen with care to ensure that the algorithm converges (Bishop and Nabney, 2008).
+
+
+*** Regularized least squares
+
+
+In Section 1.1, we introduced the idea of adding a regularization term to an error function in order to control over-fitting, so that the total error function to be minimized takes the form
+
+\begin{equation}
+E_D(\mathbf{w}) + \lambda E_W (\mathbf{w})
+\end{equation}
+
+where $\lambda$ is the regularization coefficient that controls the relative importance of the data-dependent error $E_D(\mathbf{w}) and the regularization term $E_W (\mathbf{w})$.
+One of the simplest forms of regularizer is given by the sum-of-squares of the weight vector elements
+
+\begin{equation}
+E_W(\mathbf{w})= \frac{1}{2}\mathbf{w}^T\mathbf{w}.
+\end{equation}
+
+If we also consider the sum-of-squares error function given by
+
+\begin{equation}
+E(\mathbf{w}) = \frac{1}{2} \sum_{n=1}^N\{t_n - \mathbf{w}^T\phi(\mathbf{x}_n)\}^2
+\end{equation}
+
+then the total error function becomes
+
+\begin{equation}\label{equ:3.27}
+\frac{1}{2}\sum_{n=1}^{N}\{t_n-\mathbf{w}^T\phi(\mathbf{x}_n)\}^2 + \frac{\lambda}{2}\mathbf{w}^T\mathbf{w}.
+\end{equation}
+
+This particular choice of regularizer is known in the machine learning literature as /weight decay/ because in sequential learning algorithms, it encourages weight values to decay towards zero, unless supported by the data.
+In statistics, it provides an example of a /parameter shrinkage(参数收缩)/ method because it shrinks parameter values towards zero.
+It has the advantage that the error function remains a quadratic function of $\mathbf{w}$, and so its exact minimizer can be found in closed form.
+Specifically, setting the gradient of (\ref{equ:3.27}) with respect to $\mathbf{w}$ to zero, and solving for $\mathbf{w}$ as before, we obtain
+
+\begin{equation}
+\mathbf{w}=(\lambda\mathbf{I} + \pmb{\Phi}^T\pmb{\Phi})^{-1}\pmb{\Phi}^{T}\pmb{t}
+\end{equation}
+
+This represents a simple extension of the least-squares solution (\ref{equ:3.15}).
+
+A more general regularizer is sometimes used, for which the regularized error takes the form
+
+\begin{equation}
+\frac{1}{2}\sum_{n=1}^{N}\{t_n-\mathbf{w}^T\phi(\mathbf{x})\}^2 + \frac{\lambda}{2}\sum_{j=1}^{M}|w_j|^q
+\end{equation}
+
+where $q = 2$ corresponds to the quadratic regularizer (\ref{equ:3.27}).
+Figure [[fig:3.3]] shows contours of the regularization function for different values of q.
+
+#+CAPTION: Contours of the regularization term in (3.29) for various values of the parameter $q$.
+#+ATTR_LaTeX: scale=0.75
+#+LABEL: fig:3.3
+[[file:img/fig:3.3.png]]
+
+The case of $q = 1$ is know as the /lasso(套索)/ in the statistics literature (Tibshirani, 1996).
+It has the property that if $\lambda$ is sufficiently large, some of the coefficients $\mathbf{w}_j$ are driven to zero, leading to a sparse model in which the corresponding basis functions play no role.
+To see this, we first note that minimizing (\ref{equ:3.29}) is equivalent to minimizing the unregularized sum-of-squares error (\ref{equ:3.12}) subject to the constraint
+
+\begin{equation}\label{equ:3.30}
+\sum_{j=1}^{M}|w_j|^q\leqslant\eta
+\end{equation}
+
+for an appropriate value of the parameter $\eta$, where the two approaches can be related using Lagrange multipliers.
+The origin of the sparsity can be seen from Figure [[fig:3.4]], which shows that the minimum of the error function, subject to the constraint (\ref{equ:3.30}).
+As $\lambda$ is increased, so an increasing number of parameters are driven to zero.
+
+#+CAPTION: Plot of the contours of the unregularized error function (blue) along with the constraint region (3.30) for the quadratic regularizer $q = 2$ on the left and the lasso regularizer $q = 1$ on the right, in which the optimum value for the parameter vector $\mathbf{w}$ is denoted by $\mathbf{w}^*$. The lasso gives a sparse solution in which $w_1^⋆ = 0$.
+#+ATTR_LaTeX: scale=0.75
+#+LABEL: fig:3.4
+[[file:img/fig:3.4.png]]
+
+Regularization allows complex models to be trained on data sets of limited size without severe over-fitting, essentially by limiting the effective model complexity.
+However, the problem of determining the optimal model complexity is then shifted from one of finding the appropriate number of basis functions to one of determining a suitable value of the regularization coefficient $\lambda$.
+We shall return to the issue of model complexity later in this chapter.
+
+For the remainder of this chapter we shall focus on the quadratic regularizer (\ref{equ:3.27}) both for its practical importance and its analytical tractability.
+
+
+*** Multiple outputs
+
+
+So far, we have considered the case of a single target variable $t$.
+In some applications, we may wish to predict $K > 1$ target variables, which we denote collectively by the target vector $\pmb{t}$.
+This could be done by introducing a different set of basis functions for each component of $\pmb{t}$, leading to multiple, independent regression problems.
+However, a more interesting, and more common, approach is to use the same set of basis functions to model all of the components of the target vector so that
+
+\begin{equation}
+\mathbf{y}(\mathbf{x},\mathbf{w})=\mathbf{W}^T\phi(\mathbf{x})
+\end{equation}
+
+where $\mathbf{y}$ is a K-dimensional column vector, $\mathbf{W}$ is an M × K matrix of parameters, and $\phi(\mathbf{x})$ is an M-dimensional column vector with elements $\phi_j(\mathbf{x})$, with $\phi_0(\mathbf{x}) = 1$ as before.
+Suppose we take the conditional distribution of the target vector to be an isotropic Gaussian of the form
+
+\begin{equation}
+p(\pmb{t}|\mathbf{x},\mathbf{W},\beta) = \mathcal{N}(\pmb{t}|\mathbf{W}^T\phi(\mathbf{x}),\beta^{-1}\mathbf{I}).
+\end{equation}
+
+
+If we have a set of observations $\pmb{t}_1, \cdots, \pmb{t}_N$ , we can combine these into a matrix $\pmb{T}$ of size $N \times K$ such that the n^{th} row is given by $t_n^T$ .
+Similarly, we can combine the input vectors $\mathbf{x}_1, \cdots, \mathbf{x}_N$ into a matrix $\mathbf{X}$.
+The log likelihood function is then given by
+
+\begin{equation}\label{equ:3.33}
+\begin{split}
+\ln p(\mathbf{T}|\pmb{X},\mathbf{W},\beta) &= \sum_{n=1}^{N}\mathcal{N}(\mathbf{t}_n|\mathbf{W}^T\phi(\mathbf{x}_n),\beta^{-1}\mathbf{I}) \\
+&= \frac{NK}{2}\ln(\frac{\beta}{2\pi})-\frac{\beta}{2}\sum_{n=1}^{N}\lVert\mathbf{t}_n-\mathbf{W}^T\phi(\mathbf{x}_n)\rVert^2.
+\end{split}
+\end{equation}
+
+As before, we can maximize this function with respect to $\mathbf{W}$, giving
+
+\begin{equation}
+\mathbf{W}_{ML}=(\pmb{\Phi}^T\pmb{\Phi})^{-1}\pmb{\Phi}^T\pmb{T}.
+\end{equation}
+
+If we examine this result for each target variable $t_k$, we have
+
+\begin{equation}
+\mathbf{w}_k=(\pmb{\Phi}^T\pmb{\Phi})^{-1}\pmb{\Phi}^T\pmb{t}_k=\pmb{\Phi}^{+}\pmb{t}_k
+\end{equation}
+
+where $\pmb{t}_k$ is an N-dimensional column vector with components $t_{nk}$ for $n = 1, \cdots, N$.
+Thus the solution to the regression problem decouples between the different target variables, and we need only compute a single pseudo-inverse matrix $\pmb{\Phi}^{+}$, which is shared by all of the vectors $\mathbf{w}_k$.
+
+The extension to general Gaussian noise distributions having arbitrary covariance matrices is straightforward.
+Again, this leads to a decoupling into $K$ independent regression problems.
+This result is unsurprising because the parameters $\mathbf{W}$ define only the mean of the Gaussian noise distribution, and we know from Section 2.3.4 that the maximum likelihood solution for the mean of a multivariate Gaussian is independent of the covariance.
+From now on, we shall therefore consider a single target variable $t$ for simplicity(朴素).
+
+
+** The Bias-Variance Decomposition
+
+
+So far in our discussion of linear models for regression, we have assumed that the form and number of basis functions are both fixed.
+As we have seen in Chapter 1, the use of maximum likelihood, or equivalently least squares, can lead to severe over-fitting if complex models are trained using data sets of limited size.
+However, limiting the number of basis functions in order to avoid over-fitting has the side effect of limiting the flexibility of the model to capture interesting and important trends in the data.
+Although the introduction of regularization terms can control over-fitting for models with many parameters, this raises the question of how to determine a suitable value for the regularization coefficient $\lambda$.
+Seeking the solution that minimizes the regularized error function with respect to both the weight vector $\mathbf{w}$ and the regularization coefficient $\lambda$ is clearly not the right approach since this leads to the unregularized solution with $\lambda = 0$.
+
+As we have seen in earlier chapters, the phenomenon of over-fitting is really an unfortunate property of maximum likelihood and does not arise when we marginalize over parameters in a Bayesian setting.
+In this chapter, we shall consider the Bayesian view of model complexity in some depth.
+Before doing so, however, it is instructive to consider a frequentist viewpoint of the model complexity issue, known as the /bias-variance trade-off(偏置-方差折中)/.
+Although we shall introduce this concept in the context of linear basis function models, where it is easy to illustrate the ideas using simple examples, the discussion has more general applicability.
+
+In Section 1.5.5, when we discussed decision theory for regression problems, we considered various loss functions each of which leads to a corresponding optimal prediction once we are given the conditional distribution $p(t|\mathbf{x})$.
+A popular choice is the squared loss function, for which the optimal prediction is given by the conditional expectation, which we denote by $h(\mathbf{x})$ and which is given by
+
+\begin{equation}
+h(\mathbf{x})=\mathbb{E}[t|\mathbf{x}]]=\int tp(t|\mathbf{x})\,\rm{d}t
+\end{equation}
+
+At this point, it is worth distinguishing between the squared loss function arising from decision theory and the sum-of-squares error function that arose in the maximum likelihood estimation of model parameters.
+We might use more sophisticated techniques than least squares, for example regularization or a fully Bayesian approach, to determine the conditional distribution $p(t|\mathbf{x})$.
+These can all be combined with the squared loss function for the purpose of making predictions.
+
+We showed in Section 1.5.5 that the expected squared loss can be written in the form
+
+\begin{equation}\label{equ:3.37}
+\mathbb{E}[L]=\int \{y(\mathbf{x})-h(\mathbf{x})\}^2p(\mathbf{x})\, \rm{d} \mathbf{x} + \int\{h(\mathbf{x})-t\}^2p(\mathbf{x},t)\, \rm{d}\mathbf{x}\, \rm{d}t.
+\end{equation}
+
+Recall that the second term, which is independent of $y(\mathbf{x})$, arises from the intrinsic noise on the data and represents the minimum achievable value of the expected loss.
+The first term depends on our choice for the function $y(\mathbf{x})$, and we will seek a solution for $y(\mathbf{x})$ which makes this term a minimum.
+Because it is nonnegative, the smallest that we can hope to make this term is zero.
+If we had an unlimited supply of data (and unlimited computational resources), we could in principle find the regression function $h(\mathbf{x})$ to any desired degree of accuracy, and this would represent the optimal choice for $y(\mathbf{x})$.
+However, in practice we have a data set $\mathcal{D}$ containing only a finite number $N$ of data points, and consequently we do not know the regression function $h(\mathbf{x})$ exactly.
+
+If we model the $h(\mathbf{x})$ using a parametric function $y(\mathbf{x},\mathbf{w})$ governed by a parameter vector $\mathbf{w}$, then from a Bayesian perspective the uncertainty in our model is expressed through a posterior distribution over $\mathbf{w}$.
+A frequentist treatment, however, involves making a point estimate of $\mathbf{w}$ based on the data set $\mathcal{D}$, and tries instead to interpret the uncertainty of this estimate through the following thought experiment.
+Suppose we had a large number of data sets each of size $N$ and each drawn independently from the distribution $p(t, \mathbf{x})$.
+For any given data set $\mathcal{D}$, we can run our learning algorithm and obtain a prediction function $y(\mathbf{x}; \mathcal{D})$.
+Different data sets from the ensemble will give different functions and consequently different values of the squared loss.
+The performance of a particular learning algorithm is then assessed by taking the average over this ensemble of data sets.
+
+Consider the integrand of the first term in (\ref{equ:3.37}), which for a particular data set $\mathcal{D}$ takes the form
+
+\begin{equation}
+\{y(\mathbf{x};\mathcal{D})-h(\mathbf{x})\}^2
+\end{equation}
+
+Because this quantity will be dependent on the particular data set $\mathcal{D}$, we take its average over the ensemble of data sets.
+If we add and subtract the quantity $\mathbb{E}_D[y(\mathbf{x};\mathcal{D})]$ inside the braces, and then expand, we obtain
+
+\begin{equation}
+\begin{split}
+\{y(\mathbf{x}&;\mathcal{D})-\mathbb{E}_{\mathbb{D}}[y(\mathbf{x};\mathcal{D})]+\mathbb{E}_{\mathcal{D}}[y(\mathbf{x};\mathcalD)]-h(\mathbf{x})\}^2\\
+=&\{y(\mathbf{x};\mathcal{D})-\mathbb{E}_{\mathbb{D}}[y(\mathbf{x};\mathcal{D})]\}^2+\{\mathbb{E}_{\mathcal{D}}[y(\mathbf{x};\mathcalD)]-h(\mathbf{x})\}^2\\
+&+2\{y(\mathbf{x};\mathcal{D})-\mathbb{E}_{\mathbb{D}}[y(\mathbf{x};\mathcal{D})]\}\{\mathbb{E}_{\mathcal{D}}[y(\mathbf{x};\mathcalD)]-h(\mathbf{x})\}
+\end{split}
+\end{equation}
+
+We now take the expectation of this expression with respect to D and note that thefinal term will vanish, giving
+
+\begin{equation}
+\begin{split}
+\mathbb{E}_{\mathcal{D}}&[\{ y(\mathbf{x};\mathcal{D}) - h(\mathbf{x}) \}^2] \\
+&= \underbrace{\{\mathbb{E}_{\mathcal{D}}[y(\mathbf{x};\mathcal{D})]-h(\mathbf{x})\}^2}_{(\text{bias})^2} + \underbrace{\mathbb{E}_{\mathcal{D}}[\{y(\mathbf{x};\mathcal{D})-\mathbb{E}_{\mathcal{D}}[y(\mathbf{x};\mathcal{D})]^2\}]}_{\text{variance}}.
+\end{split}
+\end{equation}
+
+We see that the expected squared difference between $y(\mathbf{x};\mathcal{D})$ and the regression function $h(\mathbf{x})$ can be expressed as the sum of two terms.
+The first term, called the squared /bias(偏置)/, represents the extent to which the average prediction over all data sets differs from the desired regression function.
+The second term, called the /variance(方差)/, measures the extent to which the solutions for individual data sets vary around their average, and hence this measures the extent to which the function $y(\mathbf{x}; \mathcal{D})$ is sensitive to the particular choice of data set. We shall provide some intuition to support these definitions shortly when we consider a simple example.
+
+So far, we have considered a single input value $\mathbf{x}$.
+If we substitute this expansion back into (\ref{equ:3.37}), we obtain the following decomposition of the expected squared loss
+
+\begin{equation}
+\text{expected loss} = (\text{bias})^2 + \text{variance} + \text{noise}
+\end{equation}
+
+where
+
+\begin{align}
+(\text{bias})^2 &= \int \{ \mathbb{E}_{\mathcal{D}}[y(\mathbf{x};\mathcal{D})] - h(\mathbf{x}) \}^2p(\mathbf{x})\, \rm{d}\mathbf{x} \\
+\text{variace} &= \int \mathbb{E}_{\mathcal{D}}\left[y(\mathbf{x};\mathcal{D}) - \mathbb{E}_{\mathcal{D}}[y(\mathbf{x};\mathcal{D})]\}^2\right]p(\mathbf{x})\, \rm{d}\mathbf{x} \\
+\text{noise} &= \int\{h(\mathbf{x}-t)\}^2p(\mathbf{x},t)\, \rm{d}\mathbf{x}\, \rm{d}t
+\end{align}
+
+and the bias and variance terms now refer to integrated quantities.
+
+Our goal is to minimize the expected loss, which we have decomposed into the sum of a (squared) bias, a variance, and a constant noise term.
+As we shall see, there is a trade-off between bias and variance, with very flexible models having low bias and high variance, and relatively rigid models having high bias and low variance. The model with the optimal predictive capability is the one that leads to the best balance between bias and variance. This is illustrated by considering the sinusoidal data set from Chapter 1. Here we generate 100 data sets, each containing N = 25 data points, independently from the sinusoidal curve h(x) = sin(2πx). The data sets are indexed by l = 1,...,L, where L = 100, and for each data set D(l) we fit a model with 24 Gaussian basis functions by minimizing the regularized error function (3.27) to give a prediction function y(l)(x) as shown in Figure 3.5. The top row corresponds to a large value of the regularization coefficient λ that gives low variance (because the red curves in the left plot look similar) but high bias (because the two curves in the right plot are very different). Conversely on the bottom row, for which λ is small, there is large variance (shown by the high variability between the red curves in the left plot) but low bias (shown by the good fit between the average model fit and the original sinusoidal function). Note that the result of averaging many solutions for the complex model with M = 25 is a very good fit to the regression function, which suggests that averaging may be a beneficial procedure. Indeed, a weighted averaging of multiple solutions lies at the heart of a Bayesian approach, although the averaging is with respect to the posterior distribution of parameters, not with respect to multiple data sets.

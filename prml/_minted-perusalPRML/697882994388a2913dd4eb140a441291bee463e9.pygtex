@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{n}{normdiscrete} \PYGmanni{o}{=} \PYGmanni{n}{stats}\PYGmanni{o}{.}\PYGmanni{n}{rv\PYGmanniZus{}discrete}\PYGmanni{p}{(}\PYGmanni{n}{values}\PYGmanni{o}{=}\PYGmanni{p}{(}\PYGmanni{n}{gridint}\PYGmanni{p}{,}
+             \PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{round}\PYGmanni{p}{(}\PYGmanni{n}{probs}\PYGmanni{p}{,} \PYGmanni{n}{decimals}\PYGmanni{o}{=}\PYGmanni{l+m+mi}{7}\PYGmanni{p}{)),} \PYGmanni{n}{name}\PYGmanni{o}{=}\PYGmanni{l+s+s1}{\PYGmanniZsq{}normdiscrete\PYGmanniZsq{}}\PYGmanni{p}{)}
+\end{Verbatim}

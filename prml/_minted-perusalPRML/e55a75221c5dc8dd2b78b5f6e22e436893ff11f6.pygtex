@@ -1,0 +1,11 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{n}{dist\PYGmanniZus{}continu} \PYGmanni{o}{=} \PYGmanni{p}{[}
+    \PYGmanni{n}{d} \PYGmanni{k}{for} \PYGmanni{n}{d} \PYGmanni{o+ow}{in} \PYGmanni{n+nb}{dir}\PYGmanni{p}{(}\PYGmanni{n}{stats}\PYGmanni{p}{)}
+    \PYGmanni{k}{if} \PYGmanni{n+nb}{isinstance}\PYGmanni{p}{(}\PYGmanni{n+nb}{getattr}\PYGmanni{p}{(}\PYGmanni{n}{stats}\PYGmanni{p}{,} \PYGmanni{n}{d}\PYGmanni{p}{),} \PYGmanni{n}{stats}\PYGmanni{o}{.}\PYGmanni{n}{rv\PYGmanniZus{}continuous}\PYGmanni{p}{)}
+\PYGmanni{p}{]}
+\PYGmanni{n}{dist\PYGmanniZus{}discrete} \PYGmanni{o}{=} \PYGmanni{p}{[}
+    \PYGmanni{n}{d} \PYGmanni{k}{for} \PYGmanni{n}{d} \PYGmanni{o+ow}{in} \PYGmanni{n+nb}{dir}\PYGmanni{p}{(}\PYGmanni{n}{stats}\PYGmanni{p}{)} \PYGmanni{k}{if} \PYGmanni{n+nb}{isinstance}\PYGmanni{p}{(}\PYGmanni{n+nb}{getattr}\PYGmanni{p}{(}\PYGmanni{n}{stats}\PYGmanni{p}{,} \PYGmanni{n}{d}\PYGmanni{p}{),} \PYGmanni{n}{stats}\PYGmanni{o}{.}\PYGmanni{n}{rv\PYGmanniZus{}discrete}\PYGmanni{p}{)}
+\PYGmanni{p}{]}
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{l+s+s1}{\PYGmanniZsq{}number of continuous distributions: }\PYGmanni{l+s+si}{\PYGmanniZpc{}d}\PYGmanni{l+s+s1}{\PYGmanniZsq{}} \PYGmanni{o}{\PYGmanniZpc{}} \PYGmanni{n+nb}{len}\PYGmanni{p}{(}\PYGmanni{n}{dist\PYGmanniZus{}continu}\PYGmanni{p}{))}
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{l+s+s1}{\PYGmanniZsq{}number of discrete distributions:   }\PYGmanni{l+s+si}{\PYGmanniZpc{}d}\PYGmanni{l+s+s1}{\PYGmanniZsq{}} \PYGmanni{o}{\PYGmanniZpc{}} \PYGmanni{n+nb}{len}\PYGmanni{p}{(}\PYGmanni{n}{dist\PYGmanniZus{}discrete}\PYGmanni{p}{))}
+\end{Verbatim}

@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{n}{deterministic} \PYGmanni{o}{=} \PYGmanni{n}{deterministic\PYGmanniZus{}gen}\PYGmanni{p}{(}\PYGmanni{n}{name}\PYGmanni{o}{=}\PYGmanni{l+s+s2}{\PYGmanniZdq{}deterministic\PYGmanniZdq{}}\PYGmanni{p}{)}
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{n}{deterministic}\PYGmanni{o}{.}\PYGmanni{n}{cdf}\PYGmanni{p}{(}\PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{arange}\PYGmanni{p}{(}\PYGmanni{o}{\PYGmanniZhy{}}\PYGmanni{l+m+mi}{3}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{3}\PYGmanni{p}{,} \PYGmanni{l+m+mf}{0.5}\PYGmanni{p}{)))}
+\end{Verbatim}

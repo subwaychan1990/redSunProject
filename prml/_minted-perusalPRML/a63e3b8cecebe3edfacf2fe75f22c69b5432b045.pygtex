@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{n}{x} \PYGmanni{o}{=} \PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{arange}\PYGmanni{p}{(}\PYGmanni{l+m+mi}{4}\PYGmanni{p}{)}\PYGmanni{o}{*}\PYGmanni{l+m+mi}{2}
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{n}{x}\PYGmanni{p}{)}
+\PYGmanni{n}{prb} \PYGmanni{o}{=} \PYGmanni{n}{hypergeom}\PYGmanni{o}{.}\PYGmanni{n}{cdf}\PYGmanni{p}{(}\PYGmanni{n}{x}\PYGmanni{p}{,} \PYGmanni{n}{M}\PYGmanni{p}{,} \PYGmanni{n}{n}\PYGmanni{p}{,} \PYGmanni{n}{N}\PYGmanni{p}{)}
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{n}{prb}\PYGmanni{p}{)}
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{n}{hypergeom}\PYGmanni{o}{.}\PYGmanni{n}{ppf}\PYGmanni{p}{(}\PYGmanni{n}{prb}\PYGmanni{p}{,} \PYGmanni{n}{M}\PYGmanni{p}{,} \PYGmanni{n}{n}\PYGmanni{p}{,} \PYGmanni{n}{N}\PYGmanni{p}{))}
+\end{Verbatim}

@@ -1,0 +1,12 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{n}{fig} \PYGmanni{o}{=} \PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{figure}\PYGmanni{p}{(}\PYGmanni{n}{figsize}\PYGmanni{o}{=}\PYGmanni{p}{(}\PYGmanni{l+m+mi}{12}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{6}\PYGmanni{p}{))}
+\PYGmanni{n}{x\PYGmanniZus{}plot} \PYGmanni{o}{=} \PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{linspace}\PYGmanni{p}{(}\PYGmanni{l+m+mi}{0}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{10}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{100}\PYGmanni{p}{)}
+\PYGmanni{n}{ax1} \PYGmanni{o}{=} \PYGmanni{n}{fig}\PYGmanni{o}{.}\PYGmanni{n}{add\PYGmanniZus{}subplot}\PYGmanni{p}{(}\PYGmanni{l+m+mi}{121}\PYGmanni{p}{)}
+\PYGmanni{n}{y\PYGmanniZus{}plot} \PYGmanni{o}{=} \PYGmanni{n}{i0}\PYGmanni{p}{(}\PYGmanni{n}{x\PYGmanniZus{}plot}\PYGmanni{p}{)}
+\PYGmanni{n}{ax1}\PYGmanni{o}{.}\PYGmanni{n}{plot}\PYGmanni{p}{(}\PYGmanni{n}{x\PYGmanniZus{}plot}\PYGmanni{p}{,} \PYGmanni{n}{y\PYGmanniZus{}plot}\PYGmanni{p}{,} \PYGmanni{l+s+s2}{\PYGmanniZdq{}r\PYGmanniZdq{}}\PYGmanni{p}{)}
+\PYGmanni{n}{ax2} \PYGmanni{o}{=} \PYGmanni{n}{fig}\PYGmanni{o}{.}\PYGmanni{n}{add\PYGmanniZus{}subplot}\PYGmanni{p}{(}\PYGmanni{l+m+mi}{122}\PYGmanni{p}{)}
+\PYGmanni{n}{y\PYGmanniZus{}plot} \PYGmanni{o}{=} \PYGmanni{n}{i1}\PYGmanni{p}{(}\PYGmanni{n}{x\PYGmanniZus{}plot}\PYGmanni{p}{)} \PYGmanni{o}{/} \PYGmanni{n}{i0}\PYGmanni{p}{(}\PYGmanni{n}{x\PYGmanniZus{}plot}\PYGmanni{p}{)}
+\PYGmanni{n}{ax2}\PYGmanni{o}{.}\PYGmanni{n}{plot}\PYGmanni{p}{(}\PYGmanni{n}{x\PYGmanniZus{}plot}\PYGmanni{p}{,} \PYGmanni{n}{y\PYGmanniZus{}plot}\PYGmanni{p}{,} \PYGmanni{l+s+s2}{\PYGmanniZdq{}r\PYGmanniZdq{}}\PYGmanni{p}{)}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{savefig}\PYGmanni{p}{(}\PYGmanni{l+s+s2}{\PYGmanniZdq{}img/fig:2.20.png\PYGmanniZdq{}}\PYGmanni{p}{)}
+\PYGmanni{n}{plt}\PYGmanni{o}{.}\PYGmanni{n}{close}\PYGmanni{p}{(}\PYGmanni{l+s+s2}{\PYGmanniZdq{}all\PYGmanniZdq{}}\PYGmanni{p}{)}
+\end{Verbatim}

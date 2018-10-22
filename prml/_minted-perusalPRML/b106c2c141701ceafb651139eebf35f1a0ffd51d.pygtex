@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{scipy.stats} \PYGmanni{k+kn}{import} \PYGmanni{n}{expon}
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{n}{expon}\PYGmanni{o}{.}\PYGmanni{n}{mean}\PYGmanni{p}{(}\PYGmanni{n}{scale}\PYGmanni{o}{=}\PYGmanni{l+m+mf}{3.}\PYGmanni{p}{))}
+\end{Verbatim}

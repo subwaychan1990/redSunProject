@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{sklearn} \PYGmanni{k+kn}{import} \PYGmanni{n}{linear\PYGmanniZus{}model}
+\PYGmanni{n}{X} \PYGmanni{o}{=} \PYGmanni{p}{[[}\PYGmanni{l+m+mf}{0.}\PYGmanni{p}{,} \PYGmanni{l+m+mf}{0.}\PYGmanni{p}{],} \PYGmanni{p}{[}\PYGmanni{l+m+mf}{1.}\PYGmanni{p}{,} \PYGmanni{l+m+mf}{1.}\PYGmanni{p}{],} \PYGmanni{p}{[}\PYGmanni{l+m+mf}{2.}\PYGmanni{p}{,} \PYGmanni{l+m+mf}{2.}\PYGmanni{p}{],} \PYGmanni{p}{[}\PYGmanni{l+m+mf}{3.}\PYGmanni{p}{,} \PYGmanni{l+m+mf}{3.}\PYGmanni{p}{]]}
+\PYGmanni{n}{Y} \PYGmanni{o}{=} \PYGmanni{p}{[}\PYGmanni{l+m+mf}{0.}\PYGmanni{p}{,} \PYGmanni{l+m+mf}{1.}\PYGmanni{p}{,} \PYGmanni{l+m+mf}{2.}\PYGmanni{p}{,} \PYGmanni{l+m+mf}{3.}\PYGmanni{p}{]}
+\PYGmanni{n}{reg} \PYGmanni{o}{=} \PYGmanni{n}{linear\PYGmanniZus{}model}\PYGmanni{o}{.}\PYGmanni{n}{BayesianRidge}\PYGmanni{p}{()}
+\PYGmanni{k}{print}\PYGmanni{p}{(}\PYGmanni{n}{reg}\PYGmanni{o}{.}\PYGmanni{n}{fit}\PYGmanni{p}{(}\PYGmanni{n}{X}\PYGmanni{p}{,} \PYGmanni{n}{Y}\PYGmanni{p}{))}
+\end{Verbatim}
