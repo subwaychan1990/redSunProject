@@ -1,0 +1,19 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{k}{def} \PYGmanni{n+nf}{create\PYGmanniZus{}toy\PYGmanniZus{}data}\PYGmanni{p}{(}\PYGmanni{n}{func}\PYGmanni{p}{,} \PYGmanni{n}{sample\PYGmanniZus{}size}\PYGmanni{o}{=}\PYGmanni{l+m+mi}{10}\PYGmanni{p}{,} \PYGmanni{n}{std}\PYGmanni{o}{=}\PYGmanni{l+m+mi}{1}\PYGmanni{p}{):}
+    \PYGmanni{n}{x} \PYGmanni{o}{=} \PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{linspace}\PYGmanni{p}{(}\PYGmanni{l+m+mi}{0}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{1}\PYGmanni{p}{,} \PYGmanni{n}{sample\PYGmanniZus{}size}\PYGmanni{p}{)}
+    \PYGmanni{n}{t} \PYGmanni{o}{=} \PYGmanni{n}{func}\PYGmanni{p}{(}\PYGmanni{n}{x}\PYGmanni{p}{)} \PYGmanni{o}{+} \PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{random}\PYGmanni{o}{.}\PYGmanni{n}{normal}\PYGmanni{p}{(}\PYGmanni{n}{scale}\PYGmanni{o}{=}\PYGmanni{n}{std}\PYGmanni{p}{,} \PYGmanni{n}{size}\PYGmanni{o}{=}\PYGmanni{n}{x}\PYGmanni{o}{.}\PYGmanni{n}{shape}\PYGmanni{p}{)}
+    \PYGmanni{k}{return} \PYGmanni{n}{x}\PYGmanni{p}{,} \PYGmanni{n}{t}
+
+
+\PYGmanni{k}{def} \PYGmanni{n+nf}{func}\PYGmanni{p}{(}\PYGmanni{n}{x}\PYGmanni{p}{):}
+    \PYGmanni{k}{return} \PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{sin}\PYGmanni{p}{(}\PYGmanni{l+m+mi}{2} \PYGmanni{o}{*} \PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{pi} \PYGmanni{o}{*} \PYGmanni{n}{x}\PYGmanni{p}{)}
+
+
+\PYGmanni{n}{std} \PYGmanni{o}{=} \PYGmanni{l+m+mf}{0.3}
+\PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{random}\PYGmanni{o}{.}\PYGmanni{n}{seed}\PYGmanni{p}{(}\PYGmanni{l+m+mi}{1234}\PYGmanni{p}{)}
+\PYGmanni{n}{data\PYGmanniZus{}train} \PYGmanni{o}{=} \PYGmanni{n}{pd}\PYGmanni{o}{.}\PYGmanni{n}{DataFrame}\PYGmanni{p}{(}
+    \PYGmanni{n+nb}{dict}\PYGmanni{p}{(}\PYGmanni{n+nb}{zip}\PYGmanni{p}{([}\PYGmanni{l+s+s2}{\PYGmanniZdq{}x\PYGmanniZdq{}}\PYGmanni{p}{,} \PYGmanni{l+s+s2}{\PYGmanniZdq{}t\PYGmanniZdq{}}\PYGmanni{p}{],} \PYGmanni{n}{create\PYGmanniZus{}toy\PYGmanniZus{}data}\PYGmanni{p}{(}\PYGmanni{n}{func}\PYGmanni{p}{,} \PYGmanni{n}{std}\PYGmanni{o}{=}\PYGmanni{n}{std}\PYGmanni{p}{,} \PYGmanni{n}{sample\PYGmanniZus{}size}\PYGmanni{o}{=}\PYGmanni{l+m+mi}{10}\PYGmanni{p}{))))}
+\PYGmanni{n}{data\PYGmanniZus{}test} \PYGmanni{o}{=} \PYGmanni{n}{pd}\PYGmanni{o}{.}\PYGmanni{n}{DataFrame}\PYGmanni{p}{(}
+    \PYGmanni{n+nb}{dict}\PYGmanni{p}{(}\PYGmanni{n+nb}{zip}\PYGmanni{p}{([}\PYGmanni{l+s+s2}{\PYGmanniZdq{}x\PYGmanniZdq{}}\PYGmanni{p}{,} \PYGmanni{l+s+s2}{\PYGmanniZdq{}t\PYGmanniZdq{}}\PYGmanni{p}{],} \PYGmanni{n}{create\PYGmanniZus{}toy\PYGmanniZus{}data}\PYGmanni{p}{(}\PYGmanni{n}{func}\PYGmanni{p}{,} \PYGmanni{n}{std}\PYGmanni{o}{=}\PYGmanni{n}{std}\PYGmanni{p}{,} \PYGmanni{n}{sample\PYGmanniZus{}size}\PYGmanni{o}{=}\PYGmanni{l+m+mi}{100}\PYGmanni{p}{))))}
+\PYGmanni{n}{data\PYGmanniZus{}plot} \PYGmanni{o}{=} \PYGmanni{n}{pd}\PYGmanni{o}{.}\PYGmanni{n}{DataFrame}\PYGmanni{p}{(\PYGmanniZob{}}\PYGmanni{l+s+s2}{\PYGmanniZdq{}x\PYGmanniZdq{}}\PYGmanni{p}{:} \PYGmanni{n}{np}\PYGmanni{o}{.}\PYGmanni{n}{linspace}\PYGmanni{p}{(}\PYGmanni{l+m+mi}{0}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{1}\PYGmanni{p}{,} \PYGmanni{l+m+mi}{100}\PYGmanni{p}{)\PYGmanniZcb{})}
+\end{Verbatim}

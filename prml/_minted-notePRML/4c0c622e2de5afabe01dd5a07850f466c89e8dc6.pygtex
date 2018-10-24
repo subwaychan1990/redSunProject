@@ -1,0 +1,17 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGmanni{k+kn}{import} \PYGmanni{n+nn}{numpy} \PYGmanni{k+kn}{as} \PYGmanni{n+nn}{np}
+\PYGmanni{k+kn}{import} \PYGmanni{n+nn}{matplotlib.pyplot} \PYGmanni{k+kn}{as} \PYGmanni{n+nn}{plt}
+\PYGmanni{k+kn}{import} \PYGmanni{n+nn}{pandas} \PYGmanni{k+kn}{as} \PYGmanni{n+nn}{pd}
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{scipy.stats} \PYGmanni{k+kn}{import} \PYGmanni{n}{norm}
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{sklearn.preprocessing} \PYGmanni{k+kn}{import} \PYGmanni{n}{PolynomialFeatures}
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{sklearn.linear\PYGmanniZus{}model} \PYGmanni{k+kn}{import} \PYGmanni{n}{LinearRegression}\PYGmanni{p}{,} \PYGmanni{n}{Ridge}\PYGmanni{p}{,} \PYGmanni{n}{BayesianRidge}
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{sklearn.naive\PYGmanniZus{}bayes} \PYGmanni{k+kn}{import} \PYGmanni{n}{GaussianNB}
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{sklearn.metrics} \PYGmanni{k+kn}{import} \PYGmanni{n}{mean\PYGmanniZus{}squared\PYGmanniZus{}error}
+\PYGmanni{k+kn}{import} \PYGmanni{n+nn}{sys}
+\PYGmanni{n}{sys}\PYGmanni{o}{.}\PYGmanni{n}{path}\PYGmanni{o}{.}\PYGmanni{n}{append}\PYGmanni{p}{(}\PYGmanni{l+s+s2}{\PYGmanniZdq{}my\PYGmanniZhy{}packages\PYGmanniZdq{}}\PYGmanni{p}{)}
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{bayesian\PYGmanniZus{}regressor} \PYGmanni{k+kn}{import} \PYGmanni{n}{BayesianRegressor}
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{polynomial} \PYGmanni{k+kn}{import} \PYGmanni{n}{PolynomialFeatures}
+\PYGmanni{n}{pd}\PYGmanni{o}{.}\PYGmanni{n}{options}\PYGmanni{o}{.}\PYGmanni{n}{display}\PYGmanni{o}{.}\PYGmanni{n}{max\PYGmanniZus{}rows} \PYGmanni{o}{=} \PYGmanni{l+m+mi}{10}
+\PYGmanni{k+kn}{from} \PYGmanni{n+nn}{tabulate} \PYGmanni{k+kn}{import} \PYGmanni{n}{tabulate}
+\PYGmanni{n}{tbl} \PYGmanni{o}{=} \PYGmanni{k}{lambda} \PYGmanni{n}{x}\PYGmanni{p}{:} \PYGmanni{n}{tabulate}\PYGmanni{p}{(}\PYGmanni{n}{x}\PYGmanni{p}{,}\PYGmanni{n}{headers}\PYGmanni{o}{=}\PYGmanni{l+s+s2}{\PYGmanniZdq{}keys\PYGmanniZdq{}}\PYGmanni{p}{,}\PYGmanni{n}{tablefmt}\PYGmanni{o}{=}\PYGmanni{l+s+s2}{\PYGmanniZdq{}orgtbl\PYGmanniZdq{}}\PYGmanni{p}{)}
+\end{Verbatim}

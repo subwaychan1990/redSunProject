@@ -125,7 +125,27 @@ Although these might sound like daunting(令人生畏的) topics, they are in fa
        return x, t
 
 
+   def func(x): #+CAPTION: generate data
+ #+BEGIN_SRC python :results silent :session src:1-1
+   def create_toy_data(func, sample_size=10, std=1):
+       x = np.linspace(0, 1, sample_size)
+       t = func(x) + np.random.normal(scale=std, size=x.shape)
+       return x, t
+
+
    def func(x):
+       return np.sin(2 * np.pi * x)
+
+
+   std = 0.3
+   np.random.seed(1234)
+   data_train = pd.DataFrame(
+       dict(zip(["x", "t"], create_toy_data(func, std=std, sample_size=10))))
+   data_test = pd.DataFrame(
+       dict(zip(["x", "t"], create_toy_data(func, std=std, sample_size=100))))
+   data_plot = pd.DataFrame({"x": np.linspace(0, 1, 100)})
+ #+END_SRC
+
        return np.sin(2 * np.pi * x)
 
 
@@ -493,7 +513,7 @@ Although these might sound like daunting(令人生畏的) topics, they are in fa
  We see that in effect \lambda now controls the effective complexity of the model and hence determines the degree of over-fitting.
 
 
- #+CAPTION: fig:1,8
+ #+CAPTION: fig:1.8
  #+BEGIN_SRC python :exports both :results output :session src:1-1
    training_errors = []
    test_errors = []
@@ -1144,7 +1164,7 @@ p(\mathbf{w}|\mathcal{D}) &\varpropto p(\mathcal{D}|\mathbf{w})p(\mathbf{w}) \\
 We have seen how the problem of polynomial curve fitting can be expressed in terms of error minimization.
 Here we return to the curve fitting example and view it from a probabilistic perspective, thereby gaining some insights into error functions and regularization, as well as taking us towards a full Bayesian treatment.
 
-The goal in the curve fitting problem is to be able to make predictions for the target variable t given some new value of the input variable \pmb{x} on the basis of a set of training data comprising N input values $\pmb{x} = (x_1 , \cdots , x_N )^T$ and their corresponding target values $\pmb{t} = (t_1 , \cdots , t_N )^T$ .
+The goal in the curve fitting problem is to be able to make predictions for the target variable t given some new value of the input variable $\pmb{x}$ on the basis of a set of training data comprising N input values $\pmb{x} = (x_1 , \cdots , x_N )^T$ and their corresponding target values $\pmb{t} = (t_1 , \cdots , t_N )^T$ .
 We can express our uncertainty over the value of the target variable using a probability distribution.
 For this purpose, we shall assume that, given the value of x, the corresponding value of t has a Gaussian distribution with a mean equal to the value $y(x, \mathbf{w})$ of the polynomial curve given by (ref:polynomial-curve-fitting).
 Thus we have
