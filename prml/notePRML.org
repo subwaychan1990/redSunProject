@@ -68,6 +68,8 @@
     - [[Curve fitting为例子演示三种方法][Curve fitting为例子演示三种方法]]
 - [[Probability Distributions][Probability Distributions]]
 - [[Linear Models for Regression][Linear Models for Regression]]
+  - [[ch03 Listing init][ch03 Listing init]]
+    - [[ch03 data][ch03 data]]
   - [[Abstract][Abstract]]
   - [[线性基函数模型][线性基函数模型]]
       - [[线性回归(linear regression)][线性回归(linear regression)]]
@@ -88,6 +90,12 @@
     - [[多个输出][多个输出]]
       - [[使用一组相同的基函数来建模][使用一组相同的基函数来建模]]
   - [[偏置-方差分解][偏置-方差分解]]
+    - [[模型的复杂度][模型的复杂度]]
+    - [[不确定性][不确定性]]
+    - [[期望平方损失的分解][期望平方损失的分解]]
+    - [[最小化期望损失][最小化期望损失]]
+      - [[正弦数据集说明][正弦数据集说明]]
+- [[listings][listings]]
 
 * Introduction
 
@@ -532,6 +540,7 @@ where $\mathbf{I}$ is the unit matrix, and we have defined the vector $\pmb{\phi
 
 
 *** 回归问题的损失函数
+
 [[skim:///Users/subway/Datum/Books/pattern-recognition-and-machine-learning/PRML_Chinese_vision.pdf::38][PRML_Chinese_vision.pdf, p. 38]]
 
 **** loss function                                                     :term:
@@ -560,7 +569,7 @@ where $\mathbf{I}$ is the unit matrix, and we have defined the vector $\pmb{\phi
 
 \begin{equation}
 \frac{\delta{\mathbb{E}[L]}}{\delta y(\mathbf{x})} =
-2 \int \{y(\mathbf{x}-t)\}p(\mathbf{x},t)\rm{d}t = 0
+2 \int \{y(\mathbf{x})-t\}p(\mathbf{x},t)\rm{d}t = 0
 \end{equation}
 
 求解 $y(\mathbf{x})$ , 使用概率的加和规则和乘积规则, 我们得到
@@ -738,8 +747,87 @@ KL(p || q) \simeq \frac{1}{N} \sum_{n=1}^{N} \{−\ln q(\mathbf{x}_n | \pmb{\the
 
 * Linear Models for Regression
 
+
+** ch03 Listing init
+
+
+#+CAPTION: ch03-init
+#+BEGIN_SRC python :exports both :results output :session src:3-1
+import numpy as np
+from scipy.stats import multivariate_normal
+import matplotlib.pyplot as plt
+import pandas as pd
+pd.options.display.max_rows = 10
+from tabulate import tabulate
+tbl = lambda x: tabulate(x,headers="keys",tablefmt="orgtbl")
+from sklearn.metrics import mean_squared_error
+#+END_SRC
+
+#+RESULTS:
+
+#+CAPTION: model-init
+#+BEGIN_SRC python :exports both :results output :session src:3-1
+import sys
+sys.path.append("prml")
+from prml.features import GaussianFeatures, PolynomialFeatures, SigmoidalFeatures
+from prml.linear import (
+    BayesianRegressor,
+    EmpiricalBayesRegressor,
+    LinearRegressor,
+    RidgeRegressor
+)
+
+np.random.seed(1234)
+#+END_SRC
+
+#+RESULTS:
+
+
+#+CAPTION: fig configuration
+#+BEGIN_SRC python :exports both :results output :session src:3-1
+# To plot pretty figures
+import matplotlib
+import matplotlib.pyplot as plt
+plt.rcParams['axes.labelsize'] = 14
+plt.rcParams['xtick.labelsize'] = 12
+plt.rcParams['ytick.labelsize'] = 12
+
+# Where to save the figures
+PROJECT_ROOT_DIR = "."
+IMAGES_PATH = os.path.join(PROJECT_ROOT_DIR, "img")
+
+def save_fig(fig_id, tight_layout=True, fig_extension="png", resolution=300):
+    path = os.path.join(IMAGES_PATH, fig_id + "." + fig_extension)
+    #print("Saving figure", fig_id)
+    if tight_layout:
+        plt.tight_layout()
+        plt.savefig(path, format=fig_extension, dpi=resolution)
+        plt.close("all")
+#+END_SRC
+
+#+RESULTS:
+
+*** ch03 data
+
+ #+CAPTION: generate data
+ #+BEGIN_SRC python :exports both :results output :session src:3-1
+   def create_toy_data(func, sample_size, std, domain=[0, 1]):
+       x = np.linspace(domain[0], domain[1], sample_size)
+       np.random.shuffle(x)
+       t = func(x) + np.random.normal(scale=std, size=x.shape)
+       return x, t
+
+
+   def sinusoidal(x):
+       return np.sin(2 * np.pi * x)
+ #+END_SRC
+
+ #+RESULTS:
+
 ** Abstract
 [[skim:///Users/subway/Datum/Books/pattern-recognition-and-machine-learning/(Information%20Science%20and%20Statistics)%20Christopher%20M.%20Bishop-Pattern%20Recognition%20and%20Machine%20Learning-Springer%20(2007).pdf::156][(Information Science and Statistics) Christopher M. Bishop-Pattern Recognition and Machine Learning-Springer (2007).pdf, p. 156]]
+
+
 
 目前为止, 本书的关注点是无监督学习, 包括诸如 *概率密度估计和数据聚类* 等话题。
 我们现在开始讨论有监督学习, 首先讨论的是回归问题。
@@ -1107,7 +1195,114 @@ p(\pmb{t}|\mathbf{x},\mathbf{W},\beta) = \mathcal{N}(\pmb{t}|\mathbf{W}^T\phi(\m
 
 [[skim:///Users/subway/Datum/Books/pattern-recognition-and-machine-learning/PRML_Chinese_vision.pdf::108][PRML_Chinese_vision.pdf, p. 108]]
 
+*** 模型的复杂度
 
+在1.5.5节, 当我们讨论回归问题的决策论时, 我们考虑了不同的损失函数。
+一旦我们知道了条件概率分布 $p(t | \mathbf{x})$, 每一种损失函数都能够给出对应的最优预测结果。
+使用最多的一个选择是平方损失函数, 此时最优的预测由条件期望(记作 $h(\mathbf{x})$)给出,即
+
+\begin{equation}
+h(\mathbf{x}) = \mathbb{E}[t|\mathbf{x}] = \int_{}^{} tp(t|\mathbf{x}) \, \rm{d}t
+\end{equation}
+
+我们在1.5.5节证明了平方损失函数的期望可以写成
+
+\begin{equation}
+\mathbb{E}[L] = \int_{}^{} \{y(\mathbf{x})-h(\mathbf{x})\}^2p(\mathbf{x}) \, \rm{d}\mathbf{x} +
+\iint \{h(\mathbf{x}-t)\}^2p(\mathbf{x},t) \, \rm{d}\mathbf{x} \,\rm{d}t
+\end{equation}
+
+*** 不确定性
+
+如果我们使用由参数向量 $w$ 控制的函数 $y(\mathbf{x}, \mathbf{w})$ 对 $h(\mathbf{x})$ 建模,那么从贝叶斯的观点来看, 我们模型的不确定性是通过 $w$ 的后验概率分布来表示的。
+
+频率学家的方法涉及到根据数据集 $\mathcal{D}$ 对 $w$ 进行点估计, 然后试着通过下面的思想实验来表示估计的不确定性。
+假设我们有许多数据集, 每个数据集的大小为 $N$, 并且每个数据集都独立地从分布 $p(t, \mathbf{x})$ 中抽取。
+对于任意给定的数据集 $\mathcal{D}$, 我们可以运行我们的学习算法, 得到一个预测函数 $y(\mathbf{x}; \mathcal{D})$ 。
+不同的数据集会给出不同的函数, 从而给出不同的平方损失的值。
+这样, 特定的学习算法的表现就可以通过取各个数据集上的表现的平均值来进行评估。
+
+\begin{equation}
+\begin{split}
+\{y(\mathbf{x}&;\mathcal{D})-\mathbb{E}_{\mathbb{D}}[y(\mathbf{x};\mathcal{D})]+\mathbb{E}_{\mathcal{D}}[y(\mathbf{x};\mathcalD)]-h(\mathbf{x})\}^2\\
+=&\{y(\mathbf{x};\mathcal{D})-\mathbb{E}_{\mathbb{D}}[y(\mathbf{x};\mathcal{D})]\}^2+\{\mathbb{E}_{\mathcal{D}}[y(\mathbf{x};\mathcalD)]-h(\mathbf{x})\}^2\\
+&+2\{y(\mathbf{x};\mathcal{D})-\mathbb{E}_{\mathbb{D}}[y(\mathbf{x};\mathcal{D})]\}\{\mathbb{E}_{\mathcal{D}}[y(\mathbf{x};\mathcalD)]-h(\mathbf{x})\}
+\end{split}
+\end{equation}
+
+我们现在关于D求期望,然后注意到最后一项等于零,可得
+
+\begin{equation}
+\begin{split}
+\mathbb{E}_{\mathcal{D}}&[\{ y(\mathbf{x};\mathcal{D}) - h(\mathbf{x}) \}^2] \\
+&= \underbrace{\{\mathbb{E}_{\mathcal{D}}[y(\mathbf{x};\mathcal{D})]-h(\mathbf{x})\}^2}_{(\text{bias})^2} + \underbrace{\mathbb{E}_{\mathcal{D}}[\{y(\mathbf{x};\mathcal{D})-\mathbb{E}_{\mathcal{D}}[y(\mathbf{x};\mathcal{D})]^2\}]}_{\text{variance}}.
+\end{split}
+\end{equation}
+
+我们看到, $y(\mathbf{x}; \mathcal{D})$ 与回归函数 $h(\mathbf{x})$ 的差的平方的期望可以表示为两项的和。
+第一项, 被称为平方偏置(bias), 表示所有数据集的平均预测与预期的回归函数之间的差异。
+第二项, 被称为方差(variance), 度量了对于单独的数据集, 模型所给出的解在平均值附近波动的情况, 因此也就度量了函数 $y(\mathbf{x}; \mathcal{D})$ 对于特定的数据集的选择的敏感程度。
+稍后我们会考虑一个简单的例子, 来直观地说明这些概念。
+
+*** 期望平方损失的分解
+
+目前为止,我们已经考虑了单一输入变量x的情形。如果我们把这个展开式带回到公式 (3.37)中,那么我们就得到了下面的对于期望平方损失的分解
+
+\begin{equation}
+\text{expected loss} = (\text{bias})^2 + \text{variance} + \text{noise}
+\end{equation}
+
+\begin{align}
+(\text{bias})^2 &= \int \{ \mathbb{E}_{\mathcal{D}}[y(\mathbf{x};\mathcal{D})] - h(\mathbf{x}) \}^2p(\mathbf{x})\, \rm{d}\mathbf{x} \\
+\text{variace} &= \int \mathbb{E}_{\mathcal{D}}\left[y(\mathbf{x};\mathcal{D}) - \mathbb{E}_{\mathcal{D}}[y(\mathbf{x};\mathcal{D})]\}^2\right]p(\mathbf{x})\, \rm{d}\mathbf{x} \\
+\text{noise} &= \int\{h(\mathbf{x}-t)\}^2p(\mathbf{x},t)\, \rm{d}\mathbf{x}\, \rm{d}t
+\end{align}
+
+现在, 偏置和方差指的是积分后的量.
+
+*** 最小化期望损失
+
+**** 正弦数据集说明
+
+我们产生了 $100$ 个数据集合, 每个集合都包含 $N = 25$ 个数据点, 都是独立地从正弦曲线 $h(x) = sin(2\pi x)$ 抽取的。
+数据集的编号为 $l = 1, \cdots, L$, 其中 $L = 100$, 并且对于每个数据集 $\mathcal{D}^{(l)}$, 我们通过最小化正则化的误差函数(3.27)拟合了一个带有24个高斯基函数的模型, 然后给出了预测函数 $y^{(l)}(x)$, 如图[[fig:3.5]]所示。
+
+#+BEGIN_SRC python :exports both :results output :session src:3-1
+  # 24个高斯基函数
+  from sklearn.linear_model import Ridge
+  feature = GaussianFeatures(np.linspace(0, 1, 24), 0.1)
+  a = np.exp(-100)
+  y_list = []
+  fig = plt.figure(figsize=(12, 6))
+  ax = fig.add_subplot(1, 2, 1)
+  for i in range(3):
+      x_train, y_train = create_toy_data(sinusoidal, 10, 0.25)
+      x_test = np.linspace(0, 1, 100)
+      y_test = sinusoidal(x_test)
+
+      feature = GaussianFeatures(np.linspace(0, 1, 8), 0.1)
+
+      X_train = feature.transform(x_train)
+      X_test = feature.transform(x_test)
+      model = Ridge(alpha=a)
+      model.fit(X_train, y_train)
+      y = model.predict(X_test)
+      y_list.append(y)
+      ax.plot(x_test, y, c="r", linewidth=.5)
+  ax.plot(x_test, y_test)
+  ax.set_ylim(-1.5, 1.5)
+  ax = fig.add_subplot(1, 2, 2)
+  ax.plot(x_test, y_test)
+  ax.plot(x_test, np.asarray(y_list).mean(axis=0))
+  ax.set_ylim(-1.5, 1.5)
+  save_fig("fig:3.5")
+#+END_SRC
+
+#+RESULTS:
+
+[[file:img/fig:3.5.png]]
+
+* listings
 
 #+CAPTION: ch03-init
 #+BEGIN_SRC python :exports both :results output :session src:3-1
@@ -1156,7 +1351,7 @@ IMAGES_PATH = os.path.join(PROJECT_ROOT_DIR, "img")
 
 def save_fig(fig_id, tight_layout=True, fig_extension="png", resolution=300):
     path = os.path.join(IMAGES_PATH, fig_id + "." + fig_extension)
-    print("Saving figure", fig_id)
+    #print("Saving figure", fig_id)
     if tight_layout:
         plt.tight_layout()
         plt.savefig(path, format=fig_extension, dpi=resolution)
@@ -1191,9 +1386,9 @@ save_fig("fig:3-1")
 #+END_SRC
 
 #+RESULTS:
-: Saving figure fig:3-1
 
 [[file:img/fig:3-1.png]]
+
 
 #+BEGIN_SRC python :exports both :results output :session src:3-1
 def sinusoidal(x):
@@ -1225,7 +1420,6 @@ save_fig("fig:3-2")
 #+END_SRC
 
 #+RESULTS:
-: Saving figure fig:3-2
 
 [[file:img/fig:3-2.png]]
 
@@ -1244,33 +1438,82 @@ save_fig("fig:3-3")
 #+RESULTS:
 : Saving figure fig:3-3
 
+[[file:img/fig:3-3.png]]
+
 
 #+BEGIN_SRC python :exports both :results output :session src:3-1
-# feature = PolynomialFeatures(24)
-feature = GaussianFeatures(np.linspace(0, 1, 24), 0.1)
-# feature = SigmoidalFeatures(np.linspace(0, 1, 24), 10)
+  # feature = PolynomialFeatures(24)
+  feature = GaussianFeatures(np.linspace(0, 1, 24), 0.1)
+  # feature = SigmoidalFeatures(np.linspace(0, 1, 24), 10)
 
-for a in [1e2, 1., 1e-9]:
-    y_list = []
-    plt.figure(figsize=(20, 5))
-    plt.subplot(1, 2, 1)
-    for i in range(100):
-        x_train, y_train = create_toy_data(sinusoidal, 25, 0.25)
-        X_train = feature.transform(x_train)
-        X_test = feature.transform(x_test)
-        model = BayesianRegressor(alpha=a, beta=1.)
-        model.fit(X_train, y_train)
-        y = model.predict(X_test)
-        y_list.append(y)
-        if i < 20:
-            plt.plot(x_test, y, c="orange")
-    plt.ylim(-1.5, 1.5)
+  for number, a  in enumerate([1e2, 1., 1e-9]):
+      y_list = []
+      plt.figure(figsize=(20, 5))
+      plt.subplot(1, 2, 1)
+      for i in range(100):
+          x_train, y_train = create_toy_data(sinusoidal, 25, 0.25)
+          X_train = feature.transform(x_train)
+          if i == 0:
+              print(X_train.shape)
+          X_test = feature.transform(x_test)
+          if i == 0:
+              print(X_test.shape)
+          model = BayesianRegressor(alpha=a, beta=1.)
+          model.fit(X_train, y_train)
+          y = model.predict(X_test)
+          y_list.append(y)
+          if i < 20:
+              plt.plot(x_test, y, c="orange")
+      plt.ylim(-1.5, 1.5)
 
-    plt.subplot(1, 2, 2)
-    plt.plot(x_test, y_test)
-    plt.plot(x_test, np.asarray(y_list).mean(axis=0))
-    plt.ylim(-1.5, 1.5)
-    plt.show()
+      plt.subplot(1, 2, 2)
+      plt.plot(x_test, y_test)
+      plt.plot(x_test, np.asarray(y_list).mean(axis=0))
+      plt.ylim(-1.5, 1.5)
+      save_fig("fig:3-4-{0}".format(number))
 #+END_SRC
 
 #+RESULTS:
+: (25, 25)
+: (100, 25)
+: Saving figure fig:3-4-0
+: (25, 25)
+: (100, 25)
+: Saving figure fig:3-4-1
+: (25, 25)
+: (100, 25)
+: Saving figure fig:3-4-2
+
+[[file:img/fig:3-4-0.png]]
+
+[[file:img/fig:3-4-1.png]]
+
+[[file:img/fig:3-4-2.png]]
+
+
+
+#+BEGIN_SRC python :exports both :results output :session src:3-1
+X = GaussianFeatures(np.array([0,1,2,3]),1).transform(np.array([1,2,3]))
+print(X)
+
+#+END_SRC
+
+#+RESULTS:
+: [[1.         0.60653066 1.         0.60653066 0.13533528]
+:  [1.         0.13533528 0.60653066 1.         0.60653066]
+:  [1.         0.011109   0.13533528 0.60653066 1.        ]]
+
+#+BEGIN_SRC python :exports both :results output :session src:3-1
+data =  [[1, 0, 0],
+         [0, 1, 0],
+         [0, 0, 1]]
+arr1 = np.array(data)
+print(arr1.)
+#+END_SRC
+
+#+RESULTS:
+: Traceback (most recent call last):
+:   File "<stdin>", line 1, in <module>
+:   File "/var/folders/y3/v3dy31mj419_mf25v586vb7m0000gn/T/babel-cIWHAe/python-R03W5S", line 5, in <module>
+:     print(arr1.r)
+: AttributeError: 'numpy.ndarray' object has no attribute 'r'
